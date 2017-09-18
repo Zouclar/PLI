@@ -1,0 +1,23 @@
+{
+  "name": "pli_backed",
+  "version": "1.0.0",
+  "description": "PLI web server",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon src/server.js"
+  },
+  "keywords": [
+    "ETNA",
+    "Bachelor",
+    "PLI"
+  ],
+  "author": "lasjun_s",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.10.2"
+  }
+}

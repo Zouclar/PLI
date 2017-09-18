@@ -1,0 +1,145 @@
+import React, { Component } from 'react';
+
+import {
+  AppRegistry,
+  StyleSheet,
+  Dimensions,
+  Animated,
+  View,
+  Text
+} from 'react-native';
+
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import Carousel from 'react-native-snap-carousel';
+import CustomStyle from './pages/PostsMap/assets/map-style.json';
+import styles from './pages/PostsMap/styles/map.js';
+
+
+class MyApp extends Component {
+  constructor(props){
+    super(props);
+    this.apiDatas = [];
+      this.sliderWidth = Dimensions.get('window').width;
+      this.sliderHeight = Dimensions.get('window').height * 0.3;
+      this.itemWidth = this.sliderWidth *0.9;
+    this.defaultLocation = {
+            latitude: 48,
+            longitude: 2,
+            latitudeDelta: 30.115,
+            longitudeDelta: 30.1121
+        };
+      this.enableSnap = true;
+    this.state = {
+        location: this.defaultLocation
+    }
+    this.map = {};
+    this.latitudeDelta = 0;
+    this.longitudeDelta = 0;
+      
+  }
+    
+    
+
+   getPostsFromApiAsync() {
+       console.log("calling api")
+    return fetch('http://192.168.0.110:3000/posts')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("okokok")
+        this.apiDatas = responseJson;
+        this.forceUpdate()
+        
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+    getCurrentLocation() {
+        this.location = 
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+            console.log("success !!")
+            let location = { ...this.defaultLocation };
+            location.latitude = position.coords.latitude;
+            location.longitude = position.coords.longitude;
+            this.location = location;
+            this.forceUpdate()
+        },
+        (error) => console.warn(error.message),
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
+        )
+    }
+
+
+   componentWillMount() {
+       this.getPostsFromApiAsync();
+       this.getCurrentLocation();
+  }
+    
+  onRegionChange(region) {
+        this.latitudeDelta = region.latitudeDelta;
+        this.longitudeDelta = region.longitudeDelta;
+  }
+    
+
+    
+    _renderItem ({item, index}) {
+        return (
+            <View onPress={() => { alert(`You've clicked `); }} style={styles.slideItem}>
+                <Text >Titre : { item.title }</Text>
+            </View>
+        );
+    }
+
+  render() {
+      console.log("hey")
+      console.log(this.state.location)
+      console.log(this.apiDatas)
+    return (
+      <View style ={styles.container}>
+        <MapView
+         ref={map => this.map = map}
+          style={styles.map}
+          customMapStyle={CustomStyle}
+          showsUserLocation={true}
+          initialRegion={this.state.location}
+        >
+        {this.apiDatas.map(post => (
+            <MapView.Marker
+              key={post.title}
+              coordinate={post.coordinates}
+              title={post.title}
+              description={post.date}
+            />
+        ))}
+
+        </MapView>
+        <Carousel
+              ref={(c) => { this._carousel = c; }}
+              data={this.apiDatas}
+              renderItem={this._renderItem}
+              sliderWidth={this.sliderWidth}
+              sliderHeight={this.sliderHeight}
+              itemWidth={this.itemWidth}
+              showsHorizontalScrollIndicator={true}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContentContainer}
+              onSnapToItem={(index) => {
+                this.map.animateToRegion ( {   
+                    longitude: this.apiDatas[index].coordinates.longitude,
+                    latitude: this.apiDatas[index].coordinates.latitude,
+                    latitudeDelta: this.latitudeDelta,
+                    longitudeDelta: this.longitudeDelta
+                    });
+                }}
+               onRegionChange    
+              
+            />
+      </View>
+    );
+  }
+}
+
+AppRegistry.registerComponent('Client', () => MyApp);
+module.exports = MyApp;
