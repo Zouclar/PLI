@@ -1,23 +1,20 @@
 {
-  "name": "pli_backed",
-  "version": "1.0.0",
-  "description": "PLI web server",
-  "main": "server.js",
+  "name": "pli",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "test",
-    "start": "nodemon src/server.js"
+    "start": "node ./bin/www"
   },
-  "keywords": [
-    "ETNA",
-    "Bachelor",
-    "PLI"
-  ],
-  "author": "lasjun_s",
-  "license": "MIT",
   "dependencies": {
-    "express": "4.14.0"
-  },
-  "devDependencies": {
-    "nodemon": "1.10.2"
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-formidable": "^1.0.0",
+    "file-system": "^2.2.2",
+    "jade": "~1.11.0",
+    "morgan": "~1.8.1",
+    "mysql": "latest",
+    "serve-favicon": "~2.4.2"
   }
 }
