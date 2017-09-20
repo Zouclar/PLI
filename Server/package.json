@@ -14,7 +14,7 @@
     "file-system": "^2.2.2",
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
-    "mysql": "latest",
+    "mysql": "^2.0.0-alpha8",
     "serve-favicon": "~2.4.2"
   }
 }
