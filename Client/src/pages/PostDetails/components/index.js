@@ -15,46 +15,33 @@ import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Ic
 class PostDetails extends Component {
     constructor(props){
         super(props);
+        this.post = props.post;
     }
 
-    getPostsFromApiAsync() {
-        return fetch('http://192.168.0.110:3000/posts')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log("okokok")
-                this.apiDatas = responseJson;
-                this.forceUpdate()
-                this.postList.uptadeProps(responseJson);
-                console.log('refreshed')
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+
 
     componentWillMount() {}
     render() {
         return ( <Container>
-            <Header />
             <Content>
                 <Card style={{flex: 0}}>
                     <CardItem>
                         <Left>
                             <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
                             <Body>
-                            <Text>Gap de 2 blocs</Text>
+                            <Text>{this.post.title}</Text>
                             <Text note>Par John Doe</Text>
                             </Body>
                         </Left>
                     </CardItem>
                     <CardItem>
                         <Body>
-                        <Image source={{uri: 'https://cdn.trendhunterstatic.com/thumbs/levis-x-nike-511-skateboarding-jean.jpeg'}} style={{height: 200, width: 340, flex: 1}}/>
+                        <Image source={{uri: this.post.image}} style={{height: 200, width: 340, flex: 1}}/>
                         <CardItem>
                             <H3>Description</H3>
                         </CardItem>
                         <Text>
-                            Lorem Ipsum j'ai sauté le bloc comme un fou zrhwwmxwlza, c'était un truc de fou malade la vie j'suis choqué de l'exploit de taré zharm que j'ai fais yaya !
+                            {this.post.description}
                         </Text>
                         </Body>
                     </CardItem>
@@ -149,5 +136,5 @@ class PostDetails extends Component {
     }
 }
 
-AppRegistry.registerComponent('PostDetails', () => PostDetails);
+//AppRegistry.registerComponent('PostDetails', () => PostDetails);
 module.exports = PostDetails;

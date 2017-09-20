@@ -27,16 +27,17 @@ class PostsList extends Component {
         console.log(this.props);
     this.apiDatas = props.apiDatas;
         this.parent = props.parent;
-        this.image = "http://25.media.tumblr.com/59fda1f501985e8b363a0dba4c9f8cb2/tumblr_mq5zud0pEq1qfz84qo1_500.jpg";
     }
     
     uptadeProps(props) {
         this.apiDatas = props;
         this.forceUpdate();
     }
+
+
         
     render() {
-        console.log('rendering carousel ', this.apiDatas, this.callback)
+        console.log('rendering carousel ', this.apiDatas, this.parent)
         
         return (
              <Carousel
@@ -50,13 +51,20 @@ class PostsList extends Component {
               containerCustomStyle={styles.slider}
               contentContainerCustomStyle={styles.sliderContentContainer}
               onSnapToItem={(index) => {
-                            this.parent.animateToPostLocation(index);
-                           }}  
+                    this.parent.animateToPostLocation(index);
+              }}
             />
         );
     }
+
+    static openDetailPage(index) {
+        console.log("details")
+        //this.parent.openDetailPage(index);
+    }
     
      _renderItem ({item, index}) {
+        console.log("rendering item, parent is ");
+        console.log(this);
         return (
             <View onPress={() => { console.log(`You've clicked `); }} style={styles.slideItem}>
                 <View style={styles.rowContainer}>
@@ -78,7 +86,9 @@ class PostsList extends Component {
                               <Icon style={styles.socialIcons} active name="chatbubbles" />
                               <Text style={styles.socialTexts}>4 </Text>
                             </TouchableOpacity>  
-                            <TouchableOpacity style={styles.socialButtons}>
+                            <TouchableOpacity onPress={
+                                PostsList.openDetailPage(index)
+                            } style={styles.socialButtons}>
                               <Text style={styles.socialTexts}>Détails </Text>
                               <Icon style={styles.socialIcons} active name="md-arrow-dropright" />
                             </TouchableOpacity> 

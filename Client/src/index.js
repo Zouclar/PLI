@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 
-import {
-  AppRegistry,
-} from 'react-native';
+import { AppRegistry, View } from 'react-native';
 
-import PostDetails from './pages/PostDetails/components/index.js'
+import { Navigation } from 'react-native-navigation';
 
-class Client extends Component {
-	render() {
-		return (<PostDetails></PostDetails>);
-	}
-}
+import { registerScreens } from './pages'
 
-module.exports = Client;
+registerScreens(); // this is where you register all of your app's screens
+
+// start the app
+Navigation.startSingleScreenApp({
+    screen: {
+            label: 'Map',
+                screen: 'Client', // this is a registered name for a screen
+            title: 'Carte'
+        },
+
+});

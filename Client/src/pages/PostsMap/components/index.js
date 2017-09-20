@@ -5,12 +5,14 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  View,
   Text
 } from 'react-native';
 
+import { Container, Header, View, Button, Icon, Fab } from 'native-base';
+
+import { Navigation } from 'react-native-navigation';
+
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-import Carousel from 'react-native-snap-carousel';
 import CustomStyle from '../assets/map-style.json';
 import styles from '../styles/map.js';
 import PostsList from './carousel.js';
@@ -29,14 +31,24 @@ class PostsMap extends Component {
         };
     this.enableSnap = true;
     this.state = {
-        location: this.defaultLocation
+        location: this.defaultLocation,
+        active: false
     }
     this.map = {};
     this.latitudeDelta = 0;
     this.longitudeDelta = 0;
     this.postList = {};
-      
+    this.selectedPostIndex = 1;
   }
+
+  openDetailPage (index) {
+      this.props.navigator.push({
+          screen: 'page.PostDetails',
+          title: 'Page details',
+          passProps: {post: this.apiDatas[index]},
+      });
+  }
+
     
    getPostsFromApiAsync() {
        console.log("calling api")
@@ -83,6 +95,7 @@ class PostsMap extends Component {
 
   animateToPostLocation (index) {
       console.log("CALLBACK", this.map)
+      this.selectedPostIndex = index;
       this.map.animateToRegion ( {   
         longitude: this.apiDatas[index].coordinates.longitude,
         latitude: this.apiDatas[index].coordinates.latitude,
@@ -98,6 +111,8 @@ class PostsMap extends Component {
       console.log(this.state.location)
       console.log(this.apiDatas)
     return (
+        <Container>
+            <Header />
       <View style ={styles.container}>
         <MapView
          ref={map => this.map = map}
@@ -117,10 +132,29 @@ class PostsMap extends Component {
 
         </MapView>
        <PostsList ref={postList => this.postList = postList} apiDatas={this.apiDatas} parent={this}></PostsList>
+          <Fab
+              active={this.state.active}
+              direction="left"
+              containerStyle={{ }}
+              style={{ backgroundColor: '#5067FF' }}
+              position="bottomRight"
+              onPress={() => this.setState({ active: !this.state.active })}>
+              <Icon name="camera" />
+          </Fab>
+          <Fab
+              active={this.state.active}
+              direction="left"
+              containerStyle={{ }}
+              style={{ backgroundColor: '#41a85f' }}
+              position="bottomLeft"
+              onPress={() => this.openDetailPage(this.selectedPostIndex)}>
+              <Icon name="dots-three-horizontal" />
+          </Fab>
       </View>
+        </Container>
     );
   }
 }
 
-AppRegistry.registerComponent('PostsMap', () => PostsMap);
+AppRegistry.registerComponent('Client', () => PostsMap);
 module.exports = PostsMap;

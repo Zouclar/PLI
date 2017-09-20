@@ -1,4 +1,3 @@
 import { AppRegistry } from 'react-native';
-import Root from './src/index';
+import Client from './src/index';
 
-AppRegistry.registerComponent('Client', () => Root);
