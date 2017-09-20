@@ -7,7 +7,7 @@ var bodyParser   = require('body-parser');
 const formidable = require('express-formidable');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var users = require('./routes/userRouter');
 var posts = require('./routes/postRouter');
 
 
@@ -18,6 +18,10 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(formidable({
+    encoding: 'utf-8',
+    uploadDir: './public/images'
+}));
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
