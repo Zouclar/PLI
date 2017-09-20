@@ -12,13 +12,13 @@ import Camera from 'react-native-camera';
 import styles from '../styles/details.js';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Icon, Left, Right, InputGroup, Body, H1, H2, H3, Form, Item, Label, Input } from 'native-base'
 
-
 class PhotoView extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             path: null,
+            cameraType : 'back',
+            mirrorMode: false
         };
     }
 
@@ -40,7 +40,10 @@ class PhotoView extends Component {
                 style={styles.preview}
                 aspect={Camera.constants.Aspect.fill}
                 captureTarget={Camera.constants.CaptureTarget.disk}
+                type={this.state.cameraType}
+                mirrorImage={this.state.mirrorMode}
             >
+                <Text style={styles.changeCamera} onPress={this.changeCameraType.bind(this)}>Switch Camera</Text>
                 <TouchableHighlight
                     style={styles.capture}
                     onPress={this.takePicture.bind(this)}
@@ -50,6 +53,21 @@ class PhotoView extends Component {
                 </TouchableHighlight>
             </Camera>
         );
+    }
+
+    changeCameraType() {
+        if(this.state.cameraType === 'back') {
+            this.setState({
+                cameraType : 'front',
+                mirrorMode : true
+            })
+        }
+        else {
+            this.setState({
+                cameraType : 'back',
+                mirrorMode : false
+            })
+        }
     }
 
     renderImage() {
