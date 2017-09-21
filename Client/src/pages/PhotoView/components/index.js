@@ -26,7 +26,7 @@ class PhotoView extends Component {
     takePicture() {
         this.camera.capture()
             .then((data) => {
-                console.log(data);
+                console.log("PICTURE", data);
                 this.setState({ path: data.path })
             })
             .catch(err => console.error(err));

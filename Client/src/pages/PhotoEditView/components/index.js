@@ -20,25 +20,25 @@ export default class PhotoEditView extends Component {
     }
 
     sendPost() {
-        let photo = { uri: source.uri}
+        console.log("sending post with image ",  this.state.uri)
         let formdata = new FormData();
 
-        formdata.append("fields[title]", 'uploadtest')
-        formdata.append("fields[description]", 'test description blabla')
-        formdata.append("fields[description]", '12dsadadsa')
-        formdata.append("files[0]", {uri: this.props.uri, type: 'multipart/form-data'})
+        console.log(formdata)
+        formdata.append("title", 'uploadtest')
+
+        formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.uri.split(/[\\/]/).pop()})
 
 
-        fetch('http://192.168.1.101:8080/posts/create',{
+        fetch('https://server.lasjunies.fr:8443/posts/create',{
             method: 'post',
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
             body: formdata
         }).then(response => {
-            console.log("image uploaded")
+            console.log("image uploaded : ", response)
         }).catch(err => {
-            console.log(err)
+            console.log("image upload", err.message)
         })
     }
 
@@ -69,7 +69,7 @@ export default class PhotoEditView extends Component {
                     containerStyle={{ }}
                     style={{ backgroundColor: '#2196F3' }}
                     position="bottomRight"
-                    onPress={() => this.sendTest()}>
+                    onPress={() => this.sendPost()}>
                     <Icon name="send" />
                 </Fab>
             </Container>

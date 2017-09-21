@@ -22,6 +22,7 @@ class PostDetails extends Component {
 
     componentWillMount() {}
     render() {
+        console.log("RENDER DETAILS ", 'https://server.lasjunies.fr:8443/posts/download/' + this.post.picture)
         return ( <Container>
             <Content>
                 <Card style={{flex: 0}}>
@@ -36,7 +37,7 @@ class PostDetails extends Component {
                     </CardItem>
                     <CardItem>
                         <Body>
-                        <Image source={{uri: this.post.image}} style={{height: 200, width: 340, flex: 1}}/>
+                        <Image source={{uri: 'https://server.lasjunies.fr:8443/posts/download/' + this.post.picture}} style={{height: 200, width: 340, flex: 1}}/>
                         <CardItem>
                             <H3>Description</H3>
                         </CardItem>

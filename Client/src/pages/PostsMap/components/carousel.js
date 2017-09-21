@@ -65,13 +65,13 @@ class PostsList extends Component {
      _renderItem ({item, index}) {
         console.log("rendering item, parent is ");
         console.log(this);
-        console.log("https://127.0.0.1:8443/posts/download/" + item.picture)
+        console.log("https://server.lasjunies.fr:8443/posts/download/" + item.picture)
         return (
             <View onPress={() => { console.log(`You've clicked `); }} style={styles.slideItem}>
                 <View style={styles.rowContainer}>
                     <View style={styles.imageContainer}>
                         <Image style={styles.image}
-                            source={{uri: "https://127.0.0.1:8443/posts/download/" + item.picture}}
+                            source={{uri: "https://server.lasjunies.fr:8443/posts/download/" + item.picture}}
                         ></Image>
                     </View>
                     <View style={styles.infos}>

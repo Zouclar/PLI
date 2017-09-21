@@ -39,7 +39,7 @@ class PostsMap extends Component {
     this.latitudeDelta = 0;
     this.longitudeDelta = 0;
     this.postList = {};
-    this.selectedPostIndex = 1;
+    this.selectedPostIndex = 0;
   }
 
   openDetailPage (index) {
@@ -59,7 +59,7 @@ class PostsMap extends Component {
     
    getPostsFromApiAsync() {
        console.log("calling api")
-    return fetch('http://192.168.0.101:8080/posts/all')
+    return fetch('https://server.lasjunies.fr:8443/posts/all')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log("okokok")
