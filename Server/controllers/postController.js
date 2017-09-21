@@ -8,29 +8,40 @@ var database = require('../config/config.js');
 class PostController {
 
     static create (req, res, next) {
+        console.log("CREATE ROUTE !!!")
         if(req.fields.length === 0 || req.files.length === 0)
             res.status(400).json("Error no data");
         else {
+            console.log("THEREIS DATA !!!")
             console.log(req.body);
             console.log(req.files);
             console.log(req.fields);
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
-                console.log("CONNEXION GOOD")
-                db.models.post.create({
-                    title          : req.field.json.title,
-                    coordinate     :req.field.json.title,
-                    description    :req.field.json.title,
-                    date_pub       :req.field.json.title,
-                    number_like    :req.field.json.title,
-                    number_dislike :req.field.json.title,
-                    picture        :req.field.json.title},function(err, rows) {
+                console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
+                db.models.posts.create({
+                    title          : 'test',
+                    coordinate     :{x: 48.2, y: 2.11},
+                    description    :'test',
+                    date_pub       :Date.now(),
+                    number_like    :0,
+                    number_dislike :0,
+                    picture        :req.files.image.path.replace("public/images/", '')
+                    },
+                    function(error, rows) {
+                    if (error){
+                        res.status(500).send("PAS OK")
+                        console.log('pas ok', error.message)
+                    }
+                        else {
+                        res.status(200).send("OK")
+                        console.log("ok", rows)
+                    }
+
 
                     }
                 );
             });
-
-            res.status(200).json("OK")
         }
     }
     static read (req, res, next) {
@@ -38,25 +49,31 @@ class PostController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
 
-            db.models.post.find({foo: 'bar'}, function(err, rows) {
-
+            db.models.posts.find({}, function(err, rows) {
+                res.status(200).json(rows)
             });
         });
-        res.status(200).json()
+
+    }
+
+    static download (req, res, next) {
+        var file = './public/images/' + req.params.id;
+        console.log('getting ./public/images/' + req.params.id)
+        res.download(file); // Set disposition and send it.
     }
     // static upload (req, res, next) {
     //     res.status(200).json()
     // }
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
-            if (err) throw err;
+            console.log("DTFGVYBHUJNKN")
 
-            // for(var item of )
-                db.models.post.find({foo: 'bar'}, function(err, rows) {
+                    db.models.posts.find({}, function(err, rows) {
+                        res.status(200).json(rows)
+                    });
 
-                });
         });
-        res.status(200).json()
+
     }
 
     static update (req, res, next) {

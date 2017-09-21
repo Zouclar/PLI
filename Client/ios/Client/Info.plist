@@ -4,10 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Autorisez l&apos;accès à la caméra de votre appareil</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Autorisez l&apos;accès à la Librairie de votre appareil</string>
 	<key>CFBundleDisplayName</key>
 	<string>Client</string>
 	<key>CFBundleExecutable</key>
@@ -32,6 +28,8 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
@@ -39,8 +37,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Autorisez l&apos;accès à la caméra de votre appareil</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Autorisez l&apos;accès à la Librairie de votre appareil</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

@@ -23,13 +23,13 @@ export default class PhotoEditView extends Component {
         let photo = { uri: source.uri}
         let formdata = new FormData();
 
-        formdata.append("product[title]", 'uploadtest')
-        formdata.append("product[description]", 'test description blabla')
-        formdata.append("product[description]", '12dsadadsa')
-        formdata.append("product[images_attributes[0][file]]", {uri: this.props.uri, type: 'multipart/form-data'})
+        formdata.append("fields[title]", 'uploadtest')
+        formdata.append("fields[description]", 'test description blabla')
+        formdata.append("fields[description]", '12dsadadsa')
+        formdata.append("files[0]", {uri: this.props.uri, type: 'multipart/form-data'})
 
 
-        fetch('http://192.168.1.101:3000/posts/',{
+        fetch('http://192.168.1.101:8080/posts/create',{
             method: 'post',
             headers: {
                 'Content-Type': 'multipart/form-data',

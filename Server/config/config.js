@@ -8,7 +8,7 @@ function setup(db) {
     var Post = db.define("posts", {
         id             : { type: "integer", unique: true },
         title          : String,
-        coordinate     : Point,
+        coordinate     : { type: "point"},
         description    : String,
         date_pub       : Date,
         number_like    : Number,
@@ -27,14 +27,16 @@ function setup(db) {
 
 module.exports = function(host, database, cb) {
     if (connections[host] && connections[host][database]) {
-        return connections[host][database];
+        console.log('ALREADY CONNECTED!!!')
+        cb(null, connections[host][database]);
+        return;
     }
 
     var opts = {
         host:     host,
         database: database,
         protocol: 'mysql',
-        port:     '8888',
+        port:     '3306',
         query:    {pool: true}
     };
 

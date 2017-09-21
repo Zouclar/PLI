@@ -55,8 +55,6 @@ class userController {
         connection.query("SELECT * FROM posts", function (error, results, fields) {
             if (error) throw error;
             console.log('The solution is: ', results[0].solution);
-            for(var item of res)
-            get file
         });
 
         connection.end();

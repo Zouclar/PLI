@@ -9,6 +9,7 @@ const ctrl = require("../controllers/postController.js");
 
 
 router.post("/create", ctrl.create);
+router.get("/download/:id", ctrl.download);
 router.get("/all", ctrl.readAll);
 router.get("/:id", ctrl.read);
 router.delete("/:id", ctrl.delete);

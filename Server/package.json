@@ -15,6 +15,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
     "mysql": "^2.0.0-alpha8",
+    "orm": "^4.0.0",
     "serve-favicon": "~2.4.2"
   }
 }

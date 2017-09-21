@@ -59,7 +59,7 @@ class PostsMap extends Component {
     
    getPostsFromApiAsync() {
        console.log("calling api")
-    return fetch('http://192.168.0.110:3000/posts')
+    return fetch('http://192.168.0.101:8080/posts/all')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log("okokok")
@@ -104,8 +104,8 @@ class PostsMap extends Component {
       console.log("CALLBACK", this.map)
       this.selectedPostIndex = index;
       this.map.animateToRegion ( {   
-        longitude: this.apiDatas[index].coordinates.longitude,
-        latitude: this.apiDatas[index].coordinates.latitude,
+        longitude: this.apiDatas[index].coordinate.x,
+        latitude: this.apiDatas[index].coordinate.y,
       });
   }
     
@@ -131,7 +131,7 @@ class PostsMap extends Component {
         {this.apiDatas.map(post => (
             <MapView.Marker
               key={post.title}
-              coordinate={post.coordinates}
+              coordinate={{longitude: post.coordinate.x, latitude: post.coordinate.y}}
               title={post.title}
               description={post.date}
             />
