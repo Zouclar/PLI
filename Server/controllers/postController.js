@@ -20,10 +20,10 @@ class PostController {
                 if (err) throw err;
                 console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
                 db.models.posts.create({
-                    title          : 'test',
-                    coordinate     :{x: 48.2, y: 2.11},
-                    description    :'test',
-                    date_pub       :Date.now(),
+                    title          : req.fields.title,
+                    coordinate     : {x: req.fields.longitude, y:req.fields.latitude},
+                    description    : req.fields.description,
+                    date_pub       : new Date(),
                     number_like    :0,
                     number_dislike :0,
                     picture        :req.files.image.path.replace("public/images/", '')

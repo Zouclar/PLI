@@ -14,32 +14,47 @@ export default class PhotoEditView extends Component {
             title: "",
             description: "",
             uri: props.uri,
-            coordinates: "",
+            coordinate: "",
         }
 
     }
 
     sendPost() {
-        console.log("sending post with image ",  this.state.uri)
-        let formdata = new FormData();
-
-        console.log(formdata)
-        formdata.append("title", 'uploadtest')
-
-        formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.uri.split(/[\\/]/).pop()})
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log("success !!")
 
 
-        fetch('https://server.lasjunies.fr:8443/posts/create',{
-            method: 'post',
-            headers: {
-                'Content-Type': 'multipart/form-data',
+                console.log("sending post with image ",  this)
+                let formdata = new FormData();
+
+                console.log(formdata)
+                formdata.append("title", this.state.title)
+                formdata.append("description", this.state.description)
+                formdata.append("latitude", position.coords.latitude);
+                formdata.append("longitude", position.coords.longitude);
+
+                formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.uri.split(/[\\/]/).pop()})
+
+
+                fetch('https://server.lasjunies.fr:8443/posts/create',{
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    body: formdata
+                }).then(response => {
+                    console.log("image uploaded : ", response)
+                }).catch(err => {
+                    console.log("image upload", err.message)
+                })
             },
-            body: formdata
-        }).then(response => {
-            console.log("image uploaded : ", response)
-        }).catch(err => {
-            console.log("image upload", err.message)
-        })
+            (error) => console.warn(error.message),
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
+        )
+
+
+
     }
 
     sendTest() {

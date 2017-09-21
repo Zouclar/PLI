@@ -41,8 +41,6 @@ export default StyleSheet.create({
   },
   socialButtons: {
       width: (sliderItemWidth * 0.7) / 3.2,
-
-      fontSize: 20, color: 'red',
       flexDirection: 'row'
   },
   socialIcons: {

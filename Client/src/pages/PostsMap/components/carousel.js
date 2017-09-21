@@ -5,13 +5,11 @@ import {
   Animated,
   Dimensions,
   Image,
-    TouchableOpacity,
-   // Button,
-  View,
-  //Text
+  TouchableOpacity,
+  View
 } from 'react-native';
 
-import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import {  Text, Icon } from 'native-base';
 
 import Carousel from 'react-native-snap-carousel';
 import styles from '../styles/map.js';
@@ -77,7 +75,7 @@ class PostsList extends Component {
                     <View style={styles.infos}>
                         <Text style={styles.infosTitle}>{ item.title.toUpperCase() }</Text>
                         <Text numberOfLines={5} style={styles.infosDescription}>{ item.description }</Text>
-                        <View style={styles.test}>
+                        <View >
                         <View style={styles.rowContainer}>
                             <TouchableOpacity style={styles.socialButtons}>
                               <Icon style={styles.socialIcons} active name="thumbs-up" />

@@ -130,7 +130,7 @@ class PostsMap extends Component {
         >
         {this.apiDatas.map(post => (
             <MapView.Marker
-              key={post.title}
+              key={post.picture}
               coordinate={{longitude: post.coordinate.x, latitude: post.coordinate.y}}
               title={post.title}
               description={post.date}
