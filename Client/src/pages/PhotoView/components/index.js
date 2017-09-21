@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    View,
     StyleSheet,
     Dimensions,
     TouchableHighlight,
@@ -8,9 +7,11 @@ import {
     Text,
     AppRegistry
 } from 'react-native';
+import { View, Fab } from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
 import Camera from 'react-native-camera';
 import styles from '../styles/details.js';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Icon, Left, Right, InputGroup, Body, H1, H2, H3, Form, Item, Label, Input } from 'native-base'
 
 class PhotoView extends Component {
     constructor(props) {
@@ -73,6 +74,7 @@ class PhotoView extends Component {
     renderImage() {
         return (
             <View>
+
                 <Image
                     source={{ uri: this.state.path }}
                     style={styles.preview}
@@ -82,6 +84,15 @@ class PhotoView extends Component {
                     onPress={() => this.setState({ path: null })}
                 >Cancel
                 </Text>
+                <Fab
+                    active={this.state.active}
+                    direction="right"
+                    containerStyle={{ }}
+                    style={{ backgroundColor: '#2196F3' }}
+                    position="bottomRight"
+                    onPress={() => this.openDetailPage(this.selectedPostIndex)}>
+                    <Icon name="mode-edit" />
+                </Fab>
             </View>
         );
     }

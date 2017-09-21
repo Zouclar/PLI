@@ -8,7 +8,8 @@ import {
   Text
 } from 'react-native';
 
-import { Container, Header, View, Button, Icon, Fab } from 'native-base';
+import { Container, Header, View, Button, Fab } from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { Navigation } from 'react-native-navigation';
 
@@ -44,10 +45,16 @@ class PostsMap extends Component {
   openDetailPage (index) {
       this.props.navigator.push({
           screen: 'page.PostDetails',
-          title: 'Page details',
+          title: 'Details',
           passProps: {post: this.apiDatas[index]},
       });
   }
+
+    openPhotoView () {
+        this.props.navigator.push({
+            screen: 'page.PhotoView',
+        });
+    }
 
     
    getPostsFromApiAsync() {
@@ -137,18 +144,18 @@ class PostsMap extends Component {
               direction="left"
               containerStyle={{ }}
               style={{ backgroundColor: '#5067FF' }}
-              position="bottomRight"
-              onPress={() => this.setState({ active: !this.state.active })}>
-              <Icon name="camera" />
+              position="bottomLeft"
+              onPress={() => this.openPhotoView()}>
+              <Icon name="photo-camera" />
           </Fab>
           <Fab
               active={this.state.active}
-              direction="left"
+              direction="right"
               containerStyle={{ }}
               style={{ backgroundColor: '#41a85f' }}
-              position="bottomLeft"
+              position="bottomRight"
               onPress={() => this.openDetailPage(this.selectedPostIndex)}>
-              <Icon name="dots-three-horizontal" />
+              <Icon name="chevron-right" />
           </Fab>
       </View>
         </Container>
