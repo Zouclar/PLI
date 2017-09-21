@@ -32,6 +32,14 @@ class PhotoView extends Component {
             .catch(err => console.error(err));
     }
 
+    openPhotoEditView () {
+        this.props.navigator.push({
+            screen: 'page.PhotoEditView',
+            title: 'Details',
+            passProps: {uri: this.state.path},
+        });
+    }
+
     renderCamera() {
         return (
             <Camera
@@ -90,7 +98,7 @@ class PhotoView extends Component {
                     containerStyle={{ }}
                     style={{ backgroundColor: '#2196F3' }}
                     position="bottomRight"
-                    onPress={() => this.openDetailPage(this.selectedPostIndex)}>
+                    onPress={() => this.openPhotoEditView(this.selectedPostIndex)}>
                     <Icon name="mode-edit" />
                 </Fab>
             </View>
