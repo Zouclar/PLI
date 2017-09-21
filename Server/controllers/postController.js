@@ -17,9 +17,17 @@ class PostController {
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 console.log("CONNEXION GOOD")
-                db.models.post.create({title: 'FirstPosition'}, function(err, rows) {
+                db.models.post.create({
+                    title          : req.field.json.title,
+                    coordinate     :req.field.json.title,
+                    description    :req.field.json.title,
+                    date_pub       :req.field.json.title,
+                    number_like    :req.field.json.title,
+                    number_dislike :req.field.json.title,
+                    picture        :req.field.json.title},function(err, rows) {
 
-                });
+                    }
+                );
             });
 
             res.status(200).json("OK")
