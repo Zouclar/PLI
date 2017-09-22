@@ -7,7 +7,8 @@ import {
     Animated,
     Image,
     View,
-    ScrollView
+    ScrollView,
+    TouchableOpacity
 } from 'react-native';
 
 import styles from '../styles/details.js';
@@ -16,9 +17,24 @@ class PostDetails extends Component {
     constructor(props){
         super(props);
         this.post = props.post;
+        this.navigator = props.navigator;
+        this.state = {
+            style: {height: 200, width: 340, flex: 1}
+        }
+
     }
 
+    openPhotoZoomView(path) {
+        this.navigator.push({
+            screen: 'page.PhotoZoomView',
+            title: 'Image',
+            passProps: {path: path},
+        });
+    }
 
+    openImage(path) {
+        this.parent.openPhotoZoomView(path);
+    }
 
     componentWillMount() {}
     render() {
@@ -37,7 +53,11 @@ class PostDetails extends Component {
                     </CardItem>
                     <CardItem>
                         <Body>
-                        <Image source={{uri: 'https://server.lasjunies.fr:8443/posts/download/' + this.post.picture}} style={{height: 200, width: 340, flex: 1}}/>
+                        <TouchableOpacity style={{height: 200, width: 340, flex: 1}} onPress={() => {
+                            this.openPhotoZoomView("https://server.lasjunies.fr/" + this.post.picture.replace("/var/www/html/", ""))
+                        }}>
+                        <Image source={{uri: "https://server.lasjunies.fr/" + this.post.picture.replace("/var/www/html/", "")}} style={{height: 200, width: 340, flex: 1}}/>
+                        </TouchableOpacity>
                         <CardItem>
                             <H3>Description</H3>
                         </CardItem>
@@ -137,5 +157,5 @@ class PostDetails extends Component {
     }
 }
 
-//AppRegistry.registerComponent('PostDetails', () => PostDetails);
+AppRegistry.registerComponent('PostDetails', () => PostDetails);
 module.exports = PostDetails;

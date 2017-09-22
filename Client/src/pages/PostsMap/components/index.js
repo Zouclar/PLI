@@ -42,11 +42,13 @@ class PostsMap extends Component {
     this.selectedPostIndex = 0;
   }
 
+
+
   openDetailPage (index) {
       this.props.navigator.push({
           screen: 'page.PostDetails',
           title: 'Details',
-          passProps: {post: this.apiDatas[index]},
+          passProps: {post: this.apiDatas[index], navigator: this.props.navigator},
       });
   }
 

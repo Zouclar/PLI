@@ -38,11 +38,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Autorisez l&apos;accès à la caméra de votre appareil</string>
+	<string>Autorisez l'accès à la caméra de votre appareil</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Autorisez l&apos;accès à la Librairie de votre appareil</string>
+	<string>Autorisez l'accès à la Librairie de votre appareil</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

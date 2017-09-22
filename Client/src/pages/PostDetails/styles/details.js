@@ -11,5 +11,8 @@ var sliderHeight = Dimensions.get('window').height * 0.3;
 export default StyleSheet.create({
     titleComment: {
         margin:10
+    },
+    fullImage: {
+            ...StyleSheet.absoluteFillObject,
     }
 });
