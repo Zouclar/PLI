@@ -2,7 +2,7 @@
  * Created by Florian on 08/10/2017.
  */
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Fab, Input } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {
@@ -13,11 +13,11 @@ export default class Connection extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        /*this.state = {
             username: "",
             password: "",
             email,
-        }
+        }*/
     }
 
     render() {
