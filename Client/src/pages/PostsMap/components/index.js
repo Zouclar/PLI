@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { Navigation } from 'react-native-navigation';
 
+import APIWrapper from '../../../api/APIWrapper.js';
+
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import CustomStyle from '../assets/map-style.json';
 import styles from '../styles/map.js';
@@ -60,19 +62,18 @@ class PostsMap extends Component {
 
     
    getPostsFromApiAsync() {
-       console.log("calling api")
-    return fetch('https://server.lasjunies.fr:8443/posts/all')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log("okokok")
-        this.apiDatas = responseJson;
-        this.forceUpdate()
-        this.postList.uptadeProps(responseJson);
-        console.log('refreshed')
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      APIWrapper.get('/posts/all',
+          (responseJson) => {
+              console.log("okokok")
+              this.apiDatas = responseJson;
+              this.forceUpdate();
+              this.postList.uptadeProps(responseJson);
+              console.log('refreshed')
+          },
+          (error) => {
+              console.error(error);
+          }
+      );
   }
 
     getCurrentLocation() {
@@ -111,9 +112,6 @@ class PostsMap extends Component {
       });
   }
     
-
-    
-   
 
   render() {
       console.log("hey")

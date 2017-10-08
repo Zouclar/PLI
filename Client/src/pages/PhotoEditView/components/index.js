@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Fab } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import APIWrapper from '../../../api/APIWrapper.js';
 
 import {
     AppRegistry,
@@ -37,17 +38,14 @@ export default class PhotoEditView extends Component {
                 formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.uri.split(/[\\/]/).pop()})
 
 
-                fetch('https://server.lasjunies.fr:8443/posts/create',{
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
+                APIWrapper.post('/posts/create', formdata,
+                    response => {
+                        console.log("image uploaded : ", response)
                     },
-                    body: formdata
-                }).then(response => {
-                    console.log("image uploaded : ", response)
-                }).catch(err => {
-                    console.log("image upload", err.message)
-                })
+                    err => {
+                        console.log("image upload", err.message)
+                    }
+                );
             },
             (error) => console.warn(error.message),
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }

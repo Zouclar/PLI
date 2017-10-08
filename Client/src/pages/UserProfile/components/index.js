@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { View, Thumbnail, Icon, Button, Card, CardItem, Right, Left, Body, DeckSwiper, Container, Content } from 'native-base';
 import styles from '../styles/details.js';
+import AppConfig from '../../../config.js'
 
 const cards = [
     {
@@ -46,7 +47,7 @@ class UserProfile extends Component {
     }
 
     test(item) {
-        return {uri: "https://server.lasjunies.fr/" + item.picture.replace("/var/www/html/", "")}
+        return {uri: '${AppConfig.get("AssetsBaseUrl")}${this.post.picture.replace("/var/www/html/", "")}'}
     }
 
     render() {

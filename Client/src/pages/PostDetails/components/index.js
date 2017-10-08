@@ -11,6 +11,9 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+import APIWrapper from '../../../api/APIWrapper.js';
+import AppConfig from '../../../config.js'
+
 import styles from '../styles/details.js';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Right, InputGroup, Body, H1, H2, H3, Form, Item, Label, Input } from 'native-base'
 class PostDetails extends Component {
@@ -25,18 +28,16 @@ class PostDetails extends Component {
     }
 
     getCommentsFromApiAsync() {
-        console.log("calling api")
-        return fetch('https://server.lasjunies.fr:8443/comments/1')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log("okokok")
-                this.comments = responseJson;
-                this.forceUpdate()
-                console.log('refreshed')
-            })
-            .catch((error) => {
+        return APIWrapper.get('/comments/1', (responseJson) => {
+            console.log("okokok");
+            this.comments = responseJson;
+            this.forceUpdate();
+            console.log('refreshed')
+        },
+            (error) => {
                 console.error(error);
-            });
+            }
+        );
     }
 
     openPhotoZoomView(path) {
@@ -64,7 +65,7 @@ class PostDetails extends Component {
     }
 
     render() {
-        console.log("RENDER DETAILS ", 'https://server.lasjunies.fr:8443/posts/download/' + this.post.picture)
+        console.log(AppConfig.get("AssetsBaseUrl") + "/" + this.post.picture.replace("/var/www/html/", ""))
         return ( <Container>
             <Content>
                 <Card style={{flex: 0}}>
@@ -84,9 +85,9 @@ class PostDetails extends Component {
                     <CardItem>
                         <Body>
                         <TouchableOpacity style={{height: 200, width: 340, flex: 1}} onPress={() => {
-                            this.openPhotoZoomView("https://server.lasjunies.fr/" + this.post.picture.replace("/var/www/html/", ""))
+                            this.openPhotoZoomView(AppConfig.get("AssetsBaseUrl") + "/" + this.post.picture.replace("/var/www/html/", ""))
                         }}>
-                        <Image source={{uri: "https://server.lasjunies.fr/" + this.post.picture.replace("/var/www/html/", "")}} style={{height: 200, width: 340, flex: 1}}/>
+                        <Image source={{uri: AppConfig.get("AssetsBaseUrl") + "/" + this.post.picture.replace("/var/www/html/", "")}} style={{height: 200, width: 340, flex: 1}}/>
                         </TouchableOpacity>
                         <CardItem>
                             <H3>Description</H3>

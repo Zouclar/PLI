@@ -4,16 +4,21 @@ import { AppRegistry, View } from 'react-native';
 
 import { Navigation } from 'react-native-navigation';
 
+import AppConfig from './config.js'
+
 import { registerScreens } from './pages'
 
 registerScreens(); // this is where you register all of your app's screens
 
+AppConfig.put("APIBaseUrl", "https://server.lasjunies.fr:8443");
+AppConfig.put("AssetsBaseUrl", "https://server.lasjunies.fr");
+
 // start the app
 Navigation.startSingleScreenApp({
     screen: {
-            label: 'Map',
-                screen: 'page.Inscription', // this is a registered name for a screen
-            title: 'Inscription'
-        },
+        label: 'Map',
+        screen: 'Client', // this is a registered name for a screen
+        title: 'Carte'
+    },
 
 });

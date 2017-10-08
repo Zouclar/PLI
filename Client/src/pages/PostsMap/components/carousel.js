@@ -11,6 +11,8 @@ import {
 
 import {  Text, Icon } from 'native-base';
 
+import AppConfig from '../../../config.js'
+
 import Carousel from 'react-native-snap-carousel';
 import styles from '../styles/map.js';
 
@@ -32,8 +34,6 @@ class PostsList extends Component {
         this.forceUpdate();
     }
 
-
-        
     render() {
         console.log('rendering carousel ', this.apiDatas, this.parent)
         
@@ -63,13 +63,13 @@ class PostsList extends Component {
      _renderItem ({item, index}) {
         console.log("rendering item, parent is ");
         console.log(this);
-        console.log("https://server.lasjunies.fr/" + item.picture)
+    console.log(AppConfig.get("AssetsBaseUrl") + item.picture.replace("/var/www/html", ""))
         return (
             <View onPress={() => { console.log(`You've clicked `); }} style={styles.slideItem}>
                 <View style={styles.rowContainer}>
                     <View style={styles.imageContainer}>
                         <Image style={styles.image}
-                            source={{uri: "https://server.lasjunies.fr/" + item.picture.replace("/var/www/html/", "")}}
+                            source={{uri: AppConfig.get("AssetsBaseUrl") + item.picture.replace("/var/www/html", "")}}
                         ></Image>
                     </View>
                     <View style={styles.infos}>
