@@ -8,6 +8,8 @@ var logger  = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 const formidable = require('express-formidable');
+var jwt = require('jsonwebtoken');  
+var expressJwt = require('express-jwt');
 
 var index    = require('./routes/index');
 var users    = require('./routes/userRouter.js');
@@ -26,12 +28,14 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+var mySecret = 'Secret';
 //app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 
 
 // app.use('/', index);
+app.use(expressJwt({ secret: mySecret }).unless({ path: [ '/users/login' ]})); //Ne pas protéger le route /login
 app.use('/posts', posts);
 app.use('/users', users);
 app.use('/comments', comments);

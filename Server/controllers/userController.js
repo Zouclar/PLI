@@ -1,5 +1,7 @@
 "use strict";
 const express = require('express');
+var jwt = require('jsonwebtoken');  
+var expressJwt = require('express-jwt');
 
 // const mysql = require('mysql');
 // var fs = require('file-system');
@@ -49,15 +51,15 @@ class UserController {
         else{
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
-                db.models.users.find({id: req.params.id}, function(err, users) {
-                    console.log(typeof users[0], users[0])
+                db.models.users.find({id: req.params.id}, function(err, result) {
+                    console.log(typeof users, users);
                     var result = {};
                     result.name       = users[0].name;
                     result.lastname   = users[0].lastname;
                     result.surname    = users[0].surname;
                     result.mail       = users[0].mail;
                     result.link_photo = users[0].link_photo;
-                    res.status(200).json(result);
+                    res.status(200).json(result)
                 });
             });
         }
@@ -104,7 +106,6 @@ class UserController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.users.find({}, function(err, rows) {
-                console.log(typeof rows, rows);
                 res.status(200).json(rows);
             });
         });
@@ -128,8 +129,22 @@ class UserController {
     }
 
     static delete (req, res, next) {
-        res.status(200).json()
+        res.status(200).json("delete")
     }
+
+    static login (req, res, next) {
+        //ici vérifier si le login et le password du gars sont bon... ensuite:
+        var token = jwt.sign({
+            username: 'toto'
+          }, "Secret");
+          var otherPro = 'blibli';
+          var data = ({
+            token: token,
+            otherPro: otherPro
+          });
+        res.status(200).json(data);
+    }
+
 }
 
 module.exports = UserController;

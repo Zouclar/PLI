@@ -14,7 +14,6 @@ class PostController {
         if(req.fields.length === 0 || req.files.length === 0)
             res.status(400).json("Error no data");
         else {
-            console.log("THEREIS DATA !!!")
             console.log(req.body);
             console.log(req.files);
             console.log(req.fields);

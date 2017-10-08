@@ -84,8 +84,8 @@ module.exports = function(host, database, cb) {
     var opts = {
         host:     host,
         database: database,
-        user:     'PLI',
-        password: 'pli',
+        user:     'root',
+        password: 'root',
         protocol: 'mysql',
         port:     '8889',
         query:    {pool: true}

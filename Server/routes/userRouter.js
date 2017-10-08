@@ -2,6 +2,8 @@
  * Created by MisterGreen on 19/09/2017.
  */
 var express = require('express');
+var jwt = require('jsonwebtoken');  
+var expressJwt = require('express-jwt');
 var router = express.Router();
 const ctrl = require("../controllers/userController.js");
 
@@ -16,5 +18,7 @@ router.put("/friends/accept/:id_friend", ctrl.acceptFriend);
 
 router.delete("/:id", ctrl.delete);
 router.put("/update/:id", ctrl.update);
+
+router.post("/login", ctrl.login);
 
 module.exports = router;
