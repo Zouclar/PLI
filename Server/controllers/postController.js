@@ -97,7 +97,6 @@ class PostController {
                     });
 
         });
-
     }
 
     static update (req, res, next) {

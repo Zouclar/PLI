@@ -1,6 +1,4 @@
 var app = require('express')();
-
-
  
 app.get('/posts', function (req, res) {
 console.log("Hey, nice to see you !");
@@ -13,6 +11,21 @@ var posts = [
 res.setHeader('Content-Type', 'application/json');  
 console.log(posts)
 res.json(posts);
+});
+
+app.get('/comments/:postID', function (req, res) {
+console.log("Hey, nice to see you !");
+var comments = [
+{
+   content: "Superbe photo"
+},
+{
+   content: "Génial, tout simplement"
+},
+]
+res.setHeader('Content-Type', 'application/json');
+console.log(comments)
+res.json(comments);
 });
  
 var server = app.listen(3000, function () {

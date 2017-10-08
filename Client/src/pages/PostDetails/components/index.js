@@ -20,8 +20,23 @@ class PostDetails extends Component {
         this.navigator = props.navigator;
         this.state = {
             style: {height: 200, width: 340, flex: 1}
-        }
+        };
+        this.comments = [];
+    }
 
+    getCommentsFromApiAsync() {
+        console.log("calling api")
+        return fetch('https://server.lasjunies.fr:8443/comments/1')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("okokok")
+                this.comments = responseJson;
+                this.forceUpdate()
+                console.log('refreshed')
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     openPhotoZoomView(path) {
@@ -32,16 +47,30 @@ class PostDetails extends Component {
         });
     }
 
+    openUserProfileView(user) {
+        this.navigator.push({
+            screen: 'page.UserProfileView',
+            title: user.firstName,
+            passProps: {user: user},
+        });
+    }
+
     openImage(path) {
         this.parent.openPhotoZoomView(path);
     }
 
-    componentWillMount() {}
+    componentWillMount() {
+        this.getCommentsFromApiAsync();
+    }
+
     render() {
         console.log("RENDER DETAILS ", 'https://server.lasjunies.fr:8443/posts/download/' + this.post.picture)
         return ( <Container>
             <Content>
                 <Card style={{flex: 0}}>
+                    <TouchableOpacity onPress={() => {
+                        this.openUserProfileView({id: 123, lastName: "Lasjunies", firstName: "Sylvain", username: "SLS", mail: "s@ls.fr", picture:"", cover:""})
+                    }}>
                     <CardItem>
                         <Left>
                             <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
@@ -51,6 +80,7 @@ class PostDetails extends Component {
                             </Body>
                         </Left>
                     </CardItem>
+                    </TouchableOpacity>
                     <CardItem>
                         <Body>
                         <TouchableOpacity style={{height: 200, width: 340, flex: 1}} onPress={() => {
@@ -88,58 +118,33 @@ class PostDetails extends Component {
 
 
                 <Text style={styles.titleComment}>Commentaires : </Text>
-                <Card>
-                    <CardItem>
-                        <Left>
-                            <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
-                            <Body>
-                            <Text>Jean-Jacques Bernard</Text>
-                            <Text note>dit</Text>
-                            </Body>
-                        </Left>
-                    </CardItem>
-                    <CardItem>
-                        <Left>
-                            <Body>
-                            <Text>
-                                Gros grave stylé la photo, t'as pris avec quel appareil ? moi aussi j'm'entraine à prendre d photo :))
-                            </Text>
-                            </Body>
-                        </Left>
-                        <Right>
-                            <Body>
-                            <Icon active name="thumbs-up" />
-                            </Body>
-                        </Right>
-                    </CardItem>
-                </Card>
-
-
-                <Card>
-                    <CardItem>
-                        <Left>
-                            <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
-                            <Body>
-                            <Text>Patrick Sweyz</Text>
-                            <Text note>dit</Text>
-                            </Body>
-                        </Left>
-                    </CardItem>
-                    <CardItem>
-                        <Left>
-                            <Body>
-                            <Text>
-                                La photo est naze ...
-                            </Text>
-                            </Body>
-                        </Left>
-                        <Right>
-                            <Body>
-                            <Icon active name="thumbs-down" />
-                            </Body>
-                        </Right>
-                    </CardItem>
-                </Card>
+                {this.comments.map(comment => (
+                    <Card>
+                        <CardItem>
+                            <Left>
+                                <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
+                                <Body>
+                                <Text>Jean-Jacques Bernard</Text>
+                                <Text note>dit</Text>
+                                </Body>
+                            </Left>
+                        </CardItem>
+                        <CardItem>
+                            <Left>
+                                <Body>
+                                <Text>
+                                    {comment.content}
+                                </Text>
+                                </Body>
+                            </Left>
+                            <Right>
+                                <Body>
+                                <Icon active name="thumbs-up" />
+                                </Body>
+                            </Right>
+                        </CardItem>
+                    </Card>
+                ))}
 
                 <View style={{flex: 1}}>
                     <Form>

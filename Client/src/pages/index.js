@@ -13,6 +13,7 @@ import PhotoZoomView from './PhotoView/components/zoom.js'
 import PhotoEditView from './PhotoEditView/components/index.js'
 import Connection from './Connection/components/index.js'
 import Inscription from './Inscription/components/index.js'
+import UserProfileView from './UserProfile/components/index.js'
 
 export function registerScreens() {
     Navigation.registerComponent('Client', () => PostsMap);
@@ -22,4 +23,5 @@ export function registerScreens() {
     Navigation.registerComponent('page.PhotoZoomView', () => PhotoZoomView);
     Navigation.registerComponent('page.Connection', () => Connection);
     Navigation.registerComponent('page.Inscription', () => Inscription);
+    Navigation.registerComponent('page.UserProfileView', () => UserProfileView);
 }
