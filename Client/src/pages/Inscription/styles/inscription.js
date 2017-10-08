@@ -10,5 +10,10 @@ import {
 
 
 export default StyleSheet.create({
-
+    submitButton: {
+        position: 'absolute',
+        bottom:0,
+        left:0,
+        width:'auto',
+    }
 });

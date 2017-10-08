@@ -10,5 +10,4 @@ import {
 
 
 export default StyleSheet.create({
-
 });

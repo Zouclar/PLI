@@ -2,28 +2,37 @@
  * Created by Florian on 08/10/2017.
  */
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Fab, Input } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, H1, View } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {
     AppRegistry,
 } from 'react-native'
+import styles from '../styles/inscription.js';
 
 export default class Inscription extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        /*this.state = {
             username: "",
             password: "",
             email,
-        }
+        }*/
     }
 
     render() {
         return (
+
+            /*
+             <Item error>
+             <Input placeholder='Textbox with Error Input'/>
+             <Icon name='close-circle' />
+             </Item>
+            */
             <Container>
-                <Header />
+                <H1 style={{textAlign: 'center', marginTop: 10}}>S'inscrire
+                </H1>
                 <Content>
                     <Form>
                         <Item>
@@ -36,13 +45,16 @@ export default class Inscription extends Component {
                             <Input placeholder="Adresse Mail" />
                         </Item>
                         <Item last>
-                            <Input placeholder="Nom - Prénom" />
+                            <Input placeholder="Nom" />
                         </Item>
-                        <Button style={{margin: 10}}  block>
-                            <Text>S'inscrire</Text>
-                        </Button>
+                        <Item last>
+                            <Input placeholder="Prénom" />
+                        </Item>
                     </Form>
                 </Content>
+                <Button style={styles.submitButton}  block>
+                    <Text>S'inscrire</Text>
+                </Button>
             </Container>
         );
     }
