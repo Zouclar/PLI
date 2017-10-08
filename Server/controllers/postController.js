@@ -2,8 +2,10 @@
 const express = require('express');
 const mysql = require('mysql');
 
-
 var database = require('../config/config.js');
+var getTokenId = function () {
+    return 1;
+};
 
 class PostController {
 
@@ -54,6 +56,28 @@ class PostController {
             });
         });
 
+    }
+    static like (req, res, next) {
+
+        database('localhost', 'PLI', function(err, db) {
+            if (err) throw err;
+            db.models.likes.create({
+                    id_owner   : Integer,
+                    id_post    : req.params.id,
+                    id_comment : null
+                },
+                function(error, rows) {
+                    if (error){
+                        res.status(500).send("Erreur Create User")
+                        console.log('Erreur Create User', error.message)
+                    }
+                    else {
+                        res.status(200).send("Success Create User")
+                        console.log("Success Create User", rows)
+                    }
+                }
+            );
+        });
     }
 
     static download (req, res, next) {

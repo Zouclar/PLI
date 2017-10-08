@@ -1,68 +1,130 @@
 "use strict";
 const express = require('express');
 
-const mysql      = require('mysql');
-var fs = require('file-system');
+// const mysql = require('mysql');
+// var fs = require('file-system');
+var getTokenId = function () {
+    return 1;
+};
+var database = require('../config/config.js');
 
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'PLI',
-    password : 'pli',
-    database : 'PLI'
-});
-
-class userController {
+class UserController {
 
     static create (req, res, next) {
-        if(req.fields.length === 0 || req.files.length === 0)
-            res.status(400).json("Error no data");
-        else {
-            req.file.photo
 
-            connection.connect();
-            for (var item of req.fields){
+        //todo save photo and LINK
 
-                connection.query("INSERT INTO `posts`(`title`, `coordinate_x`, `coordinate_y`, `description`, `link`, `date_pub`, `number_like`, `number_dislike`, `picture`) VALUES ("+item.title+","+item.coordinate_x+","+item.coordinate_y+","+item.description+","+item.link+","+item.date_pub+","+item.number_like+","+item.number_dislike+","+item.pictures, function (error, results, fields) {
-                    if (error) throw error;
-                    console.log('The solution is: ', results[0].solution);
-
-                    fs.writeFile('public/images/', 'aaa', function(err) {})
-                });
-            }
-            connection.end();
-            res.status(200).json()
+        if(req.body === undefined || req.body.length === 0){
+            res.status(400).send("Erreur in body request should not be empty");
+        }else{
+            database('localhost', 'PLI', function(err, db) {
+                if (err) throw err;
+                db.models.users.create({
+                        name       : req.body.name,
+                        lastname   : req.body.lastname,
+                        surname    : req.body.surname,
+                        mail       : req.body.mail,
+                        password   : req.body.password,
+                        link_photo : "test"
+                    },
+                    function(error, rows) {
+                        if (error){
+                            res.status(500).send("Erreur Create User")
+                            console.log('Erreur Create User', error.message)
+                        }
+                        else {
+                            res.status(200).send("Success Create User")
+                            console.log("Success Create User", rows)
+                        }
+                    }
+                );
+            });
         }
     }
+
     static read (req, res, next) {
-        connection.connect();
-
-        connection.query("SELECT * FROM posts WHERE id='" +req.params.id+ "'", function (error, results, fields) {
-            if (error) throw error;
-            console.log('The solution is: ', results[0].solution);
-            results[0].solution.link
-
-        });
-
-        connection.end();
-        res.status(200).json()
+        if(req.params.id === undefined){
+            res.status(400).send("Erreur params ID is missing");
+        }
+        else{
+            database('localhost', 'PLI', function(err, db) {
+                if (err) throw err;
+                db.models.users.find({id: req.params.id}, function(err, users) {
+                    console.log(typeof users[0], users[0])
+                    var result = {};
+                    result.name       = users[0].name;
+                    result.lastname   = users[0].lastname;
+                    result.surname    = users[0].surname;
+                    result.mail       = users[0].mail;
+                    result.link_photo = users[0].link_photo;
+                    res.status(200).json(result);
+                });
+            });
+        }
     }
-    // static upload (req, res, next) {
-    //     res.status(200).json()
-    // }
-    static readAll (req, res, next) {
-        connection.connect();
 
-        connection.query("SELECT * FROM posts", function (error, results, fields) {
-            if (error) throw error;
-            console.log('The solution is: ', results[0].solution);
+    static askFriend (req, res, next) {
+        database('localhost', 'PLI', function(err, db) {
+            if (err) throw err;
+            var id_owner = getTokenId();
+            db.models.friends.create({
+                    id_owner: id_owner,
+                    id_friend : req.params.id_friend,
+                    is_friend : false
+                },
+                function(error, rows) {
+                    if (error){
+                        res.status(500).send("Erreur Asking Friend")
+                        console.log('Erreur Asking Friend', error.message)
+                    }
+                    else {
+                        res.status(200).send("Success Asking Friend");
+                        console.log("Success Asking Friend", rows);
+                    }
+                }
+            );
         });
+    }
+    static acceptFriend (req, res, next) {
+        database('localhost', 'PLI', function(err, db) {
+            if (err) throw err;
+            var id_owner = getTokenId();
+            db.models.friends.find({id_owner: id_owner, id_friend: req.params.id_friend}, function(err, row) {
 
-        connection.end();
-        res.status(200).json()
+                row[0].is_friend = true;
+                row[0].save(function (err) {
+                    if(err) res.status(500).send("Error while Accept Friend, err: ", err);
+                    res.status(200).send("Update Accept Friend");
+                });
+            });
+        });
+    }
+
+    static readAll (req, res, next) {
+        database('localhost', 'PLI', function(err, db) {
+            if (err) throw err;
+            db.models.users.find({}, function(err, rows) {
+                console.log(typeof rows, rows);
+                res.status(200).json(rows);
+            });
+        });
     }
 
     static update (req, res, next) {
-        res.status(200).json()
+        if(req.params.id === undefined){
+            res.status(400).send("Erreur params ID is missing");
+        }
+        else{
+            database('localhost', 'PLI', function(err, db) {
+                if (err) throw err;
+                db.models.users.find({id: req.params.id}, function(err, users) {
+                    console.log(users[0].name);
+                    // people[0].save(function (err) {
+                    //     // err.msg = "under-age";
+                    // });
+                });
+            });
+        }
     }
 
     static delete (req, res, next) {
@@ -70,4 +132,4 @@ class userController {
     }
 }
 
-module.exports = CrimeController;
+module.exports = UserController;

@@ -9,6 +9,7 @@ const ctrl = require("../controllers/postController.js");
 
 
 router.post("/create", ctrl.create);
+router.post("/:id/like", ctrl.like);
 router.get("/download/:id", ctrl.download);
 router.get("/all", ctrl.readAll);
 router.get("/:id", ctrl.read);

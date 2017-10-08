@@ -21,13 +21,62 @@ function setup(db) {
             }
         }
     });
-    // var Shirt = db.define('shirt', ...);
-    // Shirt.hasOne('user', User, ...);
+    var User = db.define("users", {
+        id         : { type: "integer", unique: true },
+        name       : String,
+        lastname   : String,
+        surname    : String,
+        mail       : String,
+        password   : String,
+        link_photo : String
+    }, {
+        methods: {
+            getPictureLink: function () {
+                return this.link;
+            }
+        }
+    });
+
+    var Like = db.define("likes", {
+        id         : { type: "integer", unique: true },
+        id_owner   : { type: "integer", unique: false },
+        id_comment : { type: "integer", unique: false },
+        id_post    : { type: "integer", unique: false }
+    }, {
+        methods: {
+
+        }
+    });
+
+    var Comment = db.define("comments", {
+        id       : { type: "integer", unique: true },
+        id_post  : { type: "integer", unique: true },
+        id_owner : { type: "integer", unique: false },
+        comment  : String,
+        date     : { type: "date", time: true }
+    }, {
+        methods: {
+
+        }
+    });
+
+    var Friend = db.define("friends", {
+        id        : { type: "integer", unique: true },
+        id_owner  : { type: "integer", unique: true },
+        id_friend : { type: "integer", unique: false },
+        is_friend : { type: "boolean"}
+    }, {
+        methods: {
+
+        }
+    });
+
+
 }
 
 module.exports = function(host, database, cb) {
     if (connections[host] && connections[host][database]) {
-        console.log('ALREADY CONNECTED!!!')
+        console.log("ALREADY CONNECTED!!!\n")
         cb(null, connections[host][database]);
         return;
     }
@@ -35,8 +84,10 @@ module.exports = function(host, database, cb) {
     var opts = {
         host:     host,
         database: database,
+        user:     'PLI',
+        password: 'pli',
         protocol: 'mysql',
-        port:     '3306',
+        port:     '8889',
         query:    {pool: true}
     };
 
