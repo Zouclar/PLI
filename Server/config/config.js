@@ -71,6 +71,21 @@ function setup(db) {
         }
     });
 
+    var Postview = db.define("postsview", {
+        id             : { type: "integer", unique: true },
+        title          : String,
+        coordinate     : { type: "point"},
+        description    : String,
+        date_pub       : Date,
+        picture        : String,
+        countLikes     : Number,
+        countComments  : Number
+    }, {
+        methods: {
+
+        }
+    });
+
 
 }
 

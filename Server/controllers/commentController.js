@@ -18,13 +18,14 @@ class CommentController {
             res.status(400).send("Erreur in body request, body should not be empty");
         }else{
             database('localhost', 'PLI', function(err, db) {
+                // BIGTODO => INCLUDE MOMENT JS POUR LA DATE DANS LE CREATE;
                 if (err) throw err;
                 var id_owner = getTokenId();
                 db.models.comments.create({
                         id_post  : req.params.id_post,
                         id_owner : id_owner,
                         comment  : req.body.comment,
-                        date     : req.body.date
+                        date     : "2017-01-01 12:00:00"
                     },
                     function(error, rows) {
                         if (error){
