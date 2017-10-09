@@ -2,7 +2,7 @@
  * Created by Florian on 08/10/2017.
  */
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, H1 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {
@@ -23,16 +23,17 @@ export default class Connection extends Component {
     render() {
         return (
             <Container>
-                <Header />
+                <H1 style={{textAlign: 'center', marginTop: 10}}>Se connecter
+                </H1>
                 <Content>
                     <Form>
                         <Item>
-                            <Input placeholder="Username" />
+                            <Input placeholder="Login" />
                         </Item>
                         <Item last>
-                            <Input placeholder="Password" />
+                            <Input secureTextEntry={true} placeholder="Mot de passe" />
                         </Item>
-                        <Button style={{margin: 10}}  block>
+                        <Button style={{margin: 10}} block>
                             <Text>Connexion</Text>
                         </Button>
                     </Form>

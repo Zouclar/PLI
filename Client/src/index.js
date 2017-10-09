@@ -12,8 +12,8 @@ registerScreens(); // this is where you register all of your app's screens
 Navigation.startSingleScreenApp({
     screen: {
             label: 'Map',
-                screen: 'page.Inscription', // this is a registered name for a screen
-            title: 'Inscription'
+                screen: 'page.Connection', // this is a registered name for a screen
+            title: 'Connexion'
         },
 
 });
