@@ -39,7 +39,7 @@ export default class Inscription extends Component {
                             <Input placeholder="Pseudonyme" />
                         </Item>
                         <Item last>
-                            <Input placeholder="Mot de passe" />
+                            <Input secureTextEntry={true} placeholder="Mot de passe" />
                         </Item>
                         <Item last>
                             <Input placeholder="Adresse Mail" />
