@@ -17,8 +17,7 @@ AppConfig.put("AssetsBaseUrl", "https://server.lasjunies.fr");
 Navigation.startSingleScreenApp({
     screen: {
         label: 'Map',
-        screen: 'Client', // this is a registered name for a screen
-        title: 'Carte'
+        screen: 'page.FriendsTab', // this is a registered name for a screen
+        title: 'FriendsTab'
     },
-
 });
