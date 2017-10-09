@@ -38,7 +38,7 @@ export default class PhotoEditView extends Component {
                 formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.uri.split(/[\\/]/).pop()})
 
 
-                APIWrapper.post('/posts/create', formdata,
+                APIWrapper.postMultiPart('/posts/create', formdata,
                     response => {
                         console.log("image uploaded : ", response)
                     },

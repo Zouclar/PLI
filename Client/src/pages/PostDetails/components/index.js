@@ -28,14 +28,29 @@ class PostDetails extends Component {
     }
 
     getCommentsFromApiAsync() {
-        return APIWrapper.get('/comments/1', (responseJson) => {
-            console.log("okokok");
+        console.log("get comments :");
+        return APIWrapper.get('/comments/' + this.post.id + '/all', (responseJson) => {
+            console.log("get comments : ", responseJson);
             this.comments = responseJson;
             this.forceUpdate();
             console.log('refreshed')
         },
             (error) => {
                 console.error(error);
+            }
+        );
+    }
+
+    sendComment() {
+        console.log("ALLER ON SEND");
+        APIWrapper.post('/comments/create/' + this.post.id, this.state.comment, (responseJson) => {
+                console.log("C BON C SEND")
+                this.getCommentsFromApiAsync();
+                this.forceUpdate();
+                console.log('refreshed')
+            },
+            (error) => {
+                console.error("RATE LE SEND ", error);
             }
         );
     }
@@ -134,7 +149,7 @@ class PostDetails extends Component {
                             <Left>
                                 <Body>
                                 <Text>
-                                    {comment.content}
+                                    {comment.comment}
                                 </Text>
                                 </Body>
                             </Left>
@@ -151,9 +166,9 @@ class PostDetails extends Component {
                     <Form>
                         <Item floatingLabel>
                             <Label>Exprimez-vous !</Label>
-                            <Input />
+                            <Input onChangeText={(text) => this.setState({comment: text})}/>
                         </Item>
-                        <Button style={{margin: 10}}  block>
+                        <Button onPress={ () => {this.sendComment()} } style={{margin: 10}}  block>
                             <Text>Commenter</Text>
                         </Button>
                     </Form>

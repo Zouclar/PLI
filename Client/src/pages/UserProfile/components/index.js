@@ -39,11 +39,24 @@ const cards = [
         picture:"/var/www/html/upload_8d392b800545bfd94c2cc65d62f6978c",
         title:"AUTRE test"
     }
-]
+];
 
 class UserProfile extends Component {
     constructor(props) {
         super(props);
+    }
+
+    getProfile() {
+        return APIWrapper.get('/user/' + this.post.id + '/all', (responseJson) => {
+                console.log("get comments : ", responseJson);
+                this.comments = responseJson;
+                this.forceUpdate();
+                console.log('refreshed')
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
     }
 
     test(item) {
