@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "basic-auth": "^2.0.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
@@ -18,6 +19,8 @@
     "morgan": "~1.8.1",
     "mysql": "^2.0.0-alpha8",
     "orm": "^4.0.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.0",
     "serve-favicon": "~2.4.2"
   }
 }

@@ -1,7 +1,9 @@
 "use strict";
 const express = require('express');
+var passport = require("passport"); 
 var jwt = require('jsonwebtoken');  
 var expressJwt = require('express-jwt');
+var auth = require('basic-auth');
 
 // const mysql = require('mysql');
 // var fs = require('file-system');
@@ -51,8 +53,9 @@ class UserController {
         else{
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
-                db.models.users.find({id: req.params.id}, function(err, result) {
-                    console.log(typeof users, users);
+                db.models.users.find({id: req.params.id}, function(err, users) {
+                    console.log(err);
+                    console.log(users);
                     var result = {};
                     result.name       = users[0].name;
                     result.lastname   = users[0].lastname;
@@ -133,18 +136,37 @@ class UserController {
     }
 
     static login (req, res, next) {
-        //ici vérifier si le login et le password du gars sont bon... ensuite:
-        var token = jwt.sign({
-            username: 'toto'
-          }, "Secret");
-          var otherPro = 'blibli';
-          var data = ({
-            token: token,
-            otherPro: otherPro
-          });
-        res.status(200).json(data);
-    }
+        database('localhost', 'PLI', function(err, db) {
+            var authentic = req.headers['authorization'];
+            if (authentic) {
+                var user = auth(req);
+                var name = user.name;
+                var pass = user.pass;
 
+                db.models.users.find({name: name}, function(err, users) {
+                    if (users[0]) {
+                        if (users[0].name == name && pass == users[0].password) {
+                                    var token = jwt.sign({
+                                    exp: Math.floor(Date.now() / 1000) + (86400),
+                                    username: name
+                                  }, "Secret");
+                                  var otherPro = 'ok';
+                                  var data = ({
+                                    token: token
+                                  });
+                                res.status(200).json(data);
+                        } else {
+                            res.status(401).json("Wrong password or login");
+                        };
+                    } else {
+                        res.status(404).json("Wrong password or login");
+                    };
+                });
+            } else {
+                res.status(403).json("You need to connect");
+            };
+        });
+    }
 }
 
 module.exports = UserController;
