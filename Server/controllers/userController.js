@@ -152,7 +152,21 @@ class UserController {
                                   var data = ({
                                     token: token
                                   });
-                                res.status(200).json(data);
+                                db.models.tokens.create({
+                                    token       : token,
+                                    expiration  : Math.floor(Date.now() / 1000) + (86400),
+                                    id_user     : users[0].id
+                                },
+                                function(error, rows) {
+                                    if (error){
+                                        console.log('Erreur Create token', error.message)
+                                        res.status(500).send("Erreur to create token")
+                                    }
+                                    else {
+                                        console.log('token bien creer !');
+                                        res.status(200).json(data);
+                                    }
+                                });
                         } else {
                             res.status(401).json("Wrong password or login");
                         };

@@ -71,6 +71,17 @@ function setup(db) {
         }
     });
 
+    var Token = db.define("tokens", {
+        id          : { type: "integer", unique: true },
+        token       : String,
+        expiration  : { type: "date", time: true },
+        id_user  : { type: "integer" }
+    }, {
+        methods: {
+
+        }
+    });
+
 
 }
 
