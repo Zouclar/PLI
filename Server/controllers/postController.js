@@ -51,8 +51,23 @@ class PostController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
 
-            db.models.posts.find({}, function(err, rows) {
-                res.status(200).json(rows)
+            db.models.posts.find({id: req.params.id_post}, function(err, postsRows) {
+                var likes   = [];
+                var comments = [];
+
+                db.models.likes.find({id_post: postsRows[0].id}, function(err, likesRows) {
+                    for(var item of likesRows)
+                        likes.push(item);
+
+                    db.models.comments.find({id_post: postsRows[0].id}, function(err, commentsRows) {
+                        for(var item of commentsRows)
+                            comments.push(item);
+
+                        postsRows[0].likes    = likes;
+                        postsRows[0].comments = comments;
+                        res.status(200).json(postsRows);
+                    });
+                });
             });
         });
 
@@ -62,18 +77,18 @@ class PostController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.likes.create({
-                    id_owner   : Integer,
+                    id_owner   : getTokenId(),
                     id_post    : req.params.id,
                     id_comment : null
                 },
                 function(error, rows) {
                     if (error){
-                        res.status(500).send("Erreur Create User")
-                        console.log('Erreur Create User', error.message)
+                        res.status(500).send("Erreur Like Post")
+                        console.log('Erreur Like Post', error.message)
                     }
                     else {
-                        res.status(200).send("Success Create User")
-                        console.log("Success Create User", rows)
+                        res.status(200).send("Success Like Post")
+                        console.log("Success Like Post", rows)
                     }
                 }
             );
@@ -90,12 +105,12 @@ class PostController {
     // }
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
-            console.log("DTFGVYBHUJNKN")
+            if (err) throw err;
+            console.log("hello")
+            db.models.postsview.find({}, function(err, rows) {
 
-                    db.models.posts.find({}, function(err, rows) {
-                        res.status(200).json(rows)
-                    });
-
+                res.status(200).json(rows)
+            });
         });
     }
 
