@@ -43,7 +43,6 @@ class UserController {
 
     static read (req, res, next) {
         if(req.params.id == getTokenId()){
-            console.log("MOI MEME");
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 db.models.users.find({id: req.params.id}, function(err, users) {

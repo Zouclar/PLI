@@ -77,18 +77,18 @@ class PostController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.likes.create({
-                    id_owner   : Integer,
+                    id_owner   : getTokenId(),
                     id_post    : req.params.id,
                     id_comment : null
                 },
                 function(error, rows) {
                     if (error){
-                        res.status(500).send("Erreur Create User")
-                        console.log('Erreur Create User', error.message)
+                        res.status(500).send("Erreur Like Post")
+                        console.log('Erreur Like Post', error.message)
                     }
                     else {
-                        res.status(200).send("Success Create User")
-                        console.log("Success Create User", rows)
+                        res.status(200).send("Success Like Post")
+                        console.log("Success Like Post", rows)
                     }
                 }
             );
