@@ -148,13 +148,14 @@ class UserController {
                                     exp: Math.floor(Date.now() / 1000) + (86400),
                                     username: name
                                   }, "Secret");
-                                  var otherPro = 'ok';
+                                    var date = new Date();
+                                    date.setDate(date.getDate() + 1);
                                   var data = ({
                                     token: token
                                   });
                                 db.models.tokens.create({
                                     token       : token,
-                                    expiration  : Math.floor(Date.now() / 1000) + (86400),
+                                    expiration  : date.toLocaleString(),
                                     id_user     : users[0].id
                                 },
                                 function(error, rows) {

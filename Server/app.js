@@ -15,7 +15,7 @@ var index    = require('./routes/index');
 var users    = require('./routes/userRouter.js');
 var posts    = require('./routes/postRouter');
 var comments = require('./routes/commentRouter');
-
+var database = require('./config/config.js');
 
 var app = express();
 
@@ -33,6 +33,32 @@ var mySecret = 'Secret';
 //app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+    if (req.path == "/users/login") {
+      next();
+    } else {
+    var auth = req.get("authorization").substr(7);
+    database('localhost', 'PLI', function(err, db) {
+        if (err) throw err;
+        db.models.tokens.find({token : auth},
+            function(error, token) {
+                if (error){
+                    console.log('Erreur token', error.message)
+                    res.status(500).send("Error token doesn't not exist")
+                }
+                else {
+                  var date_now = new Date();
+                  if (date_now <= token[0].expiration) {
+                  next();
+                  } else {
+                    console.log("Your token as expire")
+                    res.status(401).send("Your token as expired")
+                  };
+                }
+            })
+        });
+    };
+});
 
 // app.use('/', index);
 app.use(expressJwt({ secret: mySecret }).unless({ path: [ '/users/login' ]})); //Ne pas protéger le route /login
