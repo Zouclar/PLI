@@ -54,15 +54,13 @@ class UserController {
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 db.models.users.find({id: req.params.id}, function(err, users) {
-                    console.log(err);
-                    console.log(users);
                     var result = {};
                     result.name       = users[0].name;
                     result.lastname   = users[0].lastname;
                     result.surname    = users[0].surname;
                     result.mail       = users[0].mail;
                     result.link_photo = users[0].link_photo;
-                    res.status(200).json(result)
+                    res.status(200).json(result);
                 });
             });
         }
