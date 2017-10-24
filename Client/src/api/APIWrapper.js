@@ -34,9 +34,24 @@ export default class APIWrapper {
         fetch(`${AppConfig.get("APIBaseUrl")}${route}`,{
             method: 'post',
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/json',
             },
-            body: datas
+            body: JSON.stringify(datas)
+        }).then(response => {
+            success(response)
+        }).catch(err => {
+            error(err);
+        });
+    }
+
+    static put(route, datas, success, error) {
+        console.log(`PUT : ${AppConfig.get("APIBaseUrl")}${route}`)
+        fetch(`${AppConfig.get("APIBaseUrl")}${route}`,{
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(datas)
         }).then(response => {
             success(response)
         }).catch(err => {

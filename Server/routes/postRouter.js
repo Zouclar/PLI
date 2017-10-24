@@ -9,7 +9,10 @@ const ctrl = require("../controllers/postController.js");
 /* GET home page. */
 
 
-router.post("/create", ctrl.create);
+router.post("/create", router.use(formidable({
+    encoding: 'utf-8',
+    uploadDir: './public/images'
+})), ctrl.create);
 router.put("/like/:id/", ctrl.like);
 router.get("/download/:id", ctrl.download);
 router.get("/all", ctrl.readAll);

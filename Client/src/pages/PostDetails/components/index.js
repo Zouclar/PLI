@@ -42,8 +42,9 @@ class PostDetails extends Component {
     }
 
     sendComment() {
-        console.log("ALLER ON SEND");
-        APIWrapper.post('/comments/create/' + this.post.id, this.state.comment, (responseJson) => {
+        console.log("ALLER ON SEND : " + { comment: this.state.comment });
+        APIWrapper.put('/comments/create/' + this.post.id, { comment: this.state.comment },
+            (responseJson) => {
                 console.log("C BON C SEND")
                 this.getCommentsFromApiAsync();
                 this.forceUpdate();
@@ -51,6 +52,23 @@ class PostDetails extends Component {
             },
             (error) => {
                 console.error("RATE LE SEND ", error);
+                console.log("RATE LE SEND ", error);
+            }
+        );
+    }
+
+    likeThisPost(post) {
+        console.log("ALLER ON LIKE : " + { comment: this.state.comment });
+        APIWrapper.put('/posts/like/' + this.post.id, {},
+            (responseJson) => {
+                console.log("C BON C SEND")
+                this.post.number_likes ++;
+                this.forceUpdate();
+                console.log('refreshed')
+            },
+            (error) => {
+                console.error("RATE LE SEND ", error);
+                console.log("RATE LE SEND ", error);
             }
         );
     }
@@ -114,15 +132,15 @@ class PostDetails extends Component {
                     </CardItem>
                     <CardItem>
                         <Left>
-                            <Button transparent>
+                            <Button transparent onPress={() => {this.likeThisPost()}}>
                                 <Icon active name="thumbs-up" />
-                                <Text>12 Likes</Text>
+                                <Text>{this.post.number_like} Likes</Text>
                             </Button>
                         </Left>
                         <Body>
                         <Button transparent>
                             <Icon active name="chatbubbles" />
-                            <Text>Comments</Text>
+                            <Text>{this.comments.length} Comments</Text>
                         </Button>
                         </Body>
                         <Right>
@@ -132,8 +150,6 @@ class PostDetails extends Component {
                 </Card>
 
 
-
-                <Text style={styles.titleComment}>Commentaires : </Text>
                 {this.comments.map(comment => (
                     <Card>
                         <CardItem>

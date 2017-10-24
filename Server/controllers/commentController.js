@@ -14,7 +14,7 @@ class CommentController {
     static create (req, res, next) {
 
         //todo save photo and LINK
-        if(req.body === undefined || req.body.length === 0){
+        if(!req.body.comment){
             res.status(400).send("Erreur in body request, body should not be empty");
         }else{
             database('localhost', 'PLI', function(err, db) {

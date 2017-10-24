@@ -63,13 +63,13 @@ class PostsList extends Component {
      _renderItem ({item, index}) {
         console.log("rendering item, parent is ");
         console.log(this);
-    console.log(AppConfig.get("AssetsBaseUrl") + item.picture.replace("/var/www/html", ""))
+    console.log(AppConfig.get("AssetsBaseUrl") + item.picture.replace("/var/www/html/", ""))
         return (
             <View onPress={() => { console.log(`You've clicked `); }} style={styles.slideItem}>
                 <View style={styles.rowContainer}>
                     <View style={styles.imageContainer}>
                         <Image style={styles.image}
-                            source={{uri: AppConfig.get("AssetsBaseUrl") + item.picture.replace("/var/www/html", "")}}
+                            source={{uri: AppConfig.get("AssetsBaseUrl") + "/" + item.picture.replace("/var/www/html", "")}}
                         ></Image>
                     </View>
                     <View style={styles.infos}>
