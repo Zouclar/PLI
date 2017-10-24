@@ -50,13 +50,17 @@ class UserController {
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 db.models.users.find({id: req.params.id}, function(err, users) {
+
+                    var result = [];
                     console.log(typeof users[0], users[0])
-                    var result = {};
-                    result.name       = users[0].name;
-                    result.lastname   = users[0].lastname;
-                    result.surname    = users[0].surname;
-                    result.mail       = users[0].mail;
-                    result.link_photo = users[0].link_photo;
+                    if(Object.keys(rows).length !== 0){
+                        result.name       = users[0].name;
+                        result.lastname   = users[0].lastname;
+                        result.surname    = users[0].surname;
+                        result.mail       = users[0].mail;
+                        result.link_photo = users[0].link_photo;
+
+                    }
                     res.status(200).json(result);
                 });
             });
@@ -104,8 +108,11 @@ class UserController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.users.find({}, function(err, rows) {
+                var result = [];
+                if(Object.keys(rows).length !== 0)
+                    result = rows;
                 console.log(typeof rows, rows);
-                res.status(200).json(rows);
+                res.status(200).json(result);
             });
         });
     }

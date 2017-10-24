@@ -14,7 +14,7 @@ class PostController {
         if(req.fields.length === 0 || req.files.length === 0)
             res.status(400).json("Error no data");
         else {
-            console.log("THEREIS DATA !!!")
+            console.log("THERE IS DATA !!!")
             console.log(req.body);
             console.log(req.files);
             console.log(req.fields);
@@ -31,16 +31,14 @@ class PostController {
                     picture        :req.files.image.path.replace("public/images/", '')
                     },
                     function(error, rows) {
-                    if (error){
-                        res.status(500).send("PAS OK")
-                        console.log('pas ok', error.message)
-                    }
+                        if (error){
+                            res.status(500).send("PAS OK")
+                            console.log('pas ok', error.message)
+                        }
                         else {
-                        res.status(200).send("OK")
-                        console.log("ok", rows)
-                    }
-
-
+                            console.log("ok", rows)
+                            res.status(200).send("OK")
+                        }
                     }
                 );
             });
@@ -50,12 +48,16 @@ class PostController {
 
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
+            console.log("one")
+            db.models.posts.find({id: req.params.id_post}, function(err, rows) {
 
-            db.models.posts.find({}, function(err, rows) {
-                res.status(200).json(rows)
+                var result = [];
+                if(Object.keys(rows).length !== 0)
+                    result = rows;
+
+                res.status(200).json(result);
             });
         });
-
     }
     static like (req, res, next) {
 
@@ -63,12 +65,12 @@ class PostController {
             if (err) throw err;
             db.models.likes.create({
                     id_owner   : Integer,
-                    id_post    : req.params.id,
+                    id_post    : req.params.id_post,
                     id_comment : null
                 },
                 function(error, rows) {
                     if (error){
-                        res.status(500).send("Erreur Create User")
+                        res.status(403).send("Erreur Create User")
                         console.log('Erreur Create User', error.message)
                     }
                     else {
@@ -81,8 +83,8 @@ class PostController {
     }
 
     static download (req, res, next) {
-        var file = './public/images/' + req.params.id;
-        console.log('getting ./public/images/' + req.params.id)
+        var file = './public/images/' + req.params.id_post;
+        console.log('getting ./public/images/' + req.params.id_post)
         res.download(file); // Set disposition and send it.
     }
     // static upload (req, res, next) {
@@ -90,12 +92,15 @@ class PostController {
     // }
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
-            console.log("DTFGVYBHUJNKN")
+            console.log("one for all")
+            db.models.posts.find({}, function(err, rows) {
+                var result = [];
+                if(Object.keys(rows).length !== 0)
+                    result = rows;
 
-                    db.models.posts.find({}, function(err, rows) {
-                        res.status(200).json(rows)
-                    });
-
+                console.log(typeof rows, rows)
+                res.status(200).json(result)
+            });
         });
     }
 

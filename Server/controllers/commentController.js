@@ -28,12 +28,12 @@ class CommentController {
                     },
                     function(error, rows) {
                         if (error){
-                            res.status(500).send("Erreur Create Comment")
                             console.log('Erreur Create Comment', error.message)
+                            res.status(500).send("Erreur Create Comment")
                         }
                         else {
-                            res.status(200).send("Success Create Comment")
                             console.log("Success Create Comment", rows)
+                            res.status(200).send("Success Create Comment")
                         }
                     }
                 );
@@ -47,9 +47,11 @@ class CommentController {
             if (err) throw err;
             console.log(req.params.id_comment);
             db.models.comments.find({id: req.params.id_comment}, function(err, row) {
-                console.log(row);
-
-                res.status(200).json(row[0]);
+                var result = [];
+                if(Object.keys(row).length !== 0)
+                    result = row[0];
+                console.log(typeof row, row);
+                res.status(200).json(result);
             });
         });
     }
@@ -59,8 +61,11 @@ class CommentController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.comments.find({id_post: req.params.id_post}, function(err, rows) {
+                var result = [];
+                if(Object.keys(rows).length !== 0)
+                    result = rows;
                 console.log(typeof rows, rows);
-                res.status(200).json(rows);
+                res.status(200).json(result);
             });
         });
     }
