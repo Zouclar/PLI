@@ -8,12 +8,14 @@ var logger  = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 const formidable = require('express-formidable');
+var jwt = require('jsonwebtoken');  
+var expressJwt = require('express-jwt');
 
 var index    = require('./routes/index');
 var users    = require('./routes/userRouter.js');
 var posts    = require('./routes/postRouter');
 var comments = require('./routes/commentRouter');
-
+var database = require('./config/config.js');
 
 var app = express();
 
@@ -26,12 +28,40 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+var mySecret = 'Secret';
 //app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+    if (req.path == "/users/login") {
+      next();
+    } else {
+    var auth = req.get("authorization").substr(7);
+    database('localhost', 'PLI', function(err, db) {
+        if (err) throw err;
+        db.models.tokens.find({token : auth},
+            function(error, token) {
+                if (error){
+                    console.log('Erreur token', error.message)
+                    res.status(500).send("Error token doesn't not exist")
+                }
+                else {
+                  var date_now = new Date();
+                  if (date_now <= token[0].expiration) {
+                  next();
+                  } else {
+                    console.log("Your token as expire")
+                    res.status(401).send("Your token as expired")
+                  };
+                }
+            })
+        });
+    };
+});
 
 // app.use('/', index);
+app.use(expressJwt({ secret: mySecret }).unless({ path: [ '/users/login' ]})); //Ne pas protéger le route /login
 app.use('/posts', posts);
 app.use('/users', users);
 app.use('/comments', comments);

@@ -2,6 +2,7 @@
  * Created by MisterGreen on 19/09/2017.
  */
 var express = require('express');
+var jwt = require('express-jwt');
 var router = express.Router();
 const ctrl = require("../controllers/postController.js");
 

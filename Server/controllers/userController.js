@@ -1,5 +1,9 @@
 "use strict";
 const express = require('express');
+var passport = require("passport");
+var jwt = require('jsonwebtoken');
+var expressJwt = require('express-jwt');
+var auth = require('basic-auth');
 
 // const mysql = require('mysql');
 // var fs = require('file-system');
@@ -46,7 +50,6 @@ class UserController {
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 db.models.users.find({id: req.params.id}, function(err, users) {
-
                     var result = {};
                     result.name       = users[0].name;
                     result.lastname   = users[0].lastname;
@@ -141,7 +144,6 @@ class UserController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.users.find({}, function(err, rows) {
-                console.log(typeof rows, rows);
                 res.status(200).json(rows);
             });
         });
@@ -165,7 +167,55 @@ class UserController {
     }
 
     static delete (req, res, next) {
-        res.status(200).json()
+        res.status(200).json("delete")
+    }
+
+    static login (req, res, next) {
+        database('localhost', 'PLI', function(err, db) {
+            var authentic = req.headers['authorization'];
+            if (authentic) {
+                var user = auth(req);
+                var name = user.name;
+                var pass = user.pass;
+
+                db.models.users.find({name: name}, function(err, users) {
+                    if (users[0]) {
+                        if (users[0].name == name && pass == users[0].password) {
+                                    var token = jwt.sign({
+                                    exp: Math.floor(Date.now() / 1000) + (86400),
+                                    username: name
+                                  }, "Secret");
+                                    var date = new Date();
+                                    date.setDate(date.getDate() + 1);
+                                  var data = ({
+                                    token: token
+                                  });
+                                db.models.tokens.create({
+                                    token       : token,
+                                    expiration  : date.toLocaleString(),
+                                    id_user     : users[0].id
+                                },
+                                function(error, rows) {
+                                    if (error){
+                                        console.log('Erreur Create token', error.message)
+                                        res.status(500).send("Erreur to create token")
+                                    }
+                                    else {
+                                        console.log('token bien creer !');
+                                        res.status(200).json(data);
+                                    }
+                                });
+                        } else {
+                            res.status(401).json("Wrong password or login");
+                        };
+                    } else {
+                        res.status(404).json("Wrong password or login");
+                    };
+                });
+            } else {
+                res.status(403).json("You need to connect");
+            };
+        });
     }
 }
 
