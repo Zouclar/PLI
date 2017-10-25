@@ -13,7 +13,8 @@ function setup(db) {
         date_pub       : Date,
         number_like    : Number,
         number_dislike : Number,
-        picture        : String
+        picture        : String,
+        user_id        : { type: "integer" }
     }, {
         methods: {
             getPictureLink: function () {

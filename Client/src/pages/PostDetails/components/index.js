@@ -20,6 +20,7 @@ class PostDetails extends Component {
     constructor(props){
         super(props);
         this.post = props.post;
+        this.apiPost = {likes:[]}
         this.navigator = props.navigator;
         this.state = {
             style: {height: 200, width: 340, flex: 1}
@@ -35,6 +36,20 @@ class PostDetails extends Component {
             this.forceUpdate();
             console.log('refreshed')
         },
+            (error) => {
+                console.error(error);
+            }
+        );
+    }
+
+    getPostFromApiAsync() {
+        console.log("get comments :");
+        return APIWrapper.get('/posts/' + this.post.id, (responseJson) => {
+                console.log("get POST : ", responseJson);
+                this.apiPost = responseJson[0];
+                this.forceUpdate();
+                console.log('refreshed')
+            },
             (error) => {
                 console.error(error);
             }
@@ -62,7 +77,7 @@ class PostDetails extends Component {
         APIWrapper.put('/posts/like/' + this.post.id, {},
             (responseJson) => {
                 console.log("C BON C SEND")
-                this.post.number_likes ++;
+                this.getPostFromApiAsync();
                 this.forceUpdate();
                 console.log('refreshed')
             },
@@ -95,6 +110,7 @@ class PostDetails extends Component {
 
     componentWillMount() {
         this.getCommentsFromApiAsync();
+        this.getPostFromApiAsync();
     }
 
     render() {
@@ -134,13 +150,13 @@ class PostDetails extends Component {
                         <Left>
                             <Button transparent onPress={() => {this.likeThisPost()}}>
                                 <Icon active name="thumbs-up" />
-                                <Text>{this.post.number_like} Likes</Text>
+                                <Text>{this.apiPost.likes.length}</Text>
                             </Button>
                         </Left>
                         <Body>
                         <Button transparent>
                             <Icon active name="chatbubbles" />
-                            <Text>{this.comments.length} Comments</Text>
+                            <Text>{this.comments.length}</Text>
                         </Button>
                         </Body>
                         <Right>

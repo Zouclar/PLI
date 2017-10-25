@@ -62,7 +62,7 @@ class PostsMap extends Component {
 
     
    getPostsFromApiAsync() {
-      APIWrapper.get('/posts/all',
+      APIWrapper.get('/posts/',
           (responseJson) => {
               console.log("okokok")
               this.apiDatas = responseJson;
