@@ -9,12 +9,16 @@ import {
     AppRegistry
 } from 'react-native';
 import { View, Thumbnail, Icon, Button, Card, CardItem, Right, Left, Body, DeckSwiper, Container, Content} from 'native-base';
-
 import styles from '../styles/details.js';
+import APIWrapper from '../../../api/APIWrapper'
 
 class ProfileTab extends Component {
     constructor(props) {
         super(props);
+        this.user = {
+
+        }
+
     }
 
     test(item) {
@@ -28,7 +32,7 @@ class ProfileTab extends Component {
                                 <View style={styles.head}>
                                     <Image style={styles.cover} source={{uri: 'https://www.newsweed.fr/wp-content/uploads/2016/08/skate-750x400.jpg'}} />
                                     <Thumbnail large style={styles.thumbnail} source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
-                                    <Text style={styles.name}>{this.props.user.firstName} {this.props.user.lastName}</Text>
+                                    <Text style={styles.name}>{this.props.user.name} {this.props.user.lastname}</Text>
                                     <Button transparent style={styles.friendAddButton}>
                                         <Icon active name="add" />
                                         <Text>Ajouter en ami</Text>

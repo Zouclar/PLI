@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { View, Thumbnail, Icon, Button, Card, CardItem, Right, Left, Body, DeckSwiper, Container, Content, H1, Header, List, Separator, ListItem } from 'native-base';
 import styles from '../styles/details.js';
+import APIWrapper from '../../../api/APIWrapper'
 
 const datas = [
     'Simon Mignolet',
@@ -30,8 +31,8 @@ export default class FriendsTab extends Component {
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             basic: true,
-            listViewData: datas,
-            listViewDataBis: datas_bis,
+            listViewData: this.props.user.friends_waiting,
+            listViewDataBis: this.props.user.friends,
         };
     }
 
@@ -40,6 +41,20 @@ export default class FriendsTab extends Component {
         const newData = [...this.state.listViewData];
         newData.splice(rowId, 1);
         this.setState({ listViewData: newData });
+    }
+
+    acceptFriend(id) {
+            APIWrapper.put('/users/friends/accept/' + id,
+            (responseJson) => {
+                console.log("C BON C SEND")
+                this.forceUpdate();
+                console.log('refreshed')
+            },
+            (error) => {
+                console.error("RATE LE SEND ", error);
+                console.log("RATE LE SEND ", error);
+            }
+        );
     }
 
     render() {
@@ -54,12 +69,12 @@ export default class FriendsTab extends Component {
                             <ListItem>
                                 <Thumbnail style={{marginLeft: 5}} square small size={80} source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg' }} />
                                 <Body>
-                                <Text> {data} </Text>
-                                <Text style={{marginLeft: 5}} note>Its time to build a difference . .</Text>
+                                <Text> {data.id_friend} </Text>
+                                <Text style={{marginLeft: 5}} note>user bio . .</Text>
                                 </Body>
                             </ListItem>}
                         renderLeftHiddenRow={data =>
-                            <Button full success onPress={() => alert(data)}>
+                            <Button full success onPress={() => {this.acceptFriend(data.id_friend)}}>
                                 <Icon active name="add" />
                             </Button>}
                         renderRightHiddenRow={(data, secId, rowId, rowMap) =>
@@ -78,8 +93,8 @@ export default class FriendsTab extends Component {
                             <ListItem>
                                 <Thumbnail style={{marginLeft: 5}} square small size={80} source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg' }} />
                                 <Body>
-                                <Text> {data} </Text>
-                                <Text style={{marginLeft: 5}} note>Its time to build a difference . .</Text>
+                                <Text> {data.id} </Text>
+                                <Text style={{marginLeft: 5}} note>user bio . .</Text>
                                 </Body>
                             </ListItem>}
                         renderLeftHiddenRow={data =>

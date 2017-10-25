@@ -26,6 +26,7 @@ class PostDetails extends Component {
             style: {height: 200, width: 340, flex: 1}
         };
         this.comments = [];
+        this.author = {}
     }
 
     getCommentsFromApiAsync() {
@@ -47,6 +48,20 @@ class PostDetails extends Component {
         return APIWrapper.get('/posts/' + this.post.id, (responseJson) => {
                 console.log("get POST : ", responseJson);
                 this.apiPost = responseJson[0];
+                this.forceUpdate();
+                console.log('refreshed')
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+    }
+
+    getAuthorProfile() {
+        return APIWrapper.get('/users/' + this.post.user_id + '/', (responseJson) => {
+            console.log('/users/' + this.post.user_id + '/')
+                console.log("get user : ", responseJson);
+                this.author = responseJson;
                 this.forceUpdate();
                 console.log('refreshed')
             },
@@ -111,6 +126,7 @@ class PostDetails extends Component {
     componentWillMount() {
         this.getCommentsFromApiAsync();
         this.getPostFromApiAsync();
+        this.getAuthorProfile();
     }
 
     render() {
@@ -119,14 +135,14 @@ class PostDetails extends Component {
             <Content>
                 <Card style={{flex: 0}}>
                     <TouchableOpacity onPress={() => {
-                        this.openUserProfileView({id: 123, lastName: "Lasjunies", firstName: "Sylvain", username: "SLS", mail: "s@ls.fr", picture:"", cover:""})
+                        this.openUserProfileView(this.author)
                     }}>
                     <CardItem>
                         <Left>
                             <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
                             <Body>
                             <Text>{this.post.title}</Text>
-                            <Text note>Par John Doe</Text>
+                            <Text note>Par {this.author.name} {this.author.lastname}</Text>
                             </Body>
                         </Left>
                     </CardItem>

@@ -19,19 +19,6 @@ class UserProfile extends Component {
         super(props);
     }
 
-    getProfile() {
-        return APIWrapper.get('/user/' + this.post.id + '/all', (responseJson) => {
-                console.log("get comments : ", responseJson);
-                this.comments = responseJson;
-                this.forceUpdate();
-                console.log('refreshed')
-            },
-            (error) => {
-                console.error(error);
-            }
-        );
-    }
-
     test(item) {
         return {uri: '${AppConfig.get("AssetsBaseUrl")}${this.post.picture.replace("/var/www/html/", "")}'}
     }
