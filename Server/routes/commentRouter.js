@@ -6,7 +6,7 @@ var router = express.Router();
 const ctrl = require("../controllers/commentController.js");
 
 
-router.post("/create/:id_post",ctrl.create);
+router.put("/create/:id_post", ctrl.create);
 router.get("/:id_post/all", ctrl.readAll);
 router.get("/:id_comment", ctrl.read);
 router.put("/like/:id_comment", ctrl.like);

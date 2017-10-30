@@ -13,7 +13,8 @@ function setup(db) {
         date_pub       : Date,
         number_like    : Number,
         number_dislike : Number,
-        picture        : String
+        picture        : String,
+        user_id        : { type: "integer" }
     }, {
         methods: {
             getPictureLink: function () {
@@ -99,10 +100,8 @@ module.exports = function(host, database, cb) {
     var opts = {
         host:     host,
         database: database,
-        user:     'PLI',
-        password: 'pli',
         protocol: 'mysql',
-        port:     '8889',
+        port:     '3306',
         query:    {pool: true}
     };
 

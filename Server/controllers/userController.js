@@ -131,7 +131,7 @@ class UserController {
                 row[0].is_friend = true;
                 row[0].save(function (err) {
                     if(err) res.status(500).send("Error while Accept Friend, err: ", err);
-                    res.status(200).send("Update Accept Friend");
+                    res.status(200).json("Update Accept Friend");
                 });
             });
         });

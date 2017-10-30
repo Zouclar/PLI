@@ -14,12 +14,15 @@ class CommentController {
     static create (req, res, next) {
 
         //todo save photo and LINK
-        if(req.body === undefined || req.body.length === 0){
-            res.status(400).send("Erreur in body request, body should not be empty");
+        if(!req.body){
+	    console.log("body : ", req.body);
+            res.status(400).send("Requete invalide");
         }else{
             database('localhost', 'PLI', function(err, db) {
                 // BIGTODO => INCLUDE MOMENT JS POUR LA DATE DANS LE CREATE;
                 if (err) throw err;
+		console.log("body: ", req.body)
+		console.log("comment : ", req.body.comment);
                 var id_owner = getTokenId();
                 db.models.comments.create({
                         id_post  : req.params.id_post,
@@ -49,8 +52,7 @@ class CommentController {
             console.log(req.params.id_comment);
             db.models.comments.find({id: req.params.id_comment}, function(err, row) {
                 console.log(row);
-
-                res.status(200).json(row[0]);
+                res.status(200).json(row);
             });
         });
     }
@@ -61,7 +63,10 @@ class CommentController {
             if (err) throw err;
             db.models.comments.find({id_post: req.params.id_post}, function(err, rows) {
                 console.log(typeof rows, rows);
-                res.status(200).json(rows);
+		let ret = [];
+                if (rows)
+                ret = rows;
+                res.status(200).json(ret);
             });
         });
     }

@@ -10,9 +10,11 @@ var getTokenId = function () {
 class PostController {
 
     static create (req, res, next) {
-        console.log("CREATE ROUTE !!!")
-        if(req.fields.length === 0 || req.files.length === 0)
-            res.status(400).json("Error no data");
+        console.log("CREATE ROUTE !!! ", req.fields, req.files)
+        if(req.fields.length === 0 || req.files.length === 0) {
+            console.log("THEREIS DATA !!!");
+	    res.status(400).json("Error no data");
+	}
         else {
             console.log("THEREIS DATA !!!")
             console.log(req.body);
@@ -20,7 +22,7 @@ class PostController {
             console.log(req.fields);
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
-                console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
+                console.log("CONNEXION GOOD uri ", req.files.image.path.replace("/var/www/html/", ''))
                 db.models.posts.create({
                     title          : req.fields.title,
                     coordinate     : {x: req.fields.longitude, y:req.fields.latitude},
@@ -28,11 +30,11 @@ class PostController {
                     date_pub       : new Date(),
                     number_like    :0,
                     number_dislike :0,
-                    picture        :req.files.image.path.replace("public/images/", '')
+                    picture        :req.files.image.path.replace("/var/www/html/", '')
                     },
                     function(error, rows) {
                     if (error){
-                        res.status(500).send("PAS OK")
+                        res.status(501).send("PAS OK")
                         console.log('pas ok', error.message)
                     }
                         else {
@@ -54,6 +56,9 @@ class PostController {
             db.models.posts.find({id: req.params.id_post}, function(err, postsRows) {
                 var likes   = [];
                 var comments = [];
+
+		console.log("looking for : ", req.params.id_post);
+		console.log(postsRows)
 
                 db.models.likes.find({id_post: postsRows[0].id}, function(err, likesRows) {
                     for(var item of likesRows)
@@ -107,9 +112,14 @@ class PostController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             console.log("hello")
-            db.models.postsview.find({}, function(err, rows) {
-
-                res.status(200).json(rows)
+            db.models.posts.find({}, function(err, rows) {
+		let truc = [];
+		console.log("err : ", err);
+		console.log("rows : ", rows)
+                if (rows) 
+                    truc = rows;
+		console.log("returning : ")
+                res.status(200).json(truc)
             });
         });
     }
