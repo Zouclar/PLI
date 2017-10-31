@@ -99,13 +99,10 @@ class PostController {
         console.log('getting ./public/images/' + req.params.id)
         res.download(file); // Set disposition and send it.
     }
-    // static upload (req, res, next) {
-    //     res.status(200).json()
-    // }
+
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            console.log("hello")
             db.models.postsview.find({}, function(err, rows) {
 
                 res.status(200).json(rows)

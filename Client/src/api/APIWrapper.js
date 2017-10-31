@@ -1,10 +1,23 @@
 import AppConfig from '../config.js'
+const base64 = require('base-64');
 
 export default class APIWrapper {
 
     static get(route, success, error) {
         console.log(`GET :  ${AppConfig.get("APIBaseUrl")}${route}`);
-        return fetch(`${AppConfig.get("APIBaseUrl")}${route}`)
+        let options = {
+            method: 'get',
+        };
+
+        if (AppConfig.get("Token")){
+            console.log("TOKEN IS SET")
+            options.headers = {
+                Authorization: `Bearer ${AppConfig.get("Token")}`
+            }
+        }
+
+
+        return fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options)
             .then((response) => response.json())
             .then((responseJson) => {
                 success(responseJson);
@@ -29,15 +42,40 @@ export default class APIWrapper {
         });
     }
 
+    static login(username, password, success, error) {
+        console.log(`LOGIN : ${AppConfig.get("APIBaseUrl")}/users/login`)
+        let options = {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': "Basic " + base64.encode(`${username}:${password}`)
+            },
+        };
+
+        if (AppConfig.get("Token"))
+            options.headers.Authorization = `Bearer ${AppConfig.get("Token")}`;
+
+        fetch(`${AppConfig.get("APIBaseUrl")}/users/login`, options).then(response => {
+            success(response)
+        }).catch(err => {
+            error(err);
+        });
+    }
+
     static post(route, datas, success, error) {
         console.log(`POST : ${AppConfig.get("APIBaseUrl")}${route}`)
-        fetch(`${AppConfig.get("APIBaseUrl")}${route}`,{
+        let options = {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(datas)
-        }).then(response => {
+        };
+
+        if (AppConfig.get("Token"))
+            options.headers.Authorization = `Bearer ${AppConfig.get("Token")}`;
+
+        fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then(response => {
             success(response)
         }).catch(err => {
             error(err);

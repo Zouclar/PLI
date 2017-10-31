@@ -19,6 +19,7 @@ var database = require('./config/config.js');
 
 var app = express();
 
+const whitelist = [ '/users/login', '/users/create' ];
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -34,7 +35,8 @@ var mySecret = 'Secret';
 //app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-    if (req.path == "/users/login") {
+
+    if (whitelist.indexOf(req.path) > -1) {
       next();
     } else {
     var auth = req.get("authorization").substr(7);
@@ -49,10 +51,11 @@ app.use(function (req, res, next) {
                 else {
                   var date_now = new Date();
                   if (date_now <= token[0].expiration) {
+                      console.log("LOGIN OK, NEXT")
                   next();
                   } else {
                     console.log("Your token as expire")
-                    res.status(401).send("Your token as expired")
+                    res.status(401).send({error: "Your token as expired"})
                   };
                 }
             })
@@ -61,7 +64,7 @@ app.use(function (req, res, next) {
 });
 
 // app.use('/', index);
-app.use(expressJwt({ secret: mySecret }).unless({ path: [ '/users/login' ]})); //Ne pas protéger le route /login
+app.use(expressJwt({ secret: mySecret }).unless({ path: whitelist})); //Ne pas protéger le route /login
 app.use('/posts', posts);
 app.use('/users', users);
 app.use('/comments', comments);

@@ -71,7 +71,7 @@ class PostsMap extends Component {
               console.log('refreshed')
           },
           (error) => {
-              console.error(error);
+              console.error("ERROR !!!", error);
           }
       );
   }

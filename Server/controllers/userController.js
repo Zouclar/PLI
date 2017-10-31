@@ -46,7 +46,7 @@ class UserController {
     }
 
     static read (req, res, next) {
-        if(req.params.id == getTokenId()){
+        if(req.params.id == res.id_user){
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 db.models.users.find({id: req.params.id}, function(err, users) {
@@ -172,7 +172,7 @@ class UserController {
 
     static login (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
-            var authentic = req.headers['authorization'];
+            var authentic = req.headers['Authorization'];
             if (authentic) {
                 var user = auth(req);
                 var name = user.name;
@@ -187,9 +187,9 @@ class UserController {
                                   }, "Secret");
                                     var date = new Date();
                                     date.setDate(date.getDate() + 1);
-                                  var data = ({
+                                  var data = {
                                     token: token
-                                  });
+                                  };
                                 db.models.tokens.create({
                                     token       : token,
                                     expiration  : date.toLocaleString(),
