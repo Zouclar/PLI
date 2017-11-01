@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { View, Thumbnail, Icon, Button, Card, CardItem, Right, Left, Body, DeckSwiper, Container, Content} from 'native-base';
 import styles from '../styles/details.js';
+import { Navigation } from 'react-native-navigation';
 import APIWrapper from '../../../api/APIWrapper'
 
 class ProfileTab extends Component {
@@ -19,6 +20,12 @@ class ProfileTab extends Component {
 
         }
 
+    }
+
+    openChatView () {
+        this.props.navigator.push({
+            screen: 'page.Chat',
+        });
     }
 
     test(item) {
@@ -51,7 +58,7 @@ class ProfileTab extends Component {
                                         </CardItem>
                                         </Body>
                                         <Right>
-                                            <Button transparent>
+                                            <Button onPress={() => this.openChatView()} transparent>
                                                 <Icon active name="chatbubbles" />
                                                 <Text>Discuter</Text>
                                             </Button>

@@ -28,7 +28,7 @@ class UserProfile extends Component {
             <Container>
             <Tabs tabBarPosition="bottom" locked={true}>
                 <Tab heading={ <TabHeading><Icon name="person" /><Text> Profile</Text></TabHeading>}>
-                   <ProfileTab user={this.props.user}/>
+                   <ProfileTab user={this.props.user} navigator={this.props.navigator}/>
                 </Tab>
                 <Tab heading={ <TabHeading><Icon name="people" /><Text> Amis</Text></TabHeading>}>
                     <FriendsTab user={this.props.user}/>
