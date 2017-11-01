@@ -9,6 +9,7 @@ import APIWrapper from '../../../api/APIWrapper.js';
 
 import {
     AppRegistry,
+    AsyncStorage
 } from 'react-native'
 
 export default class Connection extends Component {
@@ -19,6 +20,11 @@ export default class Connection extends Component {
             login: "",
             password: "",
         }
+        if (AppConfig.get("Token")) {
+            console.log("TOKEN WAS FOUND USER HAS CONNECTED EARLIER : ", AppConfig.get("Token"))
+            this.openPostMapView();
+        }
+
     }
 
     openPostMapView() {
@@ -31,24 +37,35 @@ export default class Connection extends Component {
         });
     }
 
+    openErrorNotification(title, error) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.error",
+            passProps: {title: title, message: error},
+            autoDismissTimerSec: 3
+        });
+    }
+
     login() {
         APIWrapper.login(this.state.login, this.state.password,
             (responseJson) => {
-                console.log("okokok")
+                console.log("okokok", responseJson)
                 responseJson.json().then((response) => {
                     if (response.token) {
                         console.log("TOKEN SETTTT")
                         AppConfig.put("Token", response.token)
+                        AsyncStorage.setItem("Token", response.token);
                         this.openPostMapView();
                     }
                     else {
                         console.log("WRONT ACCOUNT !!")
+                        this.openErrorNotification("Erreur", "Connexion refusée :(");
                     }
                 })
 
             },
             (error) => {
-                console.error("ERROR", error);
+                console.log("ERROR", error);
+                this.openErrorNotification("Erreur", "Une erreur réseau est survenue :(");
             }
         );
     }

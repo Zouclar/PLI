@@ -103,7 +103,6 @@ function setup(db) {
 
 module.exports = function(host, database, cb) {
     if (connections[host] && connections[host][database]) {
-        console.log("ALREADY CONNECTED!!!\n")
         cb(null, connections[host][database]);
         return;
     }

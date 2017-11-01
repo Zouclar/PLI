@@ -20,7 +20,7 @@ class PostDetails extends Component {
     constructor(props){
         super(props);
         this.post = props.post;
-        this.apiPost = {likes:[]}
+        this.apiPost = {likes:[]};
         this.navigator = props.navigator;
         this.state = {
             style: {height: 200, width: 340, flex: 1}
@@ -72,7 +72,7 @@ class PostDetails extends Component {
     }
 
     sendComment() {
-        console.log("ALLER ON SEND : " + { comment: this.state.comment });
+        console.log("ALLER ON SEND : " + this.state.comment );
         APIWrapper.put('/comments/create/' + this.post.id, { comment: this.state.comment },
             (responseJson) => {
                 console.log("C BON C SEND")
@@ -88,13 +88,14 @@ class PostDetails extends Component {
     }
 
     likeThisPost(post) {
-        console.log("ALLER ON LIKE : " + { comment: this.state.comment });
         APIWrapper.put('/posts/like/' + this.post.id, {},
             (responseJson) => {
-                console.log("C BON C SEND")
-                this.getPostFromApiAsync();
-                this.forceUpdate();
-                console.log('refreshed')
+                responseJson.json().then (response => {
+                    console.log("C BON C SEND", response);
+                    this.getPostFromApiAsync();
+                    this.forceUpdate();
+                    console.log('refreshed')
+                })
             },
             (error) => {
                 console.error("RATE LE SEND ", error);

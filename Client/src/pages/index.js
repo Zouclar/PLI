@@ -15,6 +15,8 @@ import Connection from './Connection/components/index.js'
 import Inscription from './Inscription/components/index.js'
 import UserProfileView from './UserProfile/components/index.js'
 import FriendsTab from './UserProfile/components/friendsTab.js'
+import ErrorNotification from '../notifications/error.notification'
+import SuccessNotification from '../notifications/success.notification'
 
 export function registerScreens() {
     Navigation.registerComponent('Client', () => PostsMap);
@@ -26,4 +28,6 @@ export function registerScreens() {
     Navigation.registerComponent('page.Inscription', () => Inscription);
     Navigation.registerComponent('page.UserProfileView', () => UserProfileView);
     Navigation.registerComponent('page.FriendsTab', () => FriendsTab);
+    Navigation.registerComponent('notification.error', () => ErrorNotification);
+    Navigation.registerComponent('notification.success', () => SuccessNotification);
 }
