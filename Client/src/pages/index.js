@@ -14,6 +14,8 @@ import PhotoEditView from './PhotoEditView/components/index.js'
 import Connection from './Connection/components/index.js'
 import Inscription from './Inscription/components/index.js'
 import UserProfileView from './UserProfile/components/index.js'
+import ProfileTab from './UserProfile/components/profile.js'
+import RecentPostsTab from './UserProfile/components/recent.js'
 import FriendsTab from './UserProfile/components/friendsTab.js'
 
 export function registerScreens() {
@@ -25,5 +27,7 @@ export function registerScreens() {
     Navigation.registerComponent('page.Connection', () => Connection);
     Navigation.registerComponent('page.Inscription', () => Inscription);
     Navigation.registerComponent('page.UserProfileView', () => UserProfileView);
+    Navigation.registerComponent('page.ProfileTab', () => ProfileTab);
+    Navigation.registerComponent('page.RecentPostsTab', () => RecentPostsTab);
     Navigation.registerComponent('page.FriendsTab', () => FriendsTab);
 }
