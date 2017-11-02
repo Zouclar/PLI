@@ -20,7 +20,7 @@ class CommentController {
             database('localhost', 'PLI', function(err, db) {
                 // BIGTODO => INCLUDE MOMENT JS POUR LA DATE DANS LE CREATE;
                 if (err) throw err;
-                var id_owner = getTokenId();
+                var id_owner = res.id_user;
                 db.models.comments.create({
                         id_post  : req.params.id_post,
                         id_owner : id_owner,
@@ -60,7 +60,6 @@ class CommentController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.comments.find({id_post: req.params.id_post}, function(err, rows) {
-                console.log(typeof rows, rows);
                 res.status(200).json(rows);
             });
         });

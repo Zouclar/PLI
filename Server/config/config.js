@@ -103,7 +103,6 @@ function setup(db) {
 
 module.exports = function(host, database, cb) {
     if (connections[host] && connections[host][database]) {
-        console.log("ALREADY CONNECTED!!!\n")
         cb(null, connections[host][database]);
         return;
     }
@@ -111,10 +110,8 @@ module.exports = function(host, database, cb) {
     var opts = {
         host:     host,
         database: database,
-        user:     'root',
-        password: 'root',
         protocol: 'mysql',
-        port:     '8889',
+        port:     '3306',
         query:    {pool: true}
     };
 
