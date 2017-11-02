@@ -4,9 +4,10 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, H1, View } from 'native-base';
 import { GiftedChat } from 'react-native-gifted-chat';
-import SocketIOClient from 'socket.io-client';
-import AppConfig from './config.js'
+const SocketIOClient = require('socket.io-client');
+import AppConfig from '../../../config'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
 
 import {
     AppRegistry,
@@ -38,6 +39,13 @@ export default class Chat extends Component {
 
 
     onSend(messages = []) {
+        console.log(messages)
+        let user_id = AppConfig.get("ID");
+
+        for (message in messages) {
+            message.user._id = user_id;
+            this.socket.emit('chat message', message);
+        }
         this.setState((previousState) => ({
             messages: GiftedChat.append(previousState.messages, messages),
         }));
@@ -45,7 +53,16 @@ export default class Chat extends Component {
 
     constructor(props) {
         super(props);
-        this.socket = SocketIOClient(`${AppConfig.get("AssetsBaseUrl")}:6969`);
+        console.log(`${AppConfig.get("ChatBaseUrl")}`)
+        //this.socket = SocketIOClient(`${AppConfig.get("ChatBaseUrl")}`);
+        this.socket = SocketIOClient("http://server.lasjunies.fr:2222", {
+            transports: ['websocket']
+        });
+        this.socket.on('connect_error', function(err) {
+            console.log('Connection failed', err);
+        });
+
+        console.log(this.socket)
     }
 
     render() {

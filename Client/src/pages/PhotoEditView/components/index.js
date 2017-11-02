@@ -20,6 +20,22 @@ export default class PhotoEditView extends Component {
 
     }
 
+    openErrorNotification(title, error) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.error",
+            passProps: {title: title, message: error},
+            autoDismissTimerSec: 3
+        });
+    }
+
+    openSuccessNotification(title, message) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.success",
+            passProps: {title: title, message: message},
+            autoDismissTimerSec: 3
+        });
+    }
+
     sendPost() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -41,9 +57,11 @@ export default class PhotoEditView extends Component {
                 APIWrapper.postMultiPart('/posts/create', formdata,
                     response => {
                         console.log("image uploaded : ", response)
+                        this.openSuccessNotification("Succès", "Votre post a bien été enregistré :)")
                     },
                     err => {
                         console.log("image upload", err.message)
+                        this.openErrorNotification("Erreur", "Une erreur est survenue, veuillez réessayer plus tard :(")
                     }
                 );
             },

@@ -33,6 +33,7 @@ export default class APIWrapper {
             method: 'post',
             headers: {
                 'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${AppConfig.get("Token")}`
             },
             body: datas
         }).then(response => {
@@ -48,15 +49,17 @@ export default class APIWrapper {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': "Basic " + base64.encode(`${username}:${password}`)
+                'Authorization': "Basic " + base64.encode(`${username}:${password}`)
             },
         };
 
-        if (AppConfig.get("Token"))
-            options.headers.Authorization = `Bearer ${AppConfig.get("Token")}`;
+        console.log("Setting token : ", base64.encode(`${username}:${password}`))
 
-        fetch(`${AppConfig.get("APIBaseUrl")}/users/login`, options).then(response => {
-            success(response)
+       // if (AppConfig.get("Token"))
+         //   options.headers.Authorization = `Bearer ${AppConfig.get("Token")}`;
+
+        fetch(`${AppConfig.get("APIBaseUrl")}/users/login`, options).then(responseJson => {
+            success(responseJson)
         }).catch(err => {
             error(err);
         });
@@ -72,8 +75,12 @@ export default class APIWrapper {
             body: JSON.stringify(datas)
         };
 
-        if (AppConfig.get("Token"))
-            options.headers.Authorization = `Bearer ${AppConfig.get("Token")}`;
+        if (AppConfig.get("Token")) {
+            console.log("TOKEN IS SET IN CONFIG, POSTING WITH IT !")
+            options.headers.authorization = `Bearer ${AppConfig.get("Token")}`;
+        }
+
+
 
         fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then(response => {
             success(response)
@@ -84,15 +91,25 @@ export default class APIWrapper {
 
     static put(route, datas, success, error) {
         console.log(`PUT : ${AppConfig.get("APIBaseUrl")}${route}`)
-        fetch(`${AppConfig.get("APIBaseUrl")}${route}`,{
+        let options = {
             method: 'put',
             headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(datas)
-        }).then(response => {
+        };
+
+        if (AppConfig.get("Token"))
+            options.headers.authorization = `Bearer ${AppConfig.get("Token")}`;
+
+        console.log("PUT : ", options.headers.authorization)
+        console.log(options)
+        fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then(response => {
+            console.log("PUT OK")
             success(response)
         }).catch(err => {
+            console.log("PUT KO")
             error(err);
         });
     }

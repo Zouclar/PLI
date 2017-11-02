@@ -1,5 +1,4 @@
-var io = require('socket.io')(2222);
-
+var io = require('socket.io')();
 io.on('connection', function(socket){
     console.log('a user connected');
 
@@ -13,3 +12,4 @@ io.on('connection', function(socket){
         console.log('user disconnected');
     });
 });
+io.listen(3000);

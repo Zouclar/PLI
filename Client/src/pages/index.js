@@ -17,6 +17,9 @@ import UserProfileView from './UserProfile/components/index.js'
 import ProfileTab from './UserProfile/components/profile.js'
 import RecentPostsTab from './UserProfile/components/recent.js'
 import FriendsTab from './UserProfile/components/friendsTab.js'
+import ErrorNotification from '../notifications/error.notification'
+import SuccessNotification from '../notifications/success.notification'
+import GeneralChat from '../pages/Chat/components/index'
 
 export function registerScreens() {
     Navigation.registerComponent('Client', () => PostsMap);
@@ -30,4 +33,7 @@ export function registerScreens() {
     Navigation.registerComponent('page.ProfileTab', () => ProfileTab);
     Navigation.registerComponent('page.RecentPostsTab', () => RecentPostsTab);
     Navigation.registerComponent('page.FriendsTab', () => FriendsTab);
+    Navigation.registerComponent('notification.error', () => ErrorNotification);
+    Navigation.registerComponent('notification.success', () => SuccessNotification);
+    Navigation.registerComponent('page.Chat', () => GeneralChat);
 }

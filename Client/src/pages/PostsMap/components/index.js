@@ -93,7 +93,8 @@ class PostsMap extends Component {
     }
 
 
-   componentWillMount() {
+
+   componentDidMount() {
        this.getPostsFromApiAsync();
        this.getCurrentLocation();
   }

@@ -12,6 +12,9 @@ registerScreens(); // this is where you register all of your app's screens
 
 AppConfig.put("APIBaseUrl", "https://server.lasjunies.fr:8443");
 AppConfig.put("AssetsBaseUrl", "https://server.lasjunies.fr");
+AppConfig.put("ChatBaseUrl", "http://server.lasjunies.fr:2222");
+
+AppConfig.readStoredToken();
 
 // start the app
 Navigation.startSingleScreenApp({

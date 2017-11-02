@@ -37,9 +37,10 @@ var mySecret = 'Secret';
 app.use(function (req, res, next) {
 
     if (whitelist.indexOf(req.path) > -1) {
+        console.log("ROUTE NOT PROTECTED, NEXT")
       next();
     } else {
-    var auth = req.get("authorization").substr(7);
+    var auth = req.get("Authorization").substr(7);
     database('localhost', 'PLI', function(err, db) {
         if (err) throw err;
         db.models.tokens.find({token : auth},
@@ -52,7 +53,7 @@ app.use(function (req, res, next) {
                   var date_now = new Date();
                   if (date_now <= token[0].expiration) {
                       console.log("LOGIN OK, NEXT")
-                  next();
+                      next();
                   } else {
                     console.log("Your token as expire")
                     res.status(401).send({error: "Your token as expired"})
