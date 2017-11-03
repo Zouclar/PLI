@@ -23,4 +23,10 @@ Navigation.startSingleScreenApp({
         screen: 'page.Connection', // this is a registered name for a screen
         title: 'Connection'
     },
+    drawer: {
+        right: {
+            screen: 'page.userListDrawer'
+        },
+        left: null
+    }
 });

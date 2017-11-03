@@ -25,6 +25,15 @@ export default class Connection extends Component {
          //   this.openPostMapView();
         }
 
+        this.props.navigator.setDrawerEnabled({
+            side: 'right', // the side of the drawer since you can have two, 'left' / 'right'
+            enabled: false // should the drawer be enabled or disabled (locked closed)
+        });
+        this.props.navigator.setDrawerEnabled({
+            side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
+            enabled: false // should the drawer be enabled or disabled (locked closed)
+        });
+
     }
 
     openPostMapView() {

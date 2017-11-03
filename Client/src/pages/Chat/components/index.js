@@ -30,6 +30,18 @@ export default class GeneralChat extends React.Component {
         );
         this.socket.on('chat message', this.onReceivedMessage);
         this.determineUser();
+
+        this.props.navigator.setDrawerEnabled({
+            side: 'right', // the side of the drawer since you can have two, 'left' / 'right'
+            enabled: true // should the drawer be enabled or disabled (locked closed)
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.navigator.setDrawerEnabled({
+            side: 'right', // the side of the drawer since you can have two, 'left' / 'right'
+            enabled: false // should the drawer be enabled or disabled (locked closed)
+        });
     }
 
     /**
@@ -127,6 +139,14 @@ export default class GeneralChat extends React.Component {
             />
         );
     }
+
+    toggleDrawer = () => {
+        console.log("TOGGLE DRAWER")
+        this.props.navigator.toggleDrawer({
+            side: 'left',
+            animated: true
+        });
+    };
 
     // Helper functions
     _storeMessages(messages) {
