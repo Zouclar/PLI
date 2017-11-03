@@ -1,83 +1,97 @@
-/**
- * Created by Florian on 08/10/2017.
- */
-import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, H1, View } from 'native-base';
+import React from 'react';
+import { View, Text, AsyncStorage } from 'react-native';
+import SocketIOClient from 'socket.io-client';
 import { GiftedChat } from 'react-native-gifted-chat';
-const SocketIOClient = require('socket.io-client');
-import AppConfig from '../../../config'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 
+const USER_ID = 'userId';
 
-import {
-    AppRegistry,
-} from 'react-native'
-import styles from '../styles/chat.js';
-
-export default class Chat extends Component {
-
-    state = {
-        messages: [],
-    };
-
-    componentWillMount() {
-        this.setState({
-            messages: [
-                {
-                    _id: 1,
-                    text: 'Hello developer',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                    },
-                },
-            ],
-        });
-    }
-
-
-    onSend(messages = []) {
-        console.log(messages)
-        let user_id = AppConfig.get("ID");
-
-        for (message in messages) {
-            message.user._id = user_id;
-            this.socket.emit('chat message', message);
-        }
-        this.setState((previousState) => ({
-            messages: GiftedChat.append(previousState.messages, messages),
-        }));
-    }
-
+class Main extends React.Component {
     constructor(props) {
         super(props);
-        console.log(`${AppConfig.get("ChatBaseUrl")}`)
-        //this.socket = SocketIOClient(`${AppConfig.get("ChatBaseUrl")}`);
-        this.socket = SocketIOClient("http://server.lasjunies.fr:2222", {
-            transports: ['websocket']
-        });
-        this.socket.on('connect_error', function(err) {
-            console.log('Connection failed', err);
-        });
+        this.state = {
+            messages: [],
+            userId: null
+        };
 
-        console.log(this.socket)
+        this.determineUser = this.determineUser.bind(this);
+        this.onReceivedMessage = this.onReceivedMessage.bind(this);
+        this.onSend = this.onSend.bind(this);
+        this._storeMessages = this._storeMessages.bind(this);
+
+        this.socket = SocketIOClient('http://server.lasjunies.fr:2222',
+            {
+                transports: ['websocket']
+            }
+        );
+        this.socket.on('chat message', this.onReceivedMessage);
+        this.determineUser();
+    }
+
+    /**
+     * When a user joins the chatroom, check if they are an existing user.
+     * If they aren't, then ask the server for a userId.
+     * Set the userId to the component's state.
+     */
+    determineUser() {
+        AsyncStorage.getItem(USER_ID)
+            .then((userId) => {
+                // If there isn't a stored userId, then fetch one from the server.
+                if (!userId) {
+                    this.socket.emit('userJoined', null);
+                    this.socket.on('userJoined', (userId) => {
+                        AsyncStorage.setItem(USER_ID, userId);
+                        this.setState({ userId });
+                    });
+                } else {
+                    this.socket.emit('userJoined', userId);
+                    this.setState({ userId });
+                }
+            })
+            .catch((e) => alert(e));
+    }
+
+    // Event listeners
+    /**
+     * When the server sends a message to this.
+     */
+    onReceivedMessage(messages) {
+        console.log(messages)
+        this._storeMessages(messages);
+    }
+
+    /**
+     * When a message is sent, send the message to the server
+     * and store it in this component's state.
+     */
+    onSend(messages=[]) {
+        console.log("sending")
+        this.socket.emit('chat message', messages[0]);
+        this._storeMessages(messages);
     }
 
     render() {
+        var user = { _id: this.state.userId || -1,
+            name: 'React Native',
+            avatar: 'https://i.pinimg.com/736x/dd/45/96/dd4596b601062eb491ea9bb8e3a78062--two-faces-baby-faces.jpg',
+        };
+
         return (
             <GiftedChat
                 messages={this.state.messages}
-                onSend={(messages) => this.onSend(messages)}
-                user={{
-                    _id: 1,
-                }}
+                onSend={this.onSend}
+                user={user}
             />
         );
     }
+
+    // Helper functions
+    _storeMessages(messages) {
+        this.setState((previousState) => {
+            return {
+                messages: GiftedChat.append(previousState.messages, messages),
+            };
+        });
+    }
 }
 
-
-AppRegistry.registerComponent('Chat', () => Chat);
-module.exports = Chat;
+module.exports = Main;

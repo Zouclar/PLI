@@ -55,6 +55,7 @@ export default class Connection extends Component {
                         AppConfig.put("Token", response.token)
                         AppConfig.put("ID", response.user_id)
                         AsyncStorage.setItem("Token", response.token);
+                        AsyncStorage.setItem("userId", response.user_id);
                         this.openPostMapView();
                     }
                     else {
