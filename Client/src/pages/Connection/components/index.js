@@ -22,7 +22,7 @@ export default class Connection extends Component {
         }
         if (AppConfig.get("Token")) {
             console.log("TOKEN WAS FOUND USER HAS CONNECTED EARLIER : ", AppConfig.get("Token"))
-            this.openPostMapView();
+         //   this.openPostMapView();
         }
 
     }
@@ -51,11 +51,11 @@ export default class Connection extends Component {
                 console.log("okokok", responseJson)
                 responseJson.json().then((response) => {
                     if (response.token) {
-                        console.log("TOKEN SETTTT and id is", response.user_id)
+                        console.log("TOKEN SETTTT and id is", response)
                         AppConfig.put("Token", response.token)
                         AppConfig.put("ID", response.user_id)
                         AsyncStorage.setItem("Token", response.token);
-                        AsyncStorage.setItem("userId", response.user_id);
+                        AsyncStorage.setItem("userId", response.user_id.toString());
                         this.openPostMapView();
                     }
                     else {

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, AsyncStorage } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import { GiftedChat } from 'react-native-gifted-chat';
+import AppConfig from '../../../config'
 
 const USER_ID = 'userId';
 
@@ -36,16 +37,10 @@ class Main extends React.Component {
         AsyncStorage.getItem(USER_ID)
             .then((userId) => {
                 // If there isn't a stored userId, then fetch one from the server.
-                if (!userId) {
-                    this.socket.emit('userJoined', null);
-                    this.socket.on('userJoined', (userId) => {
-                        AsyncStorage.setItem(USER_ID, userId);
-                        this.setState({ userId });
-                    });
-                } else {
+                userId = parseInt(userId);
+                    console.log("fetching user_id", userId)
                     this.socket.emit('userJoined', userId);
                     this.setState({ userId });
-                }
             })
             .catch((e) => alert(e));
     }
