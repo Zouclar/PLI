@@ -27,16 +27,18 @@ class ChatServer {
         });
     }
 
+    handleConnection(socket) {
+        console.log('a user connected');
+        this.socket = socket;
+        this.io.emit('chat message', {text: "Un utilisateur s'est connecté !"});
+
+
+        this.handleGeneralChatMessage();
+        this.handleDisconnection();
+    }
+
     run() {
-        this.io.on('connection', function(socket){
-            console.log('a user connected');
-            this.io.emit('chat message', {text: "Un utilisateur s'est connecté !"});
-
-            this.socket = socket;
-
-            this.handleGeneralChatMessage();
-            this.handleDisconnection();
-        });
+        this.io.on('connection', this.handleConnection());
     }
 }
 
