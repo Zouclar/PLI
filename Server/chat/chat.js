@@ -8,8 +8,7 @@ class ChatServer {
         this.handleDisconnection = this.handleDisconnection.bind(this);
     }
 
-    handleGeneralChatMessage() {
-        this.socket.on('chat message', function(msg) {
+    handleGeneralChatMessage(msg) {
             database('localhost', 'PLI', function(err, db) {
                 db.models.users.find({id: msg.user._id}, function(err, users) {
                     if (users[0] && !err) {
@@ -19,14 +18,11 @@ class ChatServer {
                     }
                 })
             });
-        });
     }
 
     handleDisconnection() {
-        this.socket.on('disconnect', function(){
             this.io.emit('chat message', {text: "Un utilisateur s'est deconnecté !"});
             console.log('user disconnected');
-        });
     }
 
     handleConnection(socket) {
@@ -35,8 +31,8 @@ class ChatServer {
         this.io.emit('chat message', {text: "Un utilisateur s'est connecté !"});
 
 
-        this.handleGeneralChatMessage();
-        this.handleDisconnection();
+        this.socket.on('chat message', this.handleGeneralChatMessage());
+        this.socket.on('disconnect', this.handleDisconnection());
     }
 
     run() {
