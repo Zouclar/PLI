@@ -40,7 +40,7 @@ export default StyleSheet.create({
       width: sliderItemWidth * 0.65
   },
   socialButtons: {
-      width: (sliderItemWidth * 0.7) / 3.2,
+      width: (sliderItemWidth * 0.6) / 3.2,
       flexDirection: 'row'
   },
   socialIcons: {

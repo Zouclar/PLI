@@ -73,9 +73,10 @@ class PostDetails extends Component {
 
     sendComment() {
         console.log("ALLER ON SEND : " + this.state.comment );
-        APIWrapper.put('/comments/create/' + this.post.id, { comment: this.state.comment },
+        APIWrapper.post('/comments/create/' + this.post.id, { comment: this.state.comment },
             (responseJson) => {
                 console.log("C BON C SEND")
+                console.log(responseJson)
                 this.getCommentsFromApiAsync();
                 this.forceUpdate();
                 console.log('refreshed')
@@ -88,14 +89,20 @@ class PostDetails extends Component {
     }
 
     likeThisPost(post) {
+        console.log("tonper")
         APIWrapper.put('/posts/like/' + this.post.id, {},
             (responseJson) => {
-                responseJson.json().then (response => {
+            console.log("tamerlatchoin")
+            console.log(responseJson);
+                this.getPostFromApiAsync();
+                this.forceUpdate();
+                console.log('refreshed')
+               /* responseJson.json().then (response => {
                     console.log("C BON C SEND", response);
                     this.getPostFromApiAsync();
                     this.forceUpdate();
                     console.log('refreshed')
-                })
+                })*/
             },
             (error) => {
                 console.error("RATE LE SEND ", error);

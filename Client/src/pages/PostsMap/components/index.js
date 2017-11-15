@@ -54,6 +54,12 @@ class PostsMap extends Component {
       });
   }
 
+    openChatView () {
+        this.props.navigator.push({
+            screen: 'page.Chat',
+        });
+    }
+
     openPhotoView () {
         this.props.navigator.push({
             screen: 'page.PhotoView',
@@ -155,8 +161,8 @@ class PostsMap extends Component {
               containerStyle={{ }}
               style={{ backgroundColor: '#41a85f' }}
               position="bottomRight"
-              onPress={() => this.openDetailPage(this.selectedPostIndex)}>
-              <Icon name="chevron-right" />
+              onPress={() => this.openChatView()}>
+              <Icon name="forum" />
           </Fab>
       </View>
         </Container>

@@ -48,7 +48,6 @@ export default class APIWrapper {
         let options = {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': "Basic " + base64.encode(`${username}:${password}`)
             },
         };
@@ -82,8 +81,10 @@ export default class APIWrapper {
 
 
 
-        fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then(response => {
-            success(response)
+        fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then (
+            response => response.json()
+        ).then(responseJson => {
+            success(responseJson)
         }).catch(err => {
             error(err);
         });
@@ -94,8 +95,8 @@ export default class APIWrapper {
         let options = {
             method: 'put',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                //'Accept': 'application/json',
+                //'Content-Type': 'application/json'
             },
             body: JSON.stringify(datas)
         };
@@ -105,9 +106,11 @@ export default class APIWrapper {
 
         console.log("PUT : ", options.headers.authorization)
         console.log(options)
-        fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then(response => {
+        fetch(`${AppConfig.get("APIBaseUrl")}${route}`, options).then(
+            (response) => response.json()
+        ).then(responseJson => {
             console.log("PUT OK")
-            success(response)
+            success(responseJson)
         }).catch(err => {
             console.log("PUT KO")
             error(err);

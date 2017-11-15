@@ -9,7 +9,13 @@ import {
   View
 } from 'react-native';
 
-import {  Text, Icon } from 'native-base';
+import {  Text, Icon, Button } from 'native-base';
+
+import moment from 'moment';
+
+import 'moment/locale/fr';
+
+import { Navigation } from 'react-native-navigation';
 
 import AppConfig from '../../../config.js'
 
@@ -27,6 +33,9 @@ class PostsList extends Component {
         console.log(this.props);
     this.apiDatas = props.apiDatas;
         this.parent = props.parent;
+
+        this.openDetailPage = this.openDetailPage.bind(this);
+        this._renderItem = this._renderItem.bind(this);
     }
     
     uptadeProps(props) {
@@ -55,8 +64,17 @@ class PostsList extends Component {
         );
     }
 
-    static openDetailPage(index) {
+    formatDate(date) {
+        console.log(date)
+        console.log(moment(date, "YYYY-MM-DDTHH:mm:ssZ").fromNow())
+        moment.locale('fr');
+        return moment(date, "YYYY-MM-DDTHH:mm:ssZ").fromNow()
+    }
+
+    openDetailPage(index) {
         console.log("details")
+        console.log(this.props)
+        this.props.parent.openDetailPage(index)
         //this.parent.openDetailPage(index);
     }
     
@@ -84,19 +102,21 @@ class PostsList extends Component {
                             <TouchableOpacity style={styles.socialButtons}>
                               <Icon style={styles.socialIcons} active name="chatbubbles" />
                               <Text style={styles.socialTexts}>4 </Text>
-                            </TouchableOpacity>  
-                            <TouchableOpacity onPress={
-                                PostsList.openDetailPage(index)
-                            } style={styles.socialButtons}>
-                              <Text style={styles.socialTexts}>Détails </Text>
-                              <Icon style={styles.socialIcons} active name="md-arrow-dropright" />
-                            </TouchableOpacity> 
-                        </View>
+                            </TouchableOpacity>
+                            <Text style={styles.socialTexts}>{ this.formatDate(item.date_pub)} </Text>
+                        </View >
+
+                            <View style={{justifyContent: 'space-between'}}>
+                                <Button  onPress={()=>{this.openDetailPage(index)}} rounded small success>
+                                    <Text>Details</Text>
+                                </Button>
+                            </View>
+
                     </View>
                     </View>
                 </View>
-                
-                    
+
+
             </View>
         );
     }

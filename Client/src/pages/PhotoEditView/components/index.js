@@ -36,6 +36,14 @@ export default class PhotoEditView extends Component {
         });
     }
 
+    openPostMapView() {
+        this.props.navigator.resetTo({
+            label: 'Map',
+            screen: 'Client',
+            title: 'Map'
+        });
+    }
+
     sendPost() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -58,6 +66,7 @@ export default class PhotoEditView extends Component {
                     response => {
                         console.log("image uploaded : ", response)
                         this.openSuccessNotification("Succès", "Votre post a bien été enregistré :)")
+                        this.openPostMapView();
                     },
                     err => {
                         console.log("image upload", err.message)
