@@ -33,8 +33,8 @@ class ChatServer {
         this.io.emit('chat message', {text: "Un utilisateur s'est connecté !"});
 
 
-        this.socket.on('chat message', this.handleGeneralChatMessage());
-        this.socket.on('disconnect', this.handleDisconnection());
+        this.socket.on('chat message', this.handleGeneralChatMessage);
+        this.socket.on('disconnect', this.handleDisconnection);
     }
 
     run() {
