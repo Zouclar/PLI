@@ -15,12 +15,12 @@ class CommentController {
 
         //todo save photo and LINK
         if(!req.body.comment){
-            res.status(400).send("Erreur in body request, body should not be empty");
+            res.status(400).json("Erreur in body request, body should not be empty");
         }else{
             database('localhost', 'PLI', function(err, db) {
                 // BIGTODO => INCLUDE MOMENT JS POUR LA DATE DANS LE CREATE;
                 if (err) throw err;
-                var id_owner = getTokenId();
+                var id_owner = res.id_user;
                 db.models.comments.create({
                         id_post  : req.params.id_post,
                         id_owner : id_owner,
@@ -29,11 +29,11 @@ class CommentController {
                     },
                     function(error, rows) {
                         if (error){
-                            res.status(500).send("Erreur Create Comment")
+                            res.status(500).json("Erreur Create Comment")
                             console.log('Erreur Create Comment', error.message)
                         }
                         else {
-                            res.status(200).send("Success Create Comment")
+                            res.status(200).json("Success Create Comment")
                             console.log("Success Create Comment", rows)
                         }
                     }
@@ -60,7 +60,6 @@ class CommentController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.comments.find({id_post: req.params.id_post}, function(err, rows) {
-                console.log(typeof rows, rows);
                 res.status(200).json(rows);
             });
         });

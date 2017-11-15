@@ -21,6 +21,7 @@ class PostController {
                 if (err) throw err;
                 console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
                 db.models.posts.create({
+		    user_id	   : res.id_user,
                     title          : req.fields.title,
                     coordinate     : {x: req.fields.longitude, y:req.fields.latitude},
                     description    : req.fields.description,
@@ -53,7 +54,12 @@ class PostController {
             db.models.posts.find({id: req.params.id_post}, function(err, postsRows) {
                 var likes   = [];
                 var comments = [];
-
+		console.log("pr : ", postsRows)
+		if (postsRows.length == 0) {
+			console.log("jene vais pas apparaitre et c relou")
+			res.status(404).json("Post not found");
+			return;
+		}
                 db.models.likes.find({id_post: postsRows[0].id}, function(err, likesRows) {
                     for(var item of likesRows)
                         likes.push(item);
@@ -71,28 +77,31 @@ class PostController {
         });
 
     }
-    static like (req, res, next) {
 
+    static like (req, res, next) {
+	console.log('Gonna like')
+	console.log('Gonna like', res.id_user)
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.likes.create({
-                    id_owner   : getTokenId(),
+                    id_owner   : res.id_user,
                     id_post    : req.params.id,
                     id_comment : null
                 },
                 function(error, rows) {
                     if (error){
-                        res.status(500).send("Erreur Like Post")
-                        console.log('Erreur Like Post', error.message)
+			console.log('Erreur Like Post', error.message)
+			console.log("ERROR 500")
+                        res.status(500).json("Erreur Like Post")
                     }
                     else {
-                        res.status(200).send("Success Like Post")
+                        res.status(200).json("Success Like Post")
                         console.log("Success Like Post", rows)
                     }
                 }
             );
         });
-    }
+    }	
 
     static download (req, res, next) {
         var file = './public/images/' + req.params.id;
@@ -103,8 +112,7 @@ class PostController {
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.postsview.find({}, function(err, rows) {
-
+            db.models.posts.find({}, function(err, rows) {
                 res.status(200).json(rows)
             });
         });

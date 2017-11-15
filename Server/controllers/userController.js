@@ -59,7 +59,7 @@ class UserController {
                     result.friends    = [];
                     result.friends_waiting = [];
 
-                    db.models.friends.find({id_owner: getTokenId()}, function(err, friendsRows) {
+                    db.models.friends.find({id_owner: res.id_user}, function(err, friendsRows) {
                         for(var item of friendsRows){
                             if(item.is_friend === true)
                                 result.friends.push(item);
@@ -172,9 +172,13 @@ class UserController {
 
     static login (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
-            var authentic = req.headers['Authorization'];
+	    console.log(req.headers)
+	    console.log(req.headers['Authorization'])
+	    console.log(req.headers.authorization)
+            var authentic = req.headers.authorization;
             if (authentic) {
                 var user = auth(req);
+		console.log("basicauth : ", user)
                 var name = user.name;
                 var pass = user.pass;
 
@@ -188,7 +192,8 @@ class UserController {
                                     var date = new Date();
                                     date.setDate(date.getDate() + 1);
                                   var data = {
-                                    token: token
+                                    token: token,
+				    user_id: users[0].id
                                   };
                                 db.models.tokens.create({
                                     token       : token,
@@ -198,7 +203,7 @@ class UserController {
                                 function(error, rows) {
                                     if (error){
                                         console.log('Erreur Create token', error.message)
-                                        res.status(500).send("Erreur to create token")
+                                        res.status(500).json("Erreur to create token")
                                     }
                                     else {
                                         console.log('token bien creer !');
