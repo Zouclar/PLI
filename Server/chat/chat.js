@@ -1,4 +1,4 @@
-var database = require('./config/config.js');
+var database = require('../config/config.js');
 
 class ChatServer {
     constructor(port) {
