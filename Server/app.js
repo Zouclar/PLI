@@ -16,8 +16,8 @@ var posts = require('./routes/postRouter');
 var comments = require('./routes/commentRouter');
 var database = require('./config/config.js');
 
-var ChatServer = require('chat/chat');
-var authentication = require('middlewares/auth.middleware');
+var ChatServer = require('./chat/chat.js');
+var authentication = require('./middlewares/auth.middleware');
 
 var app = express();
 

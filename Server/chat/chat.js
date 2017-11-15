@@ -1,4 +1,4 @@
-export default class ChatServer {
+class ChatServer {
     constructor(port) {
         var io = require('socket.io')(port);
         console.log(`Chat listening on port ${port}!`);
@@ -33,4 +33,4 @@ export default class ChatServer {
     }
 }
 
-
+module.exports = ChatServer;

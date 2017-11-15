@@ -1,4 +1,4 @@
-export default function authentication(req, res, next) {
+module.exports = function authentication(req, res, next) {
     const whitelist = ['/users/login', '/users/create'];
 
     if (whitelist.indexOf(req.path) > -1) {
