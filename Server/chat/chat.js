@@ -11,8 +11,8 @@ class ChatServer {
     }
 
     handleGeneralChatMessage(msg) {
-            database('localhost', 'PLI', function(err, db) {
-                db.models.users.find({id: msg.user._id}, function(err, users) {
+            database('localhost', 'PLI', (err, db) => {
+                db.models.users.find({id: msg.user._id}, (err, users) => {
                     if (users[0] && !err) {
                         msg.user.avatar = users[0].link_photo;
                         msg.user.name = users[0].name + " " + users[0].lastname;
