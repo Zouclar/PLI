@@ -1,3 +1,5 @@
+var database = require('./config/config.js');
+
 class ChatServer {
     constructor(port) {
         this.io = require('socket.io')(port);
