@@ -3,6 +3,9 @@ class ChatServer {
         this.io = require('socket.io')(port);
         this.socket = null;
         console.log(`Chat listening on port ${port}!`);
+        this.handleGeneralChatMessage = this.handleGeneralChatMessage.bind(this);
+        this.handleConnection = this.handleConnection.bind(this);
+        this.handleDisconnection = this.handleDisconnection.bind(this);
     }
 
     handleGeneralChatMessage() {
