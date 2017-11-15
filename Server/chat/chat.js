@@ -5,12 +5,13 @@ class ChatServer {
         this.io = require('socket.io')(port);
         this.socket = null;
         console.log(`Chat listening on port ${port}!`);
-        this.handleGeneralChatMessage = this.handleGeneralChatMessage.bind(this);
         this.handleConnection = this.handleConnection.bind(this);
         this.handleDisconnection = this.handleDisconnection.bind(this);
+        this.handleNewClient = this.handleNewClient.bind(this);
     }
 
-    handleGeneralChatMessage(msg) {
+    handleGeneralChatMessage() {
+        this.socket.on('chat message', (msg) =>{
             database('localhost', 'PLI', (err, db) => {
                 db.models.users.find({id: msg.user._id}, (err, users) => {
                     if (users[0] && !err) {
@@ -20,11 +21,34 @@ class ChatServer {
                     }
                 })
             });
+        });
     }
 
     handleDisconnection() {
+        this.socket.on('disconnect', () => {
             this.io.emit('chat message', {text: "Un utilisateur s'est deconnecté !"});
             console.log('user disconnected');
+        });
+    }
+
+    handleNewClient() {
+        this.socket.on('join', (data) => {
+            this.socket.join(data.userId); // We are using room of socket io
+        });
+    }
+
+    handlePrivateChatMessage() {
+        this.socket.on('private message', (msg) => {
+            database('localhost', 'PLI', (err, db) => {
+                db.models.users.find({id: msg.user._id}, (err, users) => {
+                    if (users[0] && !err) {
+                        msg.user.avatar = users[0].link_photo;
+                        msg.user.name = users[0].name + " " + users[0].lastname;
+                        this.io.sockets.in(msg.target).emit('private message', msg);
+                    }
+                })
+            });
+        })
     }
 
     handleConnection(socket) {
@@ -32,9 +56,11 @@ class ChatServer {
         this.socket = socket;
         this.io.emit('chat message', {text: "Un utilisateur s'est connecté !"});
 
+        this.handleNewClient();
 
-        this.socket.on('chat message', this.handleGeneralChatMessage);
-        this.socket.on('disconnect', this.handleDisconnection);
+        this.handlePrivateChatMessage();
+        this.handleGeneralChatMessage();
+        this.handleDisconnection();
     }
 
     run() {

@@ -29,7 +29,7 @@ export default class GeneralChat extends React.Component {
             }
         );
         this.socket.on('chat message', this.onReceivedMessage);
-        this.determineUser();
+        this.determineUser(() => { this.socket.emit('join', {id: this.state.userId}); });
 
         this.props.navigator.setDrawerEnabled({
             side: 'right',
@@ -44,13 +44,15 @@ export default class GeneralChat extends React.Component {
         });
     }
 
-    determineUser() {
+    determineUser(callback) {
         AsyncStorage.getItem(USER_ID)
             .then((userId) => {
                 userId = parseInt(userId);
                     console.log("fetching user_id", userId)
                     this.socket.emit('userJoined', userId);
                     this.setState({ userId });
+                    callback();
+
             })
             .catch((e) => alert(e));
     }
