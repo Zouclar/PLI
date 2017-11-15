@@ -63,6 +63,7 @@ export default class Inscription extends Component {
             (responseJson) => {
                 if (responseJson) {
                     this.openSuccessNotification("Succès", "Inscription réussie, bienvenue !");
+                    this.openSignInView();
                 }
                 else {
                     console.log("WRONT ACCOUNT !!")

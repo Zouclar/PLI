@@ -57,6 +57,7 @@ class PostsMap extends Component {
     openChatView () {
         this.props.navigator.push({
             screen: 'page.Chat',
+            title: 'Chat général',
         });
     }
 

@@ -32,11 +32,11 @@ class UserController {
                     },
                     function(error, rows) {
                         if (error){
-                            res.status(500).send("Erreur Create User")
+                            res.status(500).json("Erreur Create User")
                             console.log('Erreur Create User', error.message)
                         }
                         else {
-                            res.status(200).send("Success Create User")
+                            res.status(200).json("Success Create User")
                             console.log("Success Create User", rows)
                         }
                     }
