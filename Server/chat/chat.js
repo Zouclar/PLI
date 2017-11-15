@@ -12,7 +12,6 @@ class ChatServer {
                     if (users[0] && !err) {
                         msg.user.avatar = users[0].link_photo;
                         msg.user.name = users[0].name + " " + users[0].lastname;
-                        console.log(msg)
                         this.io.emit("chat message", msg)
                     }
                 })
@@ -38,7 +37,7 @@ class ChatServer {
     }
 
     run() {
-        this.io.on('connection', this.handleConnection());
+        this.io.on('connection', this.handleConnection);
     }
 }
 
