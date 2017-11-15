@@ -64,6 +64,21 @@ export default class APIWrapper {
         });
     }
 
+    static signin(data, success, error) {
+        let options = {
+            method: 'post',
+            body: JSON.stringify(data)
+        };
+
+        fetch(`${AppConfig.get("APIBaseUrl")}/users/create`, options).then(responseJson => {
+            success(responseJson)
+        }).catch(err => {
+            error(err);
+        });
+    }
+
+
+
     static post(route, datas, success, error) {
         console.log(`POST : ${AppConfig.get("APIBaseUrl")}${route}`)
         let options = {

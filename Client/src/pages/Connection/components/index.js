@@ -37,12 +37,18 @@ export default class Connection extends Component {
     }
 
     openPostMapView() {
-        //AppConfig.put("Token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDk0ODcxODEsInVzZXJuYW1lIjoic3lsdmFpbiIsImlhdCI6MTUwOTQwMDc4MX0.eFt6uGvzaM_0ogrLbGyVrud-ZD9sPXlrAhfAbrMtDmw");
-        console.log("hello");
         this.props.navigator.resetTo({
             label: 'Map',
             screen: 'Client',
             title: 'Map'
+        });
+    }
+
+    openSignUpView() {
+        this.props.navigator.resetTo({
+            label: 'Inscription',
+            screen: 'page.Inscription',
+            title: 'Inscription'
         });
     }
 
@@ -96,6 +102,9 @@ export default class Connection extends Component {
                         </Item>
                         <Button style={{margin: 10}} onPress={()=>{this.login()}} block>
                             <Text>Connexion</Text>
+                        </Button>
+                        <Button style={{margin: 10}} onPress={() => {this.openSignUpView()}} block light>
+                            <Text>S'inscrire</Text>
                         </Button>
                     </Form>
                 </Content>

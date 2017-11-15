@@ -9,16 +9,72 @@ import {
     AppRegistry,
 } from 'react-native'
 import styles from '../styles/inscription.js';
+import APIWrapper from '../../../api/APIWrapper.js';
+
 
 export default class Inscription extends Component {
 
     constructor(props) {
         super(props);
-        /*this.state = {
-            username: "",
+        this.state = {
+            name: "",
+            lastname: "",
+            surname: "",
+            mail: "",
             password: "",
-            email,
-        }*/
+            link_photo: "",
+        }
+    }
+
+    openSignInView() {
+        this.props.navigator.resetTo({
+            label: 'Connection',
+            screen: 'page.Connection',
+            title: 'Connection'
+        });
+    }
+
+    openErrorNotification(title, error) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.error",
+            passProps: {title: title, message: error},
+            autoDismissTimerSec: 3
+        });
+    }
+
+    openSuccessNotification(title, msg) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.success",
+            passProps: {title: title, message: msg},
+            autoDismissTimerSec: 3
+        });
+    }
+
+    signUp() {
+        let data = {
+            name: this.state.name,
+            lastname: this.state.lastname,
+            surname: this.state.surname,
+            mail: this.state.mail,
+            password: this.state.password,
+            link_photo: "",
+        }
+        APIWrapper.post("/users/create", data,
+            (responseJson) => {
+                if (responseJson) {
+                    this.openSuccessNotification("Succès", "Inscription réussie, bienvenue !");
+                }
+                else {
+                    console.log("WRONT ACCOUNT !!")
+                    this.openErrorNotification("Erreur", "Connexion refusée :(");
+                }
+
+            },
+            (error) => {
+                console.log("ERROR", error);
+                this.openErrorNotification("Erreur", "Une erreur réseau est survenue :(" + error);
+            }
+        );
     }
 
     render() {
@@ -36,25 +92,29 @@ export default class Inscription extends Component {
                 <Content>
                     <Form>
                         <Item>
-                            <Input placeholder="Pseudonyme" />
+                            <Input placeholder="Pseudonyme" onChangeText={(text) => this.setState({surname: text})}/>
                         </Item>
                         <Item last>
-                            <Input secureTextEntry={true} placeholder="Mot de passe" />
+                            <Input secureTextEntry={true} placeholder="Mot de passe" onChangeText={(text) => this.setState({password: text})}/>
                         </Item>
                         <Item last>
-                            <Input placeholder="Adresse Mail" />
+                            <Input placeholder="Adresse Mail" onChangeText={(text) => this.setState({email: text})}/>
                         </Item>
                         <Item last>
-                            <Input placeholder="Nom" />
+                            <Input placeholder="Nom" onChangeText={(text) => this.setState({lastname: text})}/>
                         </Item>
                         <Item last>
-                            <Input placeholder="Prénom" />
+                            <Input placeholder="Prénom" onChangeText={(text) => this.setState({name: text})}/>
                         </Item>
                     </Form>
+                    <Button style={{margin: 10}} onPress={() => {this.signUp()}} block>
+                        <Text>S'inscrire</Text>
+                    </Button>
+                    <Button style={{margin: 10}} onPress={() => {this.openSignInView()}} block light>
+                        <Text>Se connecter</Text>
+                    </Button>
                 </Content>
-                <Button style={styles.submitButton}  block>
-                    <Text>S'inscrire</Text>
-                </Button>
+
             </Container>
         );
     }

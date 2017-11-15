@@ -112,6 +112,7 @@ class PostDetails extends Component {
     }
 
     openPhotoZoomView(path) {
+        console.log("PHOTOO : ", path)
         this.navigator.push({
             screen: 'page.PhotoZoomView',
             title: 'Image',
