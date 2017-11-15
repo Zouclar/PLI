@@ -9,16 +9,15 @@ const formidable = require('express-formidable');
 
 /* GET home page. */
 
-
-router.post("/create", router.use(formidable({
-    encoding: 'utf-8',
-    uploadDir: './public/images'
-})), ctrl.create);
+router.get("/", ctrl.readAll);
 router.put("/like/:id/", ctrl.like);
 router.get("/download/:id", ctrl.download);
-router.get("/", ctrl.readAll);
 router.get("/:id_post", ctrl.read);
 router.delete("/:id", ctrl.delete);
 router.put("/update/:id", ctrl.update);
+router.post("/create", formidable({
+    encoding: 'utf-8',
+    uploadDir: '/var/www/html'
+}), ctrl.create);
 
 module.exports = router;

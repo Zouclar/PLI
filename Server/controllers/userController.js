@@ -193,7 +193,7 @@ class UserController {
                                     date.setDate(date.getDate() + 1);
                                   var data = {
                                     token: token,
-				    user_id: user.id
+				    user_id: users[0].id
                                   };
                                 db.models.tokens.create({
                                     token       : token,

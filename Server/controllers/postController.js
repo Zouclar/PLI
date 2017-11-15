@@ -21,6 +21,7 @@ class PostController {
                 if (err) throw err;
                 console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
                 db.models.posts.create({
+		    user_id	   : res.id_user,
                     title          : req.fields.title,
                     coordinate     : {x: req.fields.longitude, y:req.fields.latitude},
                     description    : req.fields.description,
@@ -76,6 +77,7 @@ class PostController {
         });
 
     }
+
     static like (req, res, next) {
 	console.log('Gonna like')
 	console.log('Gonna like', res.id_user)
@@ -99,7 +101,7 @@ class PostController {
                 }
             );
         });
-    }
+    }	
 
     static download (req, res, next) {
         var file = './public/images/' + req.params.id;
