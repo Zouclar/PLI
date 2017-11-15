@@ -32,27 +32,21 @@ export default class GeneralChat extends React.Component {
         this.determineUser();
 
         this.props.navigator.setDrawerEnabled({
-            side: 'right', // the side of the drawer since you can have two, 'left' / 'right'
-            enabled: true // should the drawer be enabled or disabled (locked closed)
+            side: 'right',
+            enabled: true
         });
     }
 
     componentWillUnmount() {
         this.props.navigator.setDrawerEnabled({
-            side: 'right', // the side of the drawer since you can have two, 'left' / 'right'
-            enabled: false // should the drawer be enabled or disabled (locked closed)
+            side: 'right',
+            enabled: false,
         });
     }
 
-    /**
-     * When a user joins the chatroom, check if they are an existing user.
-     * If they aren't, then ask the server for a userId.
-     * Set the userId to the component's state.
-     */
     determineUser() {
         AsyncStorage.getItem(USER_ID)
             .then((userId) => {
-                // If there isn't a stored userId, then fetch one from the server.
                 userId = parseInt(userId);
                     console.log("fetching user_id", userId)
                     this.socket.emit('userJoined', userId);
@@ -61,19 +55,12 @@ export default class GeneralChat extends React.Component {
             .catch((e) => alert(e));
     }
 
-    // Event listeners
-    /**
-     * When the server sends a message to this.
-     */
+
     onReceivedMessage(messages) {
         console.log(messages)
         this._storeMessages(messages);
     }
 
-    /**
-     * When a message is sent, send the message to the server
-     * and store it in this component's state.
-     */
     onSend(messages=[]) {
         console.log("sending")
         this.socket.emit('chat message', messages[0]);
