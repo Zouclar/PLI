@@ -20,6 +20,7 @@ import FriendsTab from './UserProfile/components/friendsTab.js'
 import ErrorNotification from '../notifications/error.notification'
 import SuccessNotification from '../notifications/success.notification'
 import GeneralChat from '../pages/Chat/components/index'
+import PrivateChat from '../pages/Chat/components/private'
 import UserListDrawer from '../pages/Chat/components/userList'
 
 export function registerScreens() {
@@ -37,5 +38,6 @@ export function registerScreens() {
     Navigation.registerComponent('notification.error', () => ErrorNotification);
     Navigation.registerComponent('notification.success', () => SuccessNotification);
     Navigation.registerComponent('page.Chat', () => GeneralChat);
+    Navigation.registerComponent('page.PrivateChat', () => PrivateChat);
     Navigation.registerComponent('page.userListDrawer', () => UserListDrawer);
 }

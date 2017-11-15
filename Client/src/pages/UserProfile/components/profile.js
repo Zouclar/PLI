@@ -22,9 +22,11 @@ class ProfileTab extends Component {
 
     }
 
-    openChatView () {
+    openPrivateChatView () {
         this.props.navigator.push({
-            screen: 'page.Chat',
+            screen: 'page.PrivateChat',
+            title: `${this.props.user.name} ${this.props.user.lastname}`,
+            passProps: {target: this.props.user.id},
         });
     }
 
@@ -58,7 +60,7 @@ class ProfileTab extends Component {
                                         </CardItem>
                                         </Body>
                                         <Right>
-                                            <Button onPress={() => this.openChatView()} transparent>
+                                            <Button onPress={() => this.openPrivateChatView()} transparent>
                                                 <Icon active name="chatbubbles" />
                                                 <Text>Discuter</Text>
                                             </Button>

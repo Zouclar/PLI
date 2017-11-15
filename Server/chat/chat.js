@@ -44,7 +44,7 @@ class ChatServer {
                     if (users[0] && !err) {
                         msg.user.avatar = users[0].link_photo;
                         msg.user.name = users[0].name + " " + users[0].lastname;
-                        this.io.sockets.in(msg.target).emit('private message', msg);
+                        this.io.sockets.in(msg.user.target).emit('private message', msg);
                     }
                 })
             });
