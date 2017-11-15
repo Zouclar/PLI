@@ -1,4 +1,6 @@
-module.exports = function authentication(req, res, next) {
+var database = require('../config/config.js');
+
+module.exports = function (req, res, next) {
     const whitelist = ['/users/login', '/users/create'];
 
     if (whitelist.indexOf(req.path) > -1) {
