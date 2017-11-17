@@ -45,10 +45,6 @@ class ChatServer {
                         msg.user.avatar = users[0].link_photo;
                         msg.user.name = users[0].name + " " + users[0].lastname;
                         console.log(msg.user._id + " send msg to " + msg.user.target)
-                        this.io.sockets.in(msg.user.target).emit('private message', msg);
-                        this.io.sockets.in(msg.user._id).emit('private message', msg);
-                        this.io.to(msg.user.target).emit('private message', msg);
-                        this.io.to(msg.user._id).emit('private message', msg);
                         socket.broadcast.to(msg.user._id).emit('private message', msg);
                     }
                 })
