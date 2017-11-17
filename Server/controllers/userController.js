@@ -51,6 +51,7 @@ class UserController {
                 if (err) throw err;
                 db.models.users.find({id: req.params.id}, function(err, users) {
                     var result = {};
+                    result.id         = users[0].id;
                     result.name       = users[0].name;
                     result.lastname   = users[0].lastname;
                     result.surname    = users[0].surname;
@@ -76,6 +77,7 @@ class UserController {
                 db.models.users.find({id: req.params.id}, function(err, users) {
 
                     var result = {};
+                    result.id         = users[0].id;
                     result.name       = users[0].name;
                     result.lastname   = users[0].lastname;
                     result.surname    = users[0].surname;

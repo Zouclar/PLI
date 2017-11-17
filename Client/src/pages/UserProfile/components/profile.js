@@ -23,6 +23,8 @@ class ProfileTab extends Component {
     }
 
     openPrivateChatView () {
+        console.log("TARGET USER !!!")
+        console.log(this.props.user)
         this.props.navigator.push({
             screen: 'page.PrivateChat',
             title: `${this.props.user.name} ${this.props.user.lastname}`,

@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, AsyncStorage, Container, AppRegistry } from 'react-native';
+import { Text, AsyncStorage, AppRegistry } from 'react-native';
+import { Drawer, Container, Content, View } from 'native-base';
 import SocketIOClient from 'socket.io-client';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import AppConfig from '../../../config'
+import UserListDrawer from './userList'
 
 
 const USER_ID = 'userId';
@@ -31,17 +33,17 @@ export default class GeneralChat extends React.Component {
         this.socket.on('chat message', this.onReceivedMessage);
         this.determineUser(() => { this.socket.emit('join', {id: this.state.userId}); });
 
-        this.props.navigator.setDrawerEnabled({
+        /*this.props.navigator.setDrawerEnabled({
             side: 'right',
             enabled: true
-        });
+        });*/
     }
 
     componentWillUnmount() {
-        this.props.navigator.setDrawerEnabled({
+        /*this.props.navigator.setDrawerEnabled({
             side: 'right',
             enabled: false,
-        });
+        });*/
     }
 
     determineUser(callback) {
@@ -116,25 +118,24 @@ export default class GeneralChat extends React.Component {
         };
         let trueVal = true;
 
-        return (
-            <GiftedChat
-                messages={this.state.messages}
-                onSend={this.onSend}
-                user={user}
-                renderBubble={this.renderBubble}
-                loadEarlier={trueVal}
-                onLoadEarlier={this.onLoadEarlier}
-                isLoadingEarlier={this.isLoading}
-            />
+        return (<GiftedChat
+                        messages={this.state.messages}
+                        onSend={this.onSend}
+                        user={user}
+                        renderBubble={this.renderBubble}
+                        loadEarlier={trueVal}
+                        onLoadEarlier={this.onLoadEarlier}
+                        isLoadingEarlier={this.isLoading}
+                    />
         );
     }
 
     toggleDrawer = () => {
         console.log("TOGGLE DRAWER")
-        this.props.navigator.toggleDrawer({
+        /*this.props.navigator.toggleDrawer({
             side: 'left',
             animated: true
-        });
+        });*/
     };
 
     // Helper functions

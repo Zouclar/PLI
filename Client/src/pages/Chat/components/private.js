@@ -28,7 +28,11 @@ export default class PrivateChat extends React.Component {
                 transports: ['websocket']
             }
         );
+
+        this.socket.emit('join', {id: this.props.target});
         this.socket.on('private message', this.onReceivedMessage);
+        console.log("target")
+        console.log(this.props.target)
         this.determineUser();
     }
 
@@ -45,6 +49,7 @@ export default class PrivateChat extends React.Component {
 
 
     onReceivedMessage(messages) {
+        console.log("PRIVATE MESSAGE RECIEVED")
         console.log(messages);
         this._storeMessages(messages);
     }
@@ -76,6 +81,7 @@ export default class PrivateChat extends React.Component {
                 loadEarlier={trueVal}
                 onLoadEarlier={this.onLoadEarlier}
                 isLoadingEarlier={this.isLoading}
+                renderAvatar={null}
             />
         );
     }

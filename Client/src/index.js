@@ -12,7 +12,7 @@ registerScreens(); // this is where you register all of your app's screens
 
 AppConfig.put("APIBaseUrl", "https://server.lasjunies.fr:8443");
 AppConfig.put("AssetsBaseUrl", "https://server.lasjunies.fr");
-AppConfig.put("ChatBaseUrl", "http://server.lasjunies.fr:2222");
+AppConfig.put("ChatBaseUrl", "https://server.lasjunies.fr:2222");
 
 AppConfig.readStoredToken();
 
@@ -23,10 +23,10 @@ Navigation.startSingleScreenApp({
         screen: 'page.Connection', // this is a registered name for a screen
         title: 'Connection'
     },
-    drawer: {
+    /*drawer: {
         right: {
             screen: 'page.userListDrawer'
         },
         left: null
-    }
+    }*/
 });

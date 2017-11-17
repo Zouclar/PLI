@@ -3,15 +3,14 @@ var database = require('../config/config.js');
 class ChatServer {
     constructor(port) {
         this.io = require('socket.io')(port);
-        this.socket = null;
         console.log(`Chat listening on port ${port}!`);
         this.handleConnection = this.handleConnection.bind(this);
         this.handleDisconnection = this.handleDisconnection.bind(this);
         this.handleNewClient = this.handleNewClient.bind(this);
     }
 
-    handleGeneralChatMessage() {
-        this.socket.on('chat message', (msg) =>{
+    handleGeneralChatMessage(socket) {
+        socket.on('chat message', (msg) =>{
             database('localhost', 'PLI', (err, db) => {
                 db.models.users.find({id: msg.user._id}, (err, users) => {
                     if (users[0] && !err) {
@@ -24,27 +23,33 @@ class ChatServer {
         });
     }
 
-    handleDisconnection() {
-        this.socket.on('disconnect', () => {
+    handleDisconnection(socket) {
+        socket.on('disconnect', () => {
             this.io.emit('chat message', {text: "Un utilisateur s'est deconnecté !"});
             console.log('user disconnected');
         });
     }
 
-    handleNewClient() {
-        this.socket.on('join', (data) => {
-            this.socket.join(data.userId); // We are using room of socket io
+    handleNewClient(socket) {
+        socket.on('join', (data) => {
+            console.log("client " +  data.id + " join")
+            socket.join(data.id); // We are using room of socket io
         });
     }
 
-    handlePrivateChatMessage() {
-        this.socket.on('private message', (msg) => {
+    handlePrivateChatMessage(socket) {
+        socket.on('private message', (msg) => {
             database('localhost', 'PLI', (err, db) => {
                 db.models.users.find({id: msg.user._id}, (err, users) => {
                     if (users[0] && !err) {
                         msg.user.avatar = users[0].link_photo;
                         msg.user.name = users[0].name + " " + users[0].lastname;
+                        console.log(msg.user._id + " send msg to " + msg.user.target)
                         this.io.sockets.in(msg.user.target).emit('private message', msg);
+                        this.io.sockets.in(msg.user._id).emit('private message', msg);
+                        this.io.to(msg.user.target).emit('private message', msg);
+                        this.io.to(msg.user._id).emit('private message', msg);
+                        socket.broadcast.to(msg.user._id).emit('private message', msg);
                     }
                 })
             });
@@ -53,18 +58,17 @@ class ChatServer {
 
     handleConnection(socket) {
         console.log('a user connected');
-        this.socket = socket;
         this.io.emit('chat message', {text: "Un utilisateur s'est connecté !"});
 
-        this.handleNewClient();
+        this.handleNewClient(socket);
 
-        this.handlePrivateChatMessage();
-        this.handleGeneralChatMessage();
-        this.handleDisconnection();
+        this.handlePrivateChatMessage(socket);
+        this.handleGeneralChatMessage(socket);
+        this.handleDisconnection(socket);
     }
 
     run() {
-        this.io.on('connection', this.handleConnection);
+        this.io.sockets.on('connection', this.handleConnection);
     }
 }
 
