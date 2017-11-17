@@ -74,15 +74,15 @@ export default class PrivateChat extends React.Component {
         let trueVal = true;
 
         return (
-            <GiftedChat
-                messages={this.state.messages}
-                onSend={this.onSend}
-                user={user}
-                loadEarlier={trueVal}
-                onLoadEarlier={this.onLoadEarlier}
-                isLoadingEarlier={this.isLoading}
-                renderAvatar={null}
-            />
+                <GiftedChat
+                    messages={this.state.messages}
+                    onSend={this.onSend}
+                    user={user}
+                    loadEarlier={trueVal}
+                    onLoadEarlier={this.onLoadEarlier}
+                    isLoadingEarlier={this.isLoading}
+                    renderAvatar={null}
+                />
         );
     }
 

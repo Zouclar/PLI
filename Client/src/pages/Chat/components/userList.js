@@ -61,12 +61,6 @@ export default class UserListDrawer extends React.Component {
             this.drawer._root.open()
         };
         return (
-        <Drawer
-            ref={(ref) => { this.drawer = ref; }}
-            content={<UserListDrawer navigator={this.navigator} />}
-
-            side="right"
-            panOpenMask={.25} >
             <Container style={{backgroundColor: "#F0F0F0"}}>
                 <View style={{margin: 5, marginTop: 30}}><Text style={{textAlign: "center"}}>Membres de l'instance ({this.state.listViewData.length})</Text></View>
                 <Content>
@@ -94,8 +88,6 @@ export default class UserListDrawer extends React.Component {
                     />
                 </Content>
             </Container>
-        </Drawer>
-
         );
     }
 }

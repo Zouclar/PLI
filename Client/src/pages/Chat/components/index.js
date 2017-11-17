@@ -118,15 +118,22 @@ export default class GeneralChat extends React.Component {
         };
         let trueVal = true;
 
-        return (<GiftedChat
-                        messages={this.state.messages}
-                        onSend={this.onSend}
-                        user={user}
-                        renderBubble={this.renderBubble}
-                        loadEarlier={trueVal}
-                        onLoadEarlier={this.onLoadEarlier}
-                        isLoadingEarlier={this.isLoading}
-                    />
+        return (<Drawer
+            ref={(ref) => { this.drawer = ref; }}
+            content={<UserListDrawer navigator={this.navigator} />}
+
+            side="right"
+            panOpenMask={.25} >
+                <GiftedChat
+                            messages={this.state.messages}
+                            onSend={this.onSend}
+                            user={user}
+                            renderBubble={this.renderBubble}
+                            loadEarlier={trueVal}
+                            onLoadEarlier={this.onLoadEarlier}
+                            isLoadingEarlier={this.isLoading}
+                        />
+            </Drawer>
         );
     }
 
