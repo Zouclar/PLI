@@ -21,4 +21,16 @@ export default class AppConfig {
         return this.config[key];
     }
 
+    static reset() {
+        let persistantConfig = ["APIBaseUrl", "AssetsBaseUrl", "ChatBaseUrl"]
+        console.log("reset")
+       for (let i in this.config) {
+           if (persistantConfig.indexOf(i) === -1) {
+               this.config[i] = null;
+               console.log("reseting " + this.config[i])
+           }
+
+       }
+    }
+
 }

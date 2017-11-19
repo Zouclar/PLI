@@ -8,17 +8,20 @@ import {
   Text
 } from 'react-native';
 
-import { Container, Header, View, Button, Fab } from 'native-base';
+import { Container, Header, View, Drawer, Fab } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { Navigation } from 'react-native-navigation';
 
 import APIWrapper from '../../../api/APIWrapper.js';
+import AppConfig from '../../../config';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import CustomStyle from '../assets/map-style.json';
 import styles from '../styles/map.js';
 import PostsList from './carousel.js';
+
+import SideMenu from '../../../menu/sideMenu';
 
 
 class PostsMap extends Component {
@@ -37,6 +40,7 @@ class PostsMap extends Component {
         location: this.defaultLocation,
         active: false
     }
+    this.user = {};
     this.map = {};
     this.latitudeDelta = 0;
     this.longitudeDelta = 0;
@@ -67,7 +71,21 @@ class PostsMap extends Component {
         });
     }
 
-    
+   getConnectedUserDatas() {
+       APIWrapper.get('/users/' + AppConfig.get("ID"),
+           (responseJson) => {
+                console.log("USER CONNECTED TO MENU")
+               this.user = responseJson;
+                AppConfig.put("connectedUser", responseJson)
+               this.sideMenu.setUser(responseJson)
+               this.forceUpdate();
+           },
+           (error) => {
+               console.error("ERROR !!!", error);
+           }
+       );
+   }
+
    getPostsFromApiAsync() {
       APIWrapper.get('/posts/',
           (responseJson) => {
@@ -104,6 +122,7 @@ class PostsMap extends Component {
    componentDidMount() {
        this.getPostsFromApiAsync();
        this.getCurrentLocation();
+       this.getConnectedUserDatas();
   }
     
   onRegionChange(region) {
@@ -126,6 +145,12 @@ class PostsMap extends Component {
       console.log(this.state.location)
       console.log(this.apiDatas)
     return (
+        <Drawer
+            ref={(ref) => { this.drawer = ref; }}
+            content={<SideMenu ref={(ref) => { this.sideMenu = ref; }} navigator={this.props.navigator} user={this.user}/>}
+
+            side="left"
+            panOpenMask={.25} >
         <Container>
             <Header />
       <View style ={styles.container}>
@@ -167,6 +192,7 @@ class PostsMap extends Component {
           </Fab>
       </View>
         </Container>
+        </Drawer>
     );
   }
 }

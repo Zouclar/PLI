@@ -112,8 +112,26 @@ class PostController {
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.posts.find({}).order("date_pub", "Z").all(function(err, rows) {
-                res.status(200).json(rows)
+            db.models.posts.find({}).order("date_pub", "Z").all(function (err, postsRows) {
+
+                let c = postsRows.length;
+                let i = 0;
+                let t = () => {
+                    i ++;
+                    if (i == c ){
+                        res.status(200).json(postsRows);
+                    }
+                }
+
+                if (postsRows.length == 0) {
+                    res.status(200).json([]);
+                }
+                for( var postRow of postsRows){
+                    console.log("JES PASSER")
+                    postRow.getLikes(() => {
+                        t();
+                    })
+                }
             });
         });
     }
