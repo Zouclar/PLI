@@ -98,6 +98,11 @@ function setup(db) {
         }
     });
 
+    Like.hasOne("post", Post, {field: "id_post", reverse: 'likes' });
+    Comment.hasOne("post", Post, {field: "id_post", reverse: 'comments' });
+
+    // Comment.hasOne("like", Like, {field: "id_like", reverse: 'likes' });
+    // Post.hasOne("comment", , {field: "id_post", reverse: 'likes' });
 
 }
 
@@ -121,6 +126,9 @@ module.exports = function(host, database, cb) {
         connections[host] = connections[host] || {};
         connections[host][database] = db;
         setup(db);
-        cb(null, db);
+        db.sync(function () {
+            cb(null, db);
+        });
+
     });
 };

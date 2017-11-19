@@ -110,11 +110,55 @@ class PostController {
     }
 
     static readAll (req, res, next) {
+
+
+        // database('localhost', 'PLI', function(err, db) {
+        //     if (err) throw err;
+        //     db.models.posts.find({}).order("date_pub", "Z").all(function(err, rows) {
+        //         res.status(200).json(rows)
+        //     });
+        // });
+
+        var likes   = [];
+        var comments = [];
+
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.posts.find({}).order("date_pub", "Z").all(function(err, rows) {
-                res.status(200).json(rows)
+            var countpost = 0;
+            db.models.posts.find({}, function (err, postsCount) {
+                countpost = postsCount.length;
+
+                db.models.posts.find({}, function (err, postsRows) {
+                    // console.log("pr : ", postsRows);
+
+                    if (postsRows.length == 0) {
+                        console.log("jene vais pas apparaitre et c relou")
+                        res.status(404).json("Post not found");
+                        return;
+                    }
+                    var counter= 0;
+                    for( var postRow of postsRows){
+                        console.log("JES PASSER")
+                        postRow.getLikes(function(err, liikes) {
+
+                            for(var item of liikes){
+                                likes.push(item);
+                            }
+
+                            postRow.likes    = likes;
+                            console.log(postRow)
+                            counter++;
+                            console.log(counter, countpost)
+
+                            if(counter === countpost){
+                                console.log("jenvoieee", counter, countpost)
+                                res.status(200).json(postsRows);
+                            }
+                        });
+                    }
+                });
             });
+
         });
     }
 
