@@ -98,7 +98,27 @@ function setup(db) {
         }
     });
 
+    var Event = db.define("events", {
+        id                  : { type: "integer", unique: true },
+        title               : String,
+        coordinates         : { type: "point"},
+        description         : String,
+        date_pub            : Date,
+        dateStart           : Date,
+        dateEnd             : Date,
+        picture             : String,
+        countLikes          : Number,
+        countParticipate    : Number,
+        countComments       : Number
+    }, {
+        methods: {
 
+        }
+    });
+
+    // Event.hasOne('owner', Person, { reverse: "pets" });
+    Event.hasMany('users', User, {}, { reverse: 'events', key: true });
+    Event.sync();
 }
 
 module.exports = function(host, database, cb) {
@@ -111,7 +131,9 @@ module.exports = function(host, database, cb) {
         host:     host,
         database: database,
         protocol: 'mysql',
-        port:     '3306',
+        port:     '8889',
+        user:     'root',
+        password: 'root',
         query:    {pool: true}
     };
 
@@ -121,6 +143,7 @@ module.exports = function(host, database, cb) {
         connections[host] = connections[host] || {};
         connections[host][database] = db;
         setup(db);
+        db.sync();
         cb(null, db);
     });
 };
