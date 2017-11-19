@@ -23,6 +23,8 @@ import GeneralChat from '../pages/Chat/components/index'
 import PrivateChat from '../pages/Chat/components/private'
 import UserListDrawer from '../pages/Chat/components/userList'
 import SideMenu from '../menu/sideMenu'
+import EventMap from '../pages/EventMap/components/index'
+import EventEditView from '../pages/EventEditView/components/index'
 
 export function registerScreens() {
     Navigation.registerComponent('Client', () => PostsMap);
@@ -41,5 +43,7 @@ export function registerScreens() {
     Navigation.registerComponent('page.Chat', () => GeneralChat);
     Navigation.registerComponent('page.PrivateChat', () => PrivateChat);
     Navigation.registerComponent('page.userListDrawer', () => UserListDrawer);
+    Navigation.registerComponent('page.EventMap', () => EventMap);
+    Navigation.registerComponent('page.EventEditView', () => EventEditView);
     Navigation.registerComponent('page.SideMenu', () => SideMenu);
 }
