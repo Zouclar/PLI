@@ -11,9 +11,6 @@ class PostController {
         if(req.fields.length === 0 || req.files.length === 0)
             res.status(400).json("Error no data");
         else {
-            console.log(req.body);
-            console.log(req.files);
-            console.log(req.fields);
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))

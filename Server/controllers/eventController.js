@@ -30,14 +30,24 @@ class EventController {
                     countComments       :0,
                     picture             : req.files.image.path.replace("public/images/", '')
                     },
-                    function(error, rows) {
+                    function(error, newEvent) {
                     if (error){
                         res.status(500).send("PAS OK")
                         console.log('pas ok', error.message)
                     }
                         else {
-                        res.status(200).send("OK")
-                        console.log("ok", rows)
+                        db.models.users.find({id: res.id_user}, function(err, user){
+                            if (err) {
+                            console.log(err); 
+                            } else {
+                            newEvent.addUsers(user, ()=>{
+                                console.log("ADDED user to event...");
+                                res.status(200).send("OK")
+                                })
+                            }
+                        })
+                        // rows.addUsers(,function())
+                        // console.log("ok", rows)
                     }
                     }
                 );
@@ -72,28 +82,31 @@ class EventController {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
 
-            db.models.events.find({id: req.params.id_post}, function(err, postsRows) {
-                var likes   = [];
-                var comments = [];
-		console.log("pr : ", postsRows)
-		if (postsRows.length == 0) {
+            db.models.events.find({id: req.params.id_post}).first(function(err, postRow) {
+                // var likes   = [];
+                // var comments = [];
+		if (postRow.length == 0) {
 			console.log("jene vais pas apparaitre et c relou")
 			res.status(404).json("Post not found");
 			return;
 		}
-                db.models.likes.find({id_post: postsRows[0].id}, function(err, likesRows) {
-                    for(var item of likesRows)
-                        likes.push(item);
+        postRow.getUsers(function() {
+            res.status(200).json(postRow);
+        });
 
-                    db.models.comments.find({id_post: postsRows[0].id}, function(err, commentsRows) {
-                        for(var item of commentsRows)
-                            comments.push(item);
+                // db.models.likes.find({id_post: postsRows[0].id}, function(err, likesRows) {
+                //     for(var item of likesRows)
+                //         likes.push(item);
 
-                        postsRows[0].likes    = likes;
-                        postsRows[0].comments = comments;
-                        res.status(200).json(postsRows);
-                    });
-                });
+                //     db.models.comments.find({id_post: postsRows[0].id}, function(err, commentsRows) {
+                //         for(var item of commentsRows)
+                //             comments.push(item);
+
+                //         postsRows[0].likes    = likes;
+                //         postsRows[0].comments = comments;
+                //         res.status(200).json(postsRows);
+                //     });
+                // });
             });
         });
     }
@@ -132,8 +145,25 @@ class EventController {
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.events.find({}).order("date_pub", "Z").all(function(err, rows) {
-                res.status(200).json(rows)
+            db.models.events.find({}).order("date_pub", "Z").all(function (err, postsRows) {
+
+                let c = postsRows.length;
+                let i = 0;
+                let t = () => {
+                    i ++;
+                    if (i == c ){
+                        res.status(200).json(postsRows);
+                    }
+                }
+
+                if (postsRows.length == 0) {
+                    res.status(200).json([]);
+                }
+                for( var postRow of postsRows){
+                    postRow.getUsers( () => {
+                        t();
+                    })
+                }
             });
         });
     }

@@ -117,8 +117,9 @@ function setup(db) {
     });
 
     // Event.hasOne('owner', Person, { reverse: "pets" });
-    // Event.hasMany('users', User, {}, { reverse: 'events', key: true });
-    // Event.sync();
+    Event.hasMany('users', User, {}, { reverse: 'events', key: true });
+    Event.sync();
+    User.sync();
 }
 
 module.exports = function(host, database, cb) {
@@ -143,7 +144,8 @@ module.exports = function(host, database, cb) {
         connections[host] = connections[host] || {};
         connections[host][database] = db;
         setup(db);
-        // db.sync();
-        cb(null, db);
+        db.sync(() => {
+            cb(null, db);
+        });
     });
 };
