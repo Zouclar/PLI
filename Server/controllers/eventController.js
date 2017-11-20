@@ -55,27 +55,6 @@ class EventController {
         }
     }
 
-/*    var Event = db.define("events", {
-        id                  : { type: "integer", unique: true },
-        title               : String,
-        coordinate          : { type: "point"},
-        description         : "value",  String,
-        date_pub            : Date,
-        dateStart           : Date,
-        dateEnd             : Date,
-        picture             : String,
-        countLikes          : Number,
-        countParticipate    : Number,
-        countComments       : Number
-    }, {
-        methods: {
-
-        }
-    }); */
-
-
-
-
 
     static read (req, res, next) {
 
@@ -110,6 +89,36 @@ class EventController {
             });
         });
     }
+
+    static join (req, res, next) {
+        console.log('Gonna join', res.id_user, req.params.id);
+        database('localhost', 'PLI', function(err, db) {
+            if (err) throw err;
+            db.models.users.find({id: res.id_user}, (err, user) => {
+                if (err) {
+                    console.log(err); 
+                    } else {
+                        db.models.events.find({id: req.params.id}).first((err, myEvent) => {
+                        myEvent.hasUsers([user], function(err, userHasEvent) {
+                          if (userHasEvent) {
+                            myEvent.addUsers(user, () => {
+                            res.status(200).json({"Success join"});
+                            })
+                          } else {
+                            res.status(409).json({error:"Already join"});
+                          }
+                        });
+                    })
+                }
+            }), function(error, rows) {
+                    if (error){
+                    res.status(500).json("Erreur Like Post")
+                    }
+                };
+        });
+    }
+
+
 
     static like (req, res, next) {
     	console.log('Gonna like')
