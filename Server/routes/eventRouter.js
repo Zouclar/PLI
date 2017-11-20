@@ -14,7 +14,7 @@ router.delete("/:id", ctrl.delete);
 router.put("/update/:id", ctrl.update);
 router.post("/create", formidable({
     encoding: 'utf-8',
-    uploadDir: '/Users/Zouclar/imagePLI'
+    uploadDir: '/var/www/html'
 }), ctrl.create);
 
 module.exports = router;
