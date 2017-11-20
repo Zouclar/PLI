@@ -3,9 +3,6 @@ const express = require('express');
 const mysql = require('mysql');
 
 var database = require('../config/config.js');
-var getTokenId = function () {
-    return 1;
-};
 
 class PostController {
 
@@ -14,9 +11,6 @@ class PostController {
         if(req.fields.length === 0 || req.files.length === 0)
             res.status(400).json("Error no data");
         else {
-            console.log(req.body);
-            console.log(req.files);
-            console.log(req.fields);
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
@@ -38,9 +32,7 @@ class PostController {
                         else {
                         res.status(200).send("OK")
                         console.log("ok", rows)
-                    }
-
-
+                        }
                     }
                 );
             });
@@ -75,12 +67,11 @@ class PostController {
                 });
             });
         });
-
     }
 
     static like (req, res, next) {
-	console.log('Gonna like')
-	console.log('Gonna like', res.id_user)
+    	console.log('Gonna like')
+    	console.log('Gonna like', res.id_user)
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.likes.create({
@@ -135,6 +126,7 @@ class PostController {
             });
         });
     }
+
 
     static update (req, res, next) {
         res.status(200).json()
