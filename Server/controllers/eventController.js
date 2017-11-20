@@ -16,10 +16,11 @@ class EventController {
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
                 // console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
+                // console.log(res.id_user, req.fields.title, req.fields.longitude, req.fields.latitude, req.fields.description, req.fields.dateStart, req.fields.dateEnd);
                 db.models.events.create({
 		            user_id	            : res.id_user,
                     title               : req.fields.title,
-                    coordinate          : {x: req.fields.longitude, y:req.fields.latitude},
+                    coordinates          : {x: req.fields.longitude, y:req.fields.latitude},
                     description         : req.fields.description,
                     date_pub            : new Date(),
                     dateStart           : req.fields.dateStart,
@@ -27,7 +28,7 @@ class EventController {
                     countLikes          :0,
                     countParticipate    :0,
                     countComments       :0,
-                    // picture        :req. files.image.path.replace("public/images/", '')
+                    picture             : req.files.image.path.replace("public/images/", '')
                     },
                     function(error, rows) {
                     if (error){
