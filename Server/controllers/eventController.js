@@ -160,7 +160,8 @@ class EventController {
                     res.status(200).json([]);
                 }
                 for( var postRow of postsRows){
-                    postRow.getUsers( () => {
+                    postRow.getUsers( (e,y) => {
+                        console.log(y)
                         t();
                     })
                 }
