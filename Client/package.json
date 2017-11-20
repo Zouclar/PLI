@@ -20,6 +20,7 @@
     "react-native-navigation": "^1.1.228",
     "react-native-snap-carousel": "^3.2.1",
     "react-native-socketio": "^0.3.0",
+    "socket.io": "^2.0.4",
     "supercluster": "git://github.com/mapbox/supercluster.git"
   },
   "devDependencies": {

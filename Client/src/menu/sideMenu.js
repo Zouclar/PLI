@@ -29,7 +29,12 @@ export default class SideMenu extends React.Component {
                     title: 'Map',
                 });
             }},
-            {title: "Events", action: () => {}},
+            {title: "Events", action: () => {
+                this.props.navigator.resetTo({
+                    screen: 'page.EventMap',
+                    title: 'Evenements',
+                });
+            }},
             {title: "Deconnexion", action: () => {
                 AppConfig.reset();
                 this.props.navigator.resetTo({

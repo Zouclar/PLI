@@ -2,10 +2,10 @@
  * Created by Florian on 19/11/2017.
  */
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, View} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import APIWrapper from '../../../api/APIWrapper.js';
-var ImagePicker = require('react-native-image-picker');
+import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker'
 import {
     AppRegistry,
@@ -44,7 +44,7 @@ export default class EventEditView extends Component {
     }
 
     openImagePicker() {
-        ImagePicker.showImagePicker(this.options, (response) => {
+        ImagePicker.launchImageLibrary(this.options, (response)  => {
             console.log('Response = ', response);
 
             if (response.didCancel) {
@@ -147,20 +147,39 @@ export default class EventEditView extends Component {
                                 height: 100
                             }} onChangeText={(text) => this.setState({description: text})}/>
                         </Item>
-                            <Label>Date de début</Label>
+                        <View style={{marginTop: 30}}>
+                            <Label>Plannification</Label>
                             <DatePicker
+                                style={style.datePicker}
                                 date={this.state.firstDate}
-                                mode="date"
-                                placeholder="Sélectionnez une date"
-                                format="YYYY-MM-DD"
+                                mode="datetime"
+                                placeholder="Date de début"
+                                format="YYYY-MM-DD hh-mm-ss"
+                                showIcon={false}
                                 confirmBtnText="Valider"
                                 cancelBtnText="Annuler"
                                 customStyles={{
                                     dateInput: style.datePicker
                                     // ... You can check the source to find the other keys.
                                 }}
-                                onDateChange={(date) => {this.setState({date: date})}}
+                                onDateChange={(date) => {this.setState({firstDate: date})}}
                             />
+                            <DatePicker
+                                style={style.datePicker}
+                                date={this.state.lastDate}
+                                mode="datetime"
+                                placeholder="Date de début"
+                                format="YYYY-MM-DD hh-mm-ss"
+                                showIcon={false}
+                                confirmBtnText="Valider"
+                                cancelBtnText="Annuler"
+                                customStyles={{
+                                    dateInput: style.datePicker
+                                    // ... You can check the source to find the other keys.
+                                }}
+                                onDateChange={(date) => {this.setState({lastDate: date})}}
+                            />
+                        </View>
                         <Button style={{margin: 10}} onPress={() => {this.openImagePicker()}} block>
                             <Text>Ajouter une photo</Text>
                         </Button>
