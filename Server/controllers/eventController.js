@@ -161,7 +161,7 @@ class EventController {
                 }
                 for( var postRow of postsRows){
                     postRow.getUsers( (e,y) => {
-                        console.log(y)
+                        postRow.users = y;
                         t();
                     })
                 }

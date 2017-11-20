@@ -28,6 +28,7 @@ export default class EventEditView extends Component {
             coordinate: "",
             firstDate:"",
             lastDate:"",
+            avatarSource:""
         };
         this.options = {
             title: 'Select Avatar',
@@ -93,7 +94,7 @@ export default class EventEditView extends Component {
         });
     }
 
-    sendPost() {
+    sendEvent() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 console.log("success !!");
@@ -107,8 +108,14 @@ export default class EventEditView extends Component {
                 formdata.append("description", this.state.description)
                 formdata.append("latitude", position.coords.latitude);
                 formdata.append("longitude", position.coords.longitude);
+                formdata.append("dateStart", this.state.dateStart);
+                formdata.append("dateEnd", this.state.dateEnd);
 
-                formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.uri.split(/[\\/]/).pop()})
+                console.log("eventImage")
+                console.log(this.state.avatarSource)
+
+
+                formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.avatarSource.uri.split(/[\\/]/).pop()})
 
 
                 APIWrapper.postMultiPart('/posts/create', formdata,
@@ -151,7 +158,7 @@ export default class EventEditView extends Component {
                             <Label>Plannification</Label>
                             <DatePicker
                                 style={style.datePicker}
-                                date={this.state.firstDate}
+                                date={this.state.dateStart}
                                 mode="datetime"
                                 placeholder="Date de début"
                                 format="YYYY-MM-DD hh-mm-ss"
@@ -162,11 +169,11 @@ export default class EventEditView extends Component {
                                     dateInput: style.datePicker
                                     // ... You can check the source to find the other keys.
                                 }}
-                                onDateChange={(date) => {this.setState({firstDate: date})}}
+                                onDateChange={(date) => {this.setState({dateStart: date})}}
                             />
                             <DatePicker
                                 style={style.datePicker}
-                                date={this.state.lastDate}
+                                date={this.state.dateEnd}
                                 mode="datetime"
                                 placeholder="Date de début"
                                 format="YYYY-MM-DD hh-mm-ss"
@@ -177,7 +184,7 @@ export default class EventEditView extends Component {
                                     dateInput: style.datePicker
                                     // ... You can check the source to find the other keys.
                                 }}
-                                onDateChange={(date) => {this.setState({lastDate: date})}}
+                                onDateChange={(date) => {this.setState({dateEnd: date})}}
                             />
                         </View>
                         <Button style={{margin: 10}} onPress={() => {this.openImagePicker()}} block>
@@ -191,7 +198,7 @@ export default class EventEditView extends Component {
                     containerStyle={{ }}
                     style={{ backgroundColor: '#2196F3' }}
                     position="bottomRight"
-                    onPress={() => this.sendPost()}>
+                    onPress={() => this.sendEvent()}>
                     <Icon name="send" />
                 </Fab>
             </Container>

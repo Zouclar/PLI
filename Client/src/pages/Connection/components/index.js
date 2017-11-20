@@ -22,7 +22,7 @@ export default class Connection extends Component {
         }
         if (AppConfig.get("Token")) {
             console.log("TOKEN WAS FOUND USER HAS CONNECTED EARLIER : ", AppConfig.get("Token"))
-            this.openPostMapView();
+            //this.openPostMapView();
         }
 
         this.props.navigator.setDrawerEnabled({
