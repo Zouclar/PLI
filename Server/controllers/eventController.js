@@ -102,7 +102,7 @@ class EventController {
                         myEvent.hasUsers([user], function(err, userHasEvent) {
                           if (userHasEvent) {
                             myEvent.addUsers(user, () => {
-                            res.status(200).json({"Success join"});
+                            res.status(200).json({message:"Success join"});
                             })
                           } else {
                             res.status(409).json({error:"Already join"});
