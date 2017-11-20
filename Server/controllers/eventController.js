@@ -15,19 +15,19 @@ class EventController {
             // console.log(req.fields);
             database('localhost', 'PLI', function(err, db) {
                 if (err) throw err;
-                //console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
-                db.models.posts.create({
-		          user_id	   : res.id_user,
-                    title          : req.fields.title,
-                    coordinate     : {x: req.fields.longitude, y:req.fields.latitude},
-                    description    : req.fields.description,
-                    date_pub       : new Date(),
-                    dateStart       : req.fields.dateStart,
-                    dateEnd      : req.fields.dateEnd,
-                    countLikes    :0,
-                    countParticipate :0,
-                    countComments :0,
-                    picture        :req.files.image.path.replace("public/images/", '')
+                // console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
+                db.models.events.create({
+		            user_id	            : res.id_user,
+                    title               : req.fields.title,
+                    coordinate          : {x: req.fields.longitude, y:req.fields.latitude},
+                    description         : req.fields.description,
+                    date_pub            : new Date(),
+                    dateStart           : req.fields.dateStart,
+                    dateEnd             : req.fields.dateEnd,
+                    countLikes          :0,
+                    countParticipate    :0,
+                    countComments       :0,
+                    // picture        :req. files.image.path.replace("public/images/", '')
                     },
                     function(error, rows) {
                     if (error){
@@ -44,23 +44,27 @@ class EventController {
         }
     }
 
-    // var Event = db.define("events", {
-    //     id                  : { type: "integer", unique: true },
-    //     title               : String,
-    //     coordinate          : { type: "point"},
-    //     description         : "value",  String,
-    //     date_pub            : Date,
-    //     dateStart           : Date,
-    //     dateEnd             : Date,
-    //     picture             : String,
-    //     countLikes          : Number,
-    //     countParticipate    : Number,
-    //     countComments       : Number
-    // }, {
-    //     methods: {
+/*    var Event = db.define("events", {
+        id                  : { type: "integer", unique: true },
+        title               : String,
+        coordinate          : { type: "point"},
+        description         : "value",  String,
+        date_pub            : Date,
+        dateStart           : Date,
+        dateEnd             : Date,
+        picture             : String,
+        countLikes          : Number,
+        countParticipate    : Number,
+        countComments       : Number
+    }, {
+        methods: {
 
-    //     }
-    // });
+        }
+    }); */
+
+
+
+
 
     static read (req, res, next) {
 
@@ -68,11 +72,11 @@ class EventController {
             if (err) throw err;
 
             db.models.events.find({id: req.params.id_post}, function(err, postsRows) {
-                // var likes   = [];
-                // var comments = [];
-		// console.log("pr : ", postsRows)
+                var likes   = [];
+                var comments = [];
+		console.log("pr : ", postsRows)
 		if (postsRows.length == 0) {
-			// console.log("jene vais pas apparaitre et c relou")
+			console.log("jene vais pas apparaitre et c relou")
 			res.status(404).json("Post not found");
 			return;
 		}
@@ -94,8 +98,8 @@ class EventController {
     }
 
     static like (req, res, next) {
-    	// console.log('Gonna like')
-    	// console.log('Gonna like', res.id_user)
+    	console.log('Gonna like')
+    	console.log('Gonna like', res.id_user)
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.likes.create({
@@ -127,7 +131,7 @@ class EventController {
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.posts.find({}).order("date_pub", "Z").all(function(err, rows) {
+            db.models.events.find({}).order("date_pub", "Z").all(function(err, rows) {
                 res.status(200).json(rows)
             });
         });
@@ -142,4 +146,4 @@ class EventController {
     }
 }
 
-module.exports = PostController;
+module.exports = EventController;

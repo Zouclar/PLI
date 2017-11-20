@@ -1,7 +1,7 @@
 var express = require('express');
 var jwt = require('express-jwt');
 var router = express.Router();
-const ctrl = require("../controllers/postController.js");
+const ctrl = require("../controllers/eventController.js");
 const formidable = require('express-formidable');
 
 /* GET home page. */
