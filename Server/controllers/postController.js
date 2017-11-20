@@ -70,8 +70,8 @@ class PostController {
     }
 
     static like (req, res, next) {
-    	console.log('Gonna like')
-    	console.log('Gonna like', res.id_user)
+	console.log('Gonna like')
+	console.log('Gonna like', res.id_user)
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
             db.models.likes.create({
@@ -124,9 +124,9 @@ class PostController {
                     })
                 }
             });
+
         });
     }
-
 
     static update (req, res, next) {
         res.status(200).json()

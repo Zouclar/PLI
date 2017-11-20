@@ -98,6 +98,9 @@ function setup(db) {
         }
     });
 
+
+    // Comment.hasOne("like", Like, {field: "id_like", reverse: 'likes' });
+    // Post.hasOne("comment", , {field: "id_post", reverse: 'likes' });
     var Event = db.define("events", {
         id                  : { type: "integer", unique: true },
         title               : String,
@@ -116,6 +119,8 @@ function setup(db) {
         }
     });
 
+    Like.hasOne("post", Post, {field: "id_post", reverse: 'likes' });
+    Comment.hasOne("post", Post, {field: "id_post", reverse: 'comments' });
     Event.hasMany('users', User, {}, { reverse: 'events', key: true });
     Event.sync();
     User.sync();
