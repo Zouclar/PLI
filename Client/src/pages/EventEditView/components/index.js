@@ -118,7 +118,7 @@ export default class EventEditView extends Component {
                 formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.avatarSource.uri.split(/[\\/]/).pop()})
 
 
-                APIWrapper.postMultiPart('/posts/create', formdata,
+                APIWrapper.postMultiPart('/events/create', formdata,
                     response => {
                         console.log("image uploaded : ", response);
                         this.openSuccessNotification("Succès", "Votre event a bien été ajouté :)");
