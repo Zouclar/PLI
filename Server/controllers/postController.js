@@ -110,7 +110,47 @@ class PostController {
                 let t = () => {
                     i ++;
                     if (i == c ){
-                        res.status(200).json(postsRows);
+
+
+
+
+
+
+
+                        let d = postsRows.length;
+                        let y = 0;
+                        let p = () => {
+                            y ++;
+                            if (y == d ){
+
+
+                                res.status(200).json(postsRows);
+                            }
+                        }
+
+                        if (postsRows.length == 0) {
+                            console.log(1)
+
+                            res.status(200).json([]);
+                        }
+                        for( var postRow of postsRows){
+                            console.log("JES PASSER")
+                            postRow.getComments(() => {
+                                p();
+                            })
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
                     }
                 }
 
