@@ -122,6 +122,7 @@ function setup(db) {
     Like.hasOne("post", Post, {field: "id_post", reverse: 'likes' });
     Comment.hasOne("post", Post, {field: "id_post", reverse: 'comments' });
     Event.hasMany('users', User, {}, { reverse: 'events', key: true });
+    User.hasMany('friends', Friend, {}, { reverse: 'owners', key: true });
     Event.sync();
     User.sync();
 }
@@ -131,12 +132,21 @@ module.exports = function(host, database, cb) {
         cb(null, connections[host][database]);
         return;
     }
-
+    //
+    // var opts = {
+    //     host:     host,
+    //     database: database,
+    //     protocol: 'mysql',
+    //     port:     '3306',
+    //     query:    {pool: true}
+    // };
     var opts = {
         host:     host,
         database: database,
+        user:     'PLI',
+        password: 'pli',
         protocol: 'mysql',
-        port:     '3306',
+        port:     '8889',
         query:    {pool: true}
     };
 

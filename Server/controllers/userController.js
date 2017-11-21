@@ -107,9 +107,25 @@ class UserController {
     static askFriend (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            var id_owner = getTokenId();
+
+            // db.models.users.find({id_owner: res.id_user, is_friend: req.params.id}).first((err, ActualUser) => {
+
+            // db.models.users.find({id: 3}).first((err, User) => {
+            //
+            //     db.models.friends.find({id_owner: 3, is_friend}).first((err, User) => {
+            //
+            //     User.hasFriends([friend], function(err, userHasEvent) {
+            //         if (userHasEvent) {
+            //             myEvent.addUsers(user, () => {
+            //                 res.status(200).json({message:"Success join"});
+            //             })
+            //         } else {
+            //             res.status(409).json({error:"Already join"});
+            //         }
+            //     });
+
             db.models.friends.create({
-                    id_owner: id_owner,
+                    id_owner: 1,
                     id_friend : req.params.id_friend,
                     is_friend : false
                 },
@@ -127,15 +143,15 @@ class UserController {
         });
     }
 
+
     static acceptFriend (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            var id_owner = getTokenId();
-            db.models.friends.find({id_owner: id_owner, id_friend: req.params.id_friend}, function(err, row) {
+            db.models.friends.find({id_owner: 1, id_friend: req.params.id_friend}, function(err, row) {
 
                 row[0].is_friend = true;
                 row[0].save(function (err) {
-                    if(err) res.status(500).send("Error while Accept Friend, err: ", err);
+                    if(err) res.status(500).send("Error while Accwwnodeept Friend, err: ", err);
                     res.status(200).send("Update Accept Friend");
                 });
             });
@@ -145,7 +161,8 @@ class UserController {
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.users.find({}, function(err, rows) {
+            db.models.friends.find({id_owner: res.id_user, is_friend: false}, function(err, rows) {
+                //todo hasmany friends waiting
                 res.status(200).json(rows);
             });
         });

@@ -11,11 +11,14 @@ const ctrl = require("../controllers/userController.js");
 
 router.post("/login", ctrl.login);
 router.post("/create",ctrl.create);
-router.get("/all", ctrl.readAll);
-router.get("/:id", ctrl.read);
-router.get("/friends/all", ctrl.acceptFriend);
+
+router.get("/friends", ctrl.readAll);
 router.put("/friends/ask/:id_friend", ctrl.askFriend);
 router.put("/friends/accept/:id_friend", ctrl.acceptFriend);
+
+router.get("/all", ctrl.readAll);
+router.get("/:id", ctrl.read);
+
 
 
 router.delete("/:id", ctrl.delete);

@@ -15,14 +15,15 @@ class PostController {
                 if (err) throw err;
                 console.log("CONNEXION GOOD uri ", req.files.image.path.replace("public/images/", ''))
                 db.models.posts.create({
-		    user_id	   : res.id_user,
+
+                    user_id	       : res.id_user,
                     title          : req.fields.title,
                     coordinate     : {x: req.fields.longitude, y:req.fields.latitude},
                     description    : req.fields.description,
                     date_pub       : new Date(),
-                    number_like    :0,
-                    number_dislike :0,
-                    picture        :req.files.image.path.replace("public/images/", '')
+                    number_like    : 0,
+                    number_dislike : 0,
+                    picture        : req.files.image.path.replace("public/images/", '')
                     },
                     function(error, rows) {
                     if (error){
@@ -111,12 +112,6 @@ class PostController {
                     i ++;
                     if (i == c ){
 
-
-
-
-
-
-
                         let d = postsRows.length;
                         let y = 0;
                         let p = () => {
@@ -127,7 +122,6 @@ class PostController {
                                 res.status(200).json(postsRows);
                             }
                         }
-
                         if (postsRows.length == 0) {
                             console.log(1)
 
@@ -139,18 +133,6 @@ class PostController {
                                 p();
                             })
                         }
-
-
-
-
-
-
-
-
-
-
-
-
                     }
                 }
 
