@@ -86,11 +86,10 @@ export default class EventEditView extends Component {
         });
     }
 
-    openPostMapView() {
+    openEventsMapView() {
         this.props.navigator.resetTo({
-            label: 'Map',
-            screen: 'Client',
-            title: 'Map'
+            screen: 'page.EventMap',
+            title: 'Evenements',
         });
     }
 
@@ -113,17 +112,18 @@ export default class EventEditView extends Component {
 
                 console.log("eventImage")
                 console.log(this.state.avatarSource)
+                console.log({uri: this.state.uri, type: 'image/jpeg', name: this.state.avatarSource.uri.split(/[\\/]/).pop()})
 
 
-                formdata.append("image", {uri: this.state.uri, type: 'image/jpeg', name: this.state.avatarSource.uri.split(/[\\/]/).pop()})
+                formdata.append("image", {uri: this.state.avatarSource, type: 'image/jpeg', name: this.state.avatarSource.uri.split(/[\\/]/).pop()})
 
 
                 APIWrapper.postMultiPart('/events/create', formdata,
                     response => {
                         console.log("image uploaded : ", response);
                         this.openSuccessNotification("Succès", "Votre event a bien été ajouté :)");
-                        this.openPostMapView();
-                    },
+                        this.openEventsMapView();
+                },
                     err => {
                         console.log("image upload", err.message);
                         this.openErrorNotification("Erreur", "Une erreur est survenue. Veuillez réessayer plus tard :(")

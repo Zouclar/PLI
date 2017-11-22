@@ -2,17 +2,18 @@
  * Created by Florian on 08/10/2017.
  */
 import React, {Component} from 'react';
-import {Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, H1, View} from 'native-base';
+import {Container, Header, Content, Form, Item, Input, Label, Fab, Button, Text, H1, View, Drawer} from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps'
-var ImagePicker = require('react-native-image-picker');
-
 import {
     AppRegistry,
 } from 'react-native'
 import styles from '../styles/eventmap.js';
 import CustomStyle from '../../PostsMap/assets/map-style.json';
 import APIWrapper from '../../../api/APIWrapper.js';
+import  EventsList   from './carousel';
+import SideMenu from '../../../menu/sideMenu'
+var ImagePicker = require('react-native-image-picker');
 
 
 export default class EventMap extends Component {
@@ -37,8 +38,38 @@ export default class EventMap extends Component {
         this.map = {};
         this.latitudeDelta = 0;
         this.longitudeDelta = 0;
-        this.postList = {};
-        this.selectedPostIndex = 0;
+        this.eventList = {};
+        this.selectedEventIndex = 0;
+    }
+
+    componentDidMount() {
+        this.getEventsFromApiAsync();
+    }
+
+    getEventsFromApiAsync() {
+        console.log("FETCHING EVENTS")
+        APIWrapper.get('/events/',
+            (responseJson) => {
+                console.log("okokok")
+                console.log(responseJson)
+                this.apiDatas = responseJson;
+                this.forceUpdate();
+                this.eventList.uptadeProps(responseJson);
+                console.log('refreshed')
+            },
+            (error) => {
+                console.error("ERROR !!!", error);
+            }
+        );
+    }
+
+    animateToPostLocation (index) {
+        console.log("CALLBACK", this.map)
+        this.selectedEventIndex = index;
+        this.map.animateToRegion ( {
+            longitude: this.apiDatas[index].coordinates.x,
+            latitude: this.apiDatas[index].coordinates.y,
+        });
     }
 
     openEventEditView (index) {
@@ -53,6 +84,12 @@ export default class EventMap extends Component {
     //Fab avec Valider
     renderCreation() {
         return (
+            <Drawer
+                ref={(ref) => { this.drawer = ref; }}
+                content={<SideMenu ref={(ref) => { this.sideMenu = ref; }} navigator={this.props.navigator} user={this.user}/>}
+
+                side="left"
+                panOpenMask={.25} >
             <Container>
                 <MapView
                     ref={map => this.map = map}
@@ -85,6 +122,7 @@ export default class EventMap extends Component {
                     <Icon name="close"/>
                 </Fab>
             </Container>
+            </Drawer>
         );
     }
 
@@ -92,6 +130,12 @@ export default class EventMap extends Component {
     //Fab avec plus
     renderDisplay() {
         return (
+            <Drawer
+                ref={(ref) => { this.drawer = ref; }}
+                content={<SideMenu ref={(ref) => { this.sideMenu = ref; }} navigator={this.props.navigator} user={this.user}/>}
+
+                side="left"
+                panOpenMask={.25} >
             <Container>
                 <MapView
                     ref={map => this.map = map}
@@ -99,7 +143,17 @@ export default class EventMap extends Component {
                     customMapStyle={CustomStyle}
                     showsUserLocation={true}
                     initialRegion={this.state.location}>
+                    {this.apiDatas.map(event => (
+                        <MapView.Marker
+                            key={event.picture}
+                            coordinate={{longitude: event.coordinates.x, latitude: event.coordinates.y}}
+                            title={event.title}
+                            description={event.date}
+                            pinColor={"#4286f4"}
+                        />
+                    ))}
                 </MapView>
+                <EventsList ref={eventList => this.eventList = eventList} apiDatas={this.apiDatas} parent={this}></EventsList>
 
                 <Fab
                     active={this.state.active}
@@ -111,6 +165,7 @@ export default class EventMap extends Component {
                     <Icon name="add"/>
                 </Fab>
             </Container>
+            </Drawer>
         );
     }
 

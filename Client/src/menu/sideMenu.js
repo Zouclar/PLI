@@ -18,7 +18,7 @@ export default class SideMenu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: this.props.user
+            user: AppConfig.get("connectedUser")
         };
 
         this.routes = [
