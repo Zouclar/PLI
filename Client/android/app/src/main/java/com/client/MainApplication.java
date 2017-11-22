@@ -1,6 +1,8 @@
  import com.reactnativenavigation.NavigationApplication;
 
  import com.facebook.react.ReactApplication;
+import com.gcrabtree.rctsocketio.SocketIoPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
  import com.facebook.react.ReactNativeHost;

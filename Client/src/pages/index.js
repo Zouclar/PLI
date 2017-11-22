@@ -26,6 +26,10 @@ import SideMenu from '../menu/sideMenu'
 import EventMap from '../pages/EventMap/components/index'
 import EventEditView from '../pages/EventEditView/components/index'
 import EventsList from '../pages/EventMap/components/carousel'
+import EventDescription from '../pages/EventDetails/components/eventDescription'
+import EventDetails from '../pages/EventDetails/components/index'
+import Participants from '../pages/EventDetails/components/participants'
+
 
 export function registerScreens() {
     Navigation.registerComponent('Client', () => PostsMap);
@@ -48,4 +52,7 @@ export function registerScreens() {
     Navigation.registerComponent('page.EventsList', () => EventsList);
     Navigation.registerComponent('page.EventEditView', () => EventEditView);
     Navigation.registerComponent('page.SideMenu', () => SideMenu);
+    Navigation.registerComponent('page.EventDescription', () => EventDescription);
+    Navigation.registerComponent('page.EventDetails', () => EventDetails);
+    Navigation.registerComponent('page.Participants', () => Participants);
 }
