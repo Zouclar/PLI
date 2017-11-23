@@ -121,6 +121,7 @@ function setup(db) {
 
     Like.hasOne("post", Post, {field: "id_post", reverse: 'likes' });
     Comment.hasOne("post", Post, {field: "id_post", reverse: 'comments' });
+    Comment.hasOne("owner", User, {field: "id_owner", reverse: 'comments' });
     Event.hasMany('users', User, {}, { reverse: 'events', key: true });
     Event.sync();
     User.sync();

@@ -59,8 +59,26 @@ class CommentController {
         //should get IN VIEW COMMENT
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.comments.find({id_post: req.params.id_post}, function(err, rows) {
-                res.status(200).json(rows);
+            db.models.comments.find({id_post: req.params.id_post}, function (err, commentsRows) {
+
+                let c = commentsRows.length;
+                let i = 0;
+                let t = () => {
+                    i ++;
+                    if (i == c ){
+                        res.status(200).json(commentsRows);
+                    }
+                }
+
+                if (commentsRows.length == 0) {
+                    res.status(200).json([]);
+                }
+                for( var commentRow of commentsRows){
+                    console.log("LIKE PASSER")
+                    commentRow.getOwner(() => {
+                        t();
+                    })
+                }
             });
         });
     }

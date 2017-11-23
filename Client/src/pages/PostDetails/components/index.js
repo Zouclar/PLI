@@ -13,9 +13,12 @@ import {
 
 import APIWrapper from '../../../api/APIWrapper.js';
 import AppConfig from '../../../config.js'
+import moment from 'moment';
+import 'moment/locale/fr';
 
 import styles from '../styles/details.js';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Right, InputGroup, Body, H1, H2, H3, Form, Item, Label, Input } from 'native-base'
+
 class PostDetails extends Component {
     constructor(props){
         super(props);
@@ -138,6 +141,11 @@ class PostDetails extends Component {
         this.getAuthorProfile();
     }
 
+    formatFromDate(date) {
+        moment.locale('fr');
+        return moment(date, "YYYY-MM-DDTHH:mm:ssZ").fromNow()
+    }
+
     render() {
         console.log(AppConfig.get("AssetsBaseUrl") + "/" + this.post.picture.replace("/var/www/html/", ""))
         return ( <Container>
@@ -148,7 +156,7 @@ class PostDetails extends Component {
                     }}>
                     <CardItem>
                         <Left>
-                            <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
+                            <Thumbnail source={{uri: this.author.link_photo}} />
                             <Body>
                             <Text>{this.post.title}</Text>
                             <Text note>Par {this.author.name} {this.author.lastname}</Text>
@@ -185,7 +193,7 @@ class PostDetails extends Component {
                         </Button>
                         </Body>
                         <Right>
-                            <Text>10 minutes</Text>
+                            <Text>{this.formatFromDate(this.post.date_pub)}</Text>
                         </Right>
                     </CardItem>
                 </Card>
@@ -195,9 +203,9 @@ class PostDetails extends Component {
                     <Card>
                         <CardItem>
                             <Left>
-                                <Thumbnail source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
+                                <Thumbnail source={{uri: comment.owner.link_photo}} />
                                 <Body>
-                                <Text>Jean-Jacques Bernard</Text>
+                                <Text>{comment.owner.name} {comment.owner.lastname}</Text>
                                 <Text note>dit</Text>
                                 </Body>
                             </Left>

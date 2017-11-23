@@ -34,11 +34,6 @@ class EventDescription extends Component {
         });
     }
 
-    formatFromDate(date) {
-        moment.locale('fr');
-        return moment(date, "YYYY-MM-DDTHH:mm:ssZ").fromNow()
-    }
-
     formatDate(date) {
         moment.locale('fr');
         return moment(date, "YYYY-MM-DDTHH:mm:ssZ").format('llll')

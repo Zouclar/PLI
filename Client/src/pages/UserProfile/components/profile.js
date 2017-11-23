@@ -42,7 +42,7 @@ class ProfileTab extends Component {
                             <Content>
                                 <View style={styles.head}>
                                     <Image style={styles.cover} source={{uri: 'https://www.newsweed.fr/wp-content/uploads/2016/08/skate-750x400.jpg'}} />
-                                    <Thumbnail large style={styles.thumbnail} source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
+                                    <Thumbnail large style={styles.thumbnail} source={{uri: this.props.user.link_photo}} />
                                     <Text style={styles.name}>{this.props.user.name} {this.props.user.lastname}</Text>
                                     <Button transparent style={styles.friendAddButton}>
                                         <Icon active name="add" />
@@ -69,7 +69,6 @@ class ProfileTab extends Component {
                                         </Right>
                                     </CardItem>
                                 </View>
-                                <View style={{marginTop: 300}}><Text>Réseaux sociaux</Text></View>
                             </Content>
                         </Container>
         );
