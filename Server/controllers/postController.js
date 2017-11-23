@@ -47,12 +47,12 @@ class PostController {
             db.models.posts.find({id: req.params.id_post}, function(err, postsRows) {
                 var likes   = [];
                 var comments = [];
-		console.log("pr : ", postsRows)
-		if (postsRows.length == 0) {
-			console.log("jene vais pas apparaitre et c relou")
-			res.status(404).json("Post not found");
-			return;
-		}
+                console.log("pr : ", postsRows)
+                if (postsRows.length == 0) {
+                    console.log("jene vais pas apparaitre et c relou")
+                    res.status(404).json("Post not found");
+                    return;
+                }
                 db.models.likes.find({id_post: postsRows[0].id}, function(err, likesRows) {
                     for(var item of likesRows)
                         likes.push(item);
