@@ -33,7 +33,8 @@ export default class EventMap extends Component {
             location: this.defaultLocation,
             active: false,
             markers: [],
-            didStartCreation: false
+            didStartCreation: false,
+            hasFetchDatas: false
         }
         this.map = {};
         this.latitudeDelta = 0;
@@ -54,7 +55,9 @@ export default class EventMap extends Component {
                 console.log(responseJson)
                 this.apiDatas = responseJson;
                 this.forceUpdate();
-                this.eventList.uptadeProps(responseJson);
+                //this.eventList.uptadeProps(responseJson);
+                let hasFetchDatas = true;
+                this.setState({hasFetchDatas})
                 console.log('refreshed')
             },
             (error) => {
@@ -63,20 +66,27 @@ export default class EventMap extends Component {
         );
     }
 
-    animateToPostLocation (index) {
-        console.log("CALLBACK", this.map)
-        this.selectedEventIndex = index;
-        this.map.animateToRegion ( {
-            longitude: this.apiDatas[index].coordinates.x,
-            latitude: this.apiDatas[index].coordinates.y,
-        });
-    }
-
     openEventEditView (index) {
         this.props.navigator.push({
             screen: 'page.EventEditView',
             title: 'Création d\'un évènement',
             passProps: {markerPosition: this.state.x, navigator: this.props.navigator},
+        });
+    }
+
+    openErrorNotification(title, error) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.error",
+            passProps: {title: title, message: error},
+            autoDismissTimerSec: 3
+        });
+    }
+
+    openSuccessNotification(title, msg) {
+        this.props.navigator.showInAppNotification({
+            screen: "notification.success",
+            passProps: {title: title, message: msg},
+            autoDismissTimerSec: 3
         });
     }
 
@@ -153,7 +163,7 @@ export default class EventMap extends Component {
                         />
                     ))}
                 </MapView>
-                <EventsList ref={eventList => this.eventList = eventList} apiDatas={this.apiDatas} parent={this}></EventsList>
+                {this.state.hasFetchDatas && <EventsList ref={eventList => this.eventList = eventList} apiDatas={this.apiDatas} map={this.map} parent={this}/>}
 
                 <Fab
                     active={this.state.active}

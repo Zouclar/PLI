@@ -38,7 +38,9 @@ class PostsMap extends Component {
     this.enableSnap = true;
     this.state = {
         location: this.defaultLocation,
-        active: false
+        active: false,
+        apiDatas: [],
+        hasFetchedDatas: false,
     }
     this.user = {};
     this.map = {};
@@ -88,11 +90,14 @@ class PostsMap extends Component {
 
    getPostsFromApiAsync() {
       APIWrapper.get('/posts/',
-          (responseJson) => {
+          (apiDatas) => {
               console.log("okokok")
-              this.apiDatas = responseJson;
-              this.forceUpdate();
-              this.postList.uptadeProps(responseJson);
+              let hasFetchedDatas = true;
+              this.apiDatas = apiDatas;
+              this.setState({apiDatas})
+              this.setState({hasFetchedDatas})
+              //this.forceUpdate();
+              //this.postList.uptadeProps(responseJson);
               console.log('refreshed')
           },
           (error) => {
@@ -124,26 +129,11 @@ class PostsMap extends Component {
        this.getCurrentLocation();
        this.getConnectedUserDatas();
   }
-    
-  onRegionChange(region) {
-        this.latitudeDelta = region.latitudeDelta;
-        this.longitudeDelta = region.longitudeDelta;
-  }
-
-  animateToPostLocation (index) {
-      console.log("CALLBACK", this.map)
-      this.selectedPostIndex = index;
-      this.map.animateToRegion ( {   
-        longitude: this.apiDatas[index].coordinate.x,
-        latitude: this.apiDatas[index].coordinate.y,
-      });
-  }
-    
 
   render() {
       console.log("hey")
       console.log(this.state.location)
-      console.log(this.apiDatas)
+      console.log(this.state.apiDatas)
     return (
         <Drawer
             ref={(ref) => { this.drawer = ref; }}
@@ -171,7 +161,7 @@ class PostsMap extends Component {
         ))}
 
         </MapView>
-       <PostsList ref={postList => this.postList = postList} apiDatas={this.apiDatas} parent={this}></PostsList>
+          { this.state.hasFetchedDatas && <PostsList ref={postList => this.postList = postList} apiDatas={this.state.apiDatas} map={this.map} parent={this}/> }
           <Fab
               active={this.state.active}
               direction="left"

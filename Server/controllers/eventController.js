@@ -94,13 +94,13 @@ class EventController {
         console.log('Gonna join', res.id_user, req.params.id);
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.users.find({id: res.id_user}, (err, user) => {
+            db.models.users.find({id: res.id_user}).first((err, user) => {
                 if (err) {
                     console.log(err); 
                     } else {
                         db.models.events.find({id: req.params.id}).first((err, myEvent) => {
                         myEvent.hasUsers([user], function(err, userHasEvent) {
-                          if (userHasEvent) {
+                          if (!userHasEvent) {
                             myEvent.addUsers(user, () => {
                             res.status(200).json({message:"Success join"});
                             })

@@ -16,6 +16,8 @@ AppConfig.put("ChatBaseUrl", "https://server.lasjunies.fr:2222");
 
 AppConfig.readStoredToken();
 
+//console.disableYellowBox = true;
+
 // start the app
 Navigation.startSingleScreenApp({
     screen: {

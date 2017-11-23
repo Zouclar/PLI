@@ -31,37 +31,48 @@ class PostsList extends Component {
       this.itemWidth = this.sliderWidth *0.9;
         console.log("cccc")
         console.log(this.props);
-    this.apiDatas = props.apiDatas;
         this.parent = props.parent;
+        this.map = props.map;
+
+        this.state = {
+            apiDatas: props.apiDatas
+        }
 
         this.openDetailPage = this.openDetailPage.bind(this);
         this._renderItem = this._renderItem.bind(this);
     }
     
-    uptadeProps(props) {
-        this.apiDatas = props;
-        this.forceUpdate();
+    uptadeProps(apiDatas) {
+        console.log("UPDATING POSTLIST APIDATAS ====")
+        console.log(apiDatas)
+        this.setState({apiDatas})
+        console.log(this.state.apiDatas)
+        console.log("=======")
     }
 
-    render() {
-        console.log('rendering carousel ', this.apiDatas, this.parent)
-        
+    render () {
         return (
-             <Carousel
-              ref={(c) => { this._carousel = c; }}
-              data={this.apiDatas}
-              renderItem={this._renderItem}
-              sliderWidth={this.sliderWidth}
-              sliderHeight={this.sliderHeight}
-              itemWidth={this.itemWidth}
-              showsHorizontalScrollIndicator={true}
-              containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContentContainer}
-              onSnapToItem={(index) => {
-                    this.parent.animateToPostLocation(index);
-              }}
+            <Carousel
+                ref={(c) => { this._carousel = c; }}
+                data={this.state.apiDatas}
+                renderItem={this._renderItem}
+                sliderWidth={this.sliderWidth}
+                itemWidth={this.itemWidth}
+                sliderHeight={this.sliderHeight}
+                containerCustomStyle={styles.slider}
+                onSnapToItem={(index) => {
+                    this.animateToPostLocation(index);
+                }}
             />
         );
+    }
+
+    animateToPostLocation(index) {
+        this.parent.selectedPostIndex = index;
+        this.map.animateToRegion ( {
+            longitude: this.state.apiDatas[index].coordinate.x,
+            latitude: this.state.apiDatas[index].coordinate.y,
+        });
     }
 
     formatDate(date) {
@@ -79,9 +90,6 @@ class PostsList extends Component {
     }
     
      _renderItem ({item, index}) {
-        console.log("rendering item, parent is ");
-        console.log(this);
-    console.log(AppConfig.get("AssetsBaseUrl") + item.picture.replace("/var/www/html/", ""))
         return (
             <View onPress={() => { console.log(`You've clicked `); }} style={styles.slideItem}>
                 <View style={styles.rowContainer}>
