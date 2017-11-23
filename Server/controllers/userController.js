@@ -83,16 +83,18 @@ class UserController {
                     result.surname    = users[0].surname;
                     result.mail       = users[0].mail;
                     result.link_photo = users[0].link_photo;
+                    result.friends    = [];
                     result.is_friend  = false;
-                    var id_owner = getTokenId();
 
-                    db.models.friends.find({id_owner: id_owner, id_friend: req.params.id}, function(err, friendsRows) {
+                    db.models.friends.find({id_owner: res.id_user, id_friend: req.params.id}, function(err, friendsRows) {
                         if(friendsRows.length > 0){
+                            result.friends = friendsRows;
                             for(var item of friendsRows){
                                 console.log("ISFRIEND", item.is_friend);
                                 if(item.is_friend === true){
                                     console.log("ON EST AMI GNE")
                                     result.is_friend = true;
+
                                 }
 
                             }

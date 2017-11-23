@@ -32,6 +32,25 @@ class ProfileTab extends Component {
         });
     }
 
+    askFriend() {
+        APIWrapper.put('/users/friends/ask/' + this.props.user.id, {},
+            (responseJson) => {
+                console.log("C BON C SEND")
+                this.parent.openSuccessNotification("Succès", "Votre demande a été transmise")
+                this.forceUpdate();
+                console.log('refreshed')
+            },
+            (error) => {
+                this.parent.openErrorNotification("Erreur", "Une erreur est survenue !");
+                console.error("RATE LE SEND ", error);
+                console.log("RATE LE SEND ", error);
+            }
+        );
+
+    }
+
+
+
     test(item) {
         return {uri: '${AppConfig.get("AssetsBaseUrl")}${this.post.picture.replace("/var/www/html/", "")}'}
     }
@@ -44,7 +63,9 @@ class ProfileTab extends Component {
                                     <Image style={styles.cover} source={{uri: 'https://www.newsweed.fr/wp-content/uploads/2016/08/skate-750x400.jpg'}} />
                                     <Thumbnail large style={styles.thumbnail} source={{uri: this.props.user.link_photo}} />
                                     <Text style={styles.name}>{this.props.user.name} {this.props.user.lastname}</Text>
-                                    <Button transparent style={styles.friendAddButton}>
+                                    <Button onPress={() => {
+                                        this.askFriend();
+                                    }} transparent style={styles.friendAddButton}>
                                         <Icon active name="add" />
                                         <Text>Ajouter en ami</Text>
                                     </Button>

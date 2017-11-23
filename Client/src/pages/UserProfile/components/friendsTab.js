@@ -47,10 +47,12 @@ export default class FriendsTab extends Component {
             APIWrapper.put('/users/friends/accept/' + id,
             (responseJson) => {
                 console.log("C BON C SEND")
+                this.parent.openSuccessNotification("Succès", "Vous avez un nouvel ami !")
                 this.forceUpdate();
                 console.log('refreshed')
             },
             (error) => {
+                this.parent.openErrorNotification("Erreur", "Une erreur est survenue !");
                 console.error("RATE LE SEND ", error);
                 console.log("RATE LE SEND ", error);
             }
@@ -62,7 +64,10 @@ export default class FriendsTab extends Component {
         return (
             <Container>
                 <Content>
-                    <View style={{margin: 5}}><Text style={{textAlign: "center"}}>Demandes d'amis</Text></View>
+                    {this.state.listViewData &&
+                    <View style={{margin: 5}}><Text style={{textAlign: "center"}}>Demandes d'amis</Text></View>}
+
+                    {this.state.listViewData &&
                     <List
                         dataSource={this.ds.cloneWithRows(this.state.listViewData)}
                         renderRow={data =>
@@ -84,9 +89,12 @@ export default class FriendsTab extends Component {
                         leftOpenValue={75}
                         rightOpenValue={-75}
                     />
+                    }
 
-                    <View style={{margin: 5, marginTop: 15}}><Text style={{textAlign: "center"}}>Amis</Text></View>
+                    {this.state.listViewDataBis &&
+                    <View style={{margin: 5, marginTop: 15}}><Text style={{textAlign: "center"}}>Amis</Text></View>}
 
+                    {this.state.listViewDataBis &&
                     <List
                         dataSource={this.ds.cloneWithRows(this.state.listViewDataBis)}
                         renderRow={data =>
@@ -107,7 +115,7 @@ export default class FriendsTab extends Component {
                             </Button>}
                         leftOpenValue={75}
                         rightOpenValue={-75}
-                    />
+                    />}
                 </Content>
             </Container>
         );

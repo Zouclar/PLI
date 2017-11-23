@@ -202,29 +202,25 @@ class PostDetails extends Component {
                 {this.comments.map(comment => (
                     <Card>
                         <CardItem>
-                            <Left>
-                                <TouchableOpacity >
+                            <Left >
+                                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {
+                                    this.openUserProfileView(comment.owner)
+                                }}>
                                     <Thumbnail source={{uri: comment.owner.link_photo}} />
-                                    <Body>
-                                    <Text>{comment.owner.name} {comment.owner.lastname}</Text>
+                                    <Body style={{flexDirection: 'row'}}>
+                                    <Text>{comment.owner.name} {comment.owner.lastname} </Text>
                                     <Text note>dit</Text>
                                     </Body>
                                 </TouchableOpacity>
                             </Left>
                         </CardItem>
                         <CardItem>
-                            <Left>
                                 <Body>
                                 <Text>
                                     {comment.comment}
                                 </Text>
                                 </Body>
-                            </Left>
-                            <Right>
-                                <Body>
-                                <Icon active name="thumbs-up" />
-                                </Body>
-                            </Right>
+
                         </CardItem>
                     </Card>
                 ))}
