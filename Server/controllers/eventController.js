@@ -156,13 +156,14 @@ class EventController {
             if (err) throw err;
             db.models.events.find({}).order("date_pub", "Z").all(function (err, postsRows) {
 
+                let copy = postsRows;
                 let c = postsRows.length;
                 let i = 0;
-                let t = () => {
+                let t = (y, u) => {
                     i ++;
-                    if (i == c ){
+                    copy[y].users = u
+                    if (i  == c)
                         res.status(200).json(postsRows);
-                    }
                 }
 
                 if (postsRows.length == 0) {
@@ -170,9 +171,9 @@ class EventController {
                 }
                 for( var postRow of postsRows){
                     postRow.users = [];
+                    let index = postsRows.indexOf(postRow)
                     postRow.getUsers( (e,y) => {
-                        postRow.users = y;
-                        t();
+                        t(index, y);
                     })
                 }
             });

@@ -154,9 +154,9 @@ class EventsList extends Component {
                                     <Text>Details</Text>
                                 </Button>
 
-                                <Button  onPress={()=>{this.joinEvent(index)}} rounded small info>
+                                { !hasStarted && !isOver && <Button  onPress={()=>{this.joinEvent(index)}} rounded small info>
                                     <Text>Participer</Text>
-                                </Button>
+                                </Button> }
                             </View>
 
                         </View>

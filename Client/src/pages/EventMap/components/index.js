@@ -66,6 +66,13 @@ export default class EventMap extends Component {
         );
     }
 
+    openDetailPage (index) {
+        this.props.navigator.push({
+            screen: 'page.EventDetails',
+            title: 'Détails de l\'évènement',
+            passProps: {event: this.apiDatas[index]},
+        });
+    }
     openEventEditView (index) {
         this.props.navigator.push({
             screen: 'page.EventEditView',

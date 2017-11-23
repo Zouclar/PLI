@@ -15,36 +15,12 @@ import { View, Thumbnail, Icon, Button, Card, CardItem, Right, Left, Body, DeckS
 import styles from '../styles/details.js';
 import { Navigation } from 'react-native-navigation';
 import APIWrapper from '../../../api/APIWrapper'
+import AppConfig from '../../../config'
+import moment from 'moment';
+import 'moment/locale/fr';
 
 class EventDescription extends Component {
     constructor(props) {
-        props.event = {
-            id: 2,
-            title: 'efrget',
-            coordinates: {
-            x: 456,
-                y: 123
-        },
-            description: 'dfghjkhgfddfghj',
-            date_pub: '2017-11-19T23:00:00.000Z',
-            dateStart: '0000-00-00',
-            dateEnd: '0000-00-00',
-            picture: '/var/www/html/upload_10a4544787b00f3357a04b433158081a',
-            countLikes: 0,
-            countParticipate: 0,
-            countComments: 0,
-            users: [
-            {
-                id: 1,
-                name: 'sylvain',
-                lastname: 'lasjunies',
-                surname: 'megasyl',
-                mail: 'sylvai@lasjunies.fr',
-                password: 'abcdef',
-                link_photo: 'https://i.pinimg.com/736x/dd/45/96/dd4596b601062eb491ea9bb8e3a78062--two-faces-baby-faces.jpg'
-            }
-        ]
-        };
         super(props);
     }
 
@@ -58,44 +34,58 @@ class EventDescription extends Component {
         });
     }
 
-    test(item) {
-        return {uri: '${AppConfig.get("AssetsBaseUrl")}${this.post.picture.replace("/var/www/html/", "")}'}
+    formatFromDate(date) {
+        moment.locale('fr');
+        return moment(date, "YYYY-MM-DDTHH:mm:ssZ").fromNow()
+    }
+
+    formatDate(date) {
+        moment.locale('fr');
+        return moment(date, "YYYY-MM-DDTHH:mm:ssZ").format('llll')
+    }
+
+    joinEvent() {
+        console.log("Joining EVENTS")
+        APIWrapper.post("/events/join/" + this.props.event.id, {},
+            (responseJson) => {
+                if (responseJson.error)
+                    this.parent.openErrorNotification("Erreur", "Vous participez déjà");
+                else
+                    this.parent.openSuccessNotification("Succès", "Participation enregistrée");
+
+            },
+            (error) => {
+                console.log("ERROR", error);
+                this.openErrorNotification("Erreur", "Une erreur réseau est survenue :(" + error);
+            }
+        );
     }
 
     render() {
+        let hasStarted = moment(this.props.event.dateStart , "YYYY-MM-DDTHH:mm:ssZ").isBefore(moment());
+        let isOver = moment(this.props.event.dateEnd , "YYYY-MM-DDTHH:mm:ssZ").isBefore(moment());
         return (
             <Container>
                 <Content>
                     <View style={styles.head}>
-                        <Image style={styles.cover} source={{uri: 'https://www.newsweed.fr/wp-content/uploads/2016/08/skate-750x400.jpg'}} />
-                        <Thumbnail large style={styles.thumbnail} source={{uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg'}} />
+                        <Image style={styles.cover} source={{uri: AppConfig.get("AssetsBaseUrl") + "/" + this.props.event.picture.replace("/var/www/html", "")}} />
                         <Text style={styles.name}>{this.props.event.title}</Text>
-                        <Button transparent style={styles.friendAddButton}>
-                            <Icon active name="add" />
-                            <Text>Ajouter en ami</Text>
-                        </Button>
-                        <CardItem>
-                            <Left>
-                                <CardItem >
-                                    <Icon active name="people" />
-                                    <Text>75 Amis</Text>
-                                </CardItem>
-                            </Left>
-                            <Body>
-                            <CardItem>
-                                <Icon active name="chatbubbles" />
-                                <Text>23 Posts</Text>
-                            </CardItem>
-                            </Body>
-                            <Right>
-                                <Button onPress={() => this.openPrivateChatView()} transparent>
-                                    <Icon active name="chatbubbles" />
-                                    <Text>Discuter</Text>
-                                </Button>
-                            </Right>
-                        </CardItem>
+                        <Text>{this.props.event.description}</Text>
+
+                        <View style={styles.datesContainer}>
+                            <Text>du</Text>
+                            <Text style={styles.date}>{this.formatDate(this.props.event.dateStart)}</Text>
+                            <Text>au</Text>
+                            <Text style={styles.date}>{this.formatDate(this.props.event.dateEnd)}</Text>
+                            { !hasStarted && !isOver && <Text>Evenement à venir</Text> }
+                            { hasStarted && !isOver && <Text>Evenement commencé</Text> }
+                            { isOver && <Text>Evenement terminé</Text> }
+                        </View>
+
                     </View>
-                    <View style={{marginTop: 300}}><Text>Réseaux sociaux</Text></View>
+                    {!hasStarted && !isOver && <Button style={{margin: 10}} onPress={()=>{this.joinEvent()}} block info>
+                        <Text>Participer</Text>
+                    </Button> }
                 </Content>
             </Container>
         );

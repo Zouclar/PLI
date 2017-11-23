@@ -15,6 +15,7 @@ import {
 import { View, Thumbnail, Icon, Button, Card, CardItem, Right, Left, Body, DeckSwiper, Container, Content, H1, Header, List, Separator, ListItem } from 'native-base';
 import styles from '../styles/details.js';
 import APIWrapper from '../../../api/APIWrapper'
+import AppConfig from '../../../config'
 
 const datas = [
     'Simon Mignolet',
@@ -34,9 +35,10 @@ export default class Participants extends Component {
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             basic: true,
-            listViewData: this.props.user.friends_waiting,
-            listViewDataBis: this.props.user.friends,
+            listViewData: this.props.event.users,
         };
+        console.log("PARTICIPANTS ")
+        console.log(this.props.event.users)
     }
 
     deleteRow(secId, rowId, rowMap) {
@@ -65,38 +67,13 @@ export default class Participants extends Component {
         return (
             <Container>
                 <Content>
-                    <View style={{margin: 5}}><Text style={{textAlign: "center"}}>Demandes d'amis</Text></View>
                     <List
                         dataSource={this.ds.cloneWithRows(this.state.listViewData)}
                         renderRow={data =>
                             <ListItem>
-                                <Thumbnail style={{marginLeft: 5}} square small size={80} source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg' }} />
+                                <Thumbnail style={{marginLeft: 5}} square small size={80} source={{uri: data.link_photo}} />
                                 <Body>
-                                <Text> {data.id_friend} </Text>
-                                <Text style={{marginLeft: 5}} note>user bio . .</Text>
-                                </Body>
-                            </ListItem>}
-                        renderLeftHiddenRow={data =>
-                            <Button full success onPress={() => {this.acceptFriend(data.id_friend)}}>
-                                <Icon active name="add" />
-                            </Button>}
-                        renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                            <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap)}>
-                                <Icon active name="close" />
-                            </Button>}
-                        leftOpenValue={75}
-                        rightOpenValue={-75}
-                    />
-
-                    <View style={{margin: 5, marginTop: 15}}><Text style={{textAlign: "center"}}>Amis</Text></View>
-
-                    <List
-                        dataSource={this.ds.cloneWithRows(this.state.listViewDataBis)}
-                        renderRow={data =>
-                            <ListItem>
-                                <Thumbnail style={{marginLeft: 5}} square small size={80} source={{ uri: 'https://s-media-cache-ak0.pinimg.com/originals/f1/5a/7d/f15a7da85cea390e793cf2bb05f2bc69.jpg' }} />
-                                <Body>
-                                <Text> {data.id} </Text>
+                                <Text> {data.name} {data.lastname} </Text>
                                 <Text style={{marginLeft: 5}} note>user bio . .</Text>
                                 </Body>
                             </ListItem>}

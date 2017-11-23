@@ -21,9 +21,9 @@ AppConfig.readStoredToken();
 // start the app
 Navigation.startSingleScreenApp({
     screen: {
-        label: 'EventDetails',
-        screen: 'page.EventDetails',
-        title: 'EventDetails'
+        label: 'Connection',
+        screen: 'page.Connection',
+        title: 'Connection'
     },
     /*drawer: {
         right: {

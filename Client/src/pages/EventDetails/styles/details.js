@@ -31,6 +31,16 @@ export default StyleSheet.create({
     friendAddButton: {
         alignSelf: "center",
         flexDirection: 'row'
-    }
+    },
+    datesContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10
+    },
+    date: {
+        fontSize: 20,
+        alignSelf: "center"
+    },
 
 });
