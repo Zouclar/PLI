@@ -105,11 +105,11 @@ class PostsList extends Component {
                         <View style={styles.rowContainer}>
                             <TouchableOpacity style={styles.socialButtons}>
                               <Icon style={styles.socialIcons} active name="thumbs-up" />
-                              <Text style={styles.socialTexts}>12</Text>
+                              <Text style={styles.socialTexts}>{item.likes.length} </Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.socialButtons}>
                               <Icon style={styles.socialIcons} active name="chatbubbles" />
-                              <Text style={styles.socialTexts}>4 </Text>
+                              <Text style={styles.socialTexts}>{item.comments.length} </Text>
                             </TouchableOpacity>
                             <Text style={styles.socialTexts}>{ this.formatDate(item.date_pub)} </Text>
                         </View >

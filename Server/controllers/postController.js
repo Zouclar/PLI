@@ -106,10 +106,14 @@ class PostController {
             db.models.posts.find({}).order("date_pub", "Z").all(function (err, postsRows) {
 
                 let c = postsRows.length;
-                let i = 0;
-                let t = () => {
-                    i ++;
-                    if (i == c ){
+                let il = 0;
+                let ic = 0;
+                let t = (type) => {
+                    if (type == "like")
+                        il ++;
+                    else if (type == "comment")
+                        ic ++
+                    if (il == c && ic == c ){
                         res.status(200).json(postsRows);
                     }
                 }
@@ -118,9 +122,15 @@ class PostController {
                     res.status(200).json([]);
                 }
                 for( var postRow of postsRows){
-                    console.log("JES PASSER")
+                    console.log("LIKE PASSER")
                     postRow.getLikes(() => {
-                        t();
+                        t("like");
+                    })
+                }
+                for( var postRow of postsRows){
+                    console.log("COMMENTS PASSER")
+                    postRow.getComments(() => {
+                        t("comment");
                     })
                 }
             });
