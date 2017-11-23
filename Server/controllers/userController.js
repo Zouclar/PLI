@@ -107,9 +107,9 @@ class UserController {
     static askFriend (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            var id_owner = getTokenId();
+
             db.models.friends.create({
-                    id_owner: id_owner,
+                    id_owner: res.id_user,
                     id_friend : req.params.id_friend,
                     is_friend : false
                 },
@@ -127,17 +127,25 @@ class UserController {
         });
     }
 
+
     static acceptFriend (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            var id_owner = getTokenId();
-            db.models.friends.find({id_owner: id_owner, id_friend: req.params.id_friend}, function(err, row) {
+            db.models.friends.find({id_owner: res.id_user, id_friend: req.params.id_friend}, function(err, row) {
 
-                row[0].is_friend = true;
-                row[0].save(function (err) {
-                    if(err) res.status(500).send("Error while Accept Friend, err: ", err);
-                    res.status(200).send("Update Accept Friend");
-                });
+
+                if(row.length === 0){
+                    console.log(2);
+                    res.status(404).send("No Friend request from such user")
+                }else {
+                    console.log(3);
+                    row[0].is_friend = true;
+                    row[0].save(function (err) {
+                        if(err) res.status(500).send("Error while Accept Friend, err: ", err);
+                        res.status(200).send("Update Accept Friend");
+                    });
+                }
+
             });
         });
     }
@@ -145,7 +153,8 @@ class UserController {
     static readAll (req, res, next) {
         database('localhost', 'PLI', function(err, db) {
             if (err) throw err;
-            db.models.users.find({}, function(err, rows) {
+            db.models.friends.find({id_owner: res.id_user, is_friend: false}, function(err, rows) {
+                //todo hasmany friends waiting
                 res.status(200).json(rows);
             });
         });
@@ -195,7 +204,7 @@ class UserController {
                                     date.setDate(date.getDate() + 1);
                                   var data = {
                                     token: token,
-				    user_id: users[0].id
+				                    user_id: users[0].id
                                   };
                                 db.models.tokens.create({
                                     token       : token,

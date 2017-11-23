@@ -203,11 +203,13 @@ class PostDetails extends Component {
                     <Card>
                         <CardItem>
                             <Left>
-                                <Thumbnail source={{uri: comment.owner.link_photo}} />
-                                <Body>
-                                <Text>{comment.owner.name} {comment.owner.lastname}</Text>
-                                <Text note>dit</Text>
-                                </Body>
+                                <TouchableOpacity >
+                                    <Thumbnail source={{uri: comment.owner.link_photo}} />
+                                    <Body>
+                                    <Text>{comment.owner.name} {comment.owner.lastname}</Text>
+                                    <Text note>dit</Text>
+                                    </Body>
+                                </TouchableOpacity>
                             </Left>
                         </CardItem>
                         <CardItem>
